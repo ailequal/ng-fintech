@@ -3,7 +3,7 @@ import {Component, OnInit} from '@angular/core';
 @Component({
   selector: 'ae-debug',
   template: `
-    <div style="width: 992px; margin: 20px auto; border: 3px solid red; padding: 20px;">
+    <div style="max-width: 992px; width: 80%; margin: 20px auto; border: 3px solid red; padding: 20px;">
       <h2>debugging...</h2>
 
       <!--call your component here-->
