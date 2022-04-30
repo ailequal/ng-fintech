@@ -15,6 +15,7 @@ import {NgForm} from "@angular/forms";
         <mat-label>Email</mat-label>
         <input
           ngModel
+          #nameRef="ngModel"
           name="email"
           matInput
           type="email"
@@ -22,7 +23,18 @@ import {NgForm} from "@angular/forms";
           email
           placeholder="lucastip@earth.org"
         >
+        <mat-error *ngIf="nameRef.errors?.['email']">
+          Inserire un indirizzo email valido.
+        </mat-error>
+        <mat-error *ngIf="nameRef.errors?.['required']">
+          Il campo email è <strong>obbligatorio</strong>.
+        </mat-error>
       </mat-form-field>
+
+      <!--debut input status-->
+      <pre>
+      {{nameRef.errors | json}}
+      </pre>
 
       <mat-form-field class="full-width" appearance="fill">
         <mat-label>Nome</mat-label>
@@ -118,6 +130,7 @@ import {NgForm} from "@angular/forms";
 export class RegisterComponent implements OnInit {
 
   // TODO: The two passwords inputs must check that they hold the same value before sending the request.
+  //  We will use a custom validator for this requirement.
   // TODO: Implement a more robust password validation (use special characters...).
 
   hideAlpha: boolean = true;
@@ -136,6 +149,9 @@ export class RegisterComponent implements OnInit {
    * @param f
    */
   submitHandler(f: NgForm) {
+    if (f.value.passwordAlpha !== f.value.passwordBeta)
+      throw new Error('The two passwords do not match!!')
+
     console.log(f.value)
   }
 
