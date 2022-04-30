@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {NgForm} from "@angular/forms";
 
 /**
  * Based from Angular Material 13.3.5 and component "Input".
@@ -10,22 +11,53 @@ import {Component, OnInit} from '@angular/core';
 @Component({
   selector: 'ae-sign-in',
   template: `
-    <form class="sign-in-form">
+    <form #f="ngForm" (ngSubmit)="submitHandler(f)" class="sign-in-form">
       <mat-form-field class="full-width" appearance="fill">
-        <mat-icon color="primary" matPrefix aria-hidden="false" aria-label="Person icon">person</mat-icon>
+        <mat-icon matPrefix color="primary" aria-hidden="false" aria-label="Person icon">person</mat-icon>
         <mat-label>Email</mat-label>
-        <input type="email" matInput placeholder="lucas@earth.org" required>
+        <input
+          ngModel
+          name="email"
+          matInput
+          type="email"
+          required
+          email
+          placeholder="lucas@earth.org"
+        >
       </mat-form-field>
 
       <mat-form-field class="full-width" appearance="fill">
-        <mat-icon color="primary" matPrefix aria-hidden="false" aria-label="Lock icon">lock</mat-icon>
+        <mat-icon matPrefix color="primary" aria-hidden="false" aria-label="Lock icon">lock</mat-icon>
         <mat-label>Password</mat-label>
-        <input [type]="hide ? 'password': 'text'" matInput required>
+        <input
+          ngModel
+          name="password"
+          matInput
+          [type]="hide ? 'password': 'text'"
+          required
+          minlength="8"
+          maxlength="64"
+        >
         <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
       </mat-form-field>
 
-      <button mat-raised-button class="full-width mb" color="primary">Accedi</button>
-      <button mat-raised-button class="full-width">Crea un nuovo account</button>
+      <button
+        mat-raised-button
+        type="submit"
+        [disabled]="f.invalid"
+        class="full-width mb"
+        color="primary"
+      >
+        Accedi
+      </button>
+
+      <button
+        mat-raised-button
+        type="button"
+        class="full-width"
+      >
+        Crea un nuovo account
+      </button>
     </form>
   `,
   styles: [`
@@ -52,6 +84,15 @@ export class SignInComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  /**
+   * Handles the form submission.
+   *
+   * @param f
+   */
+  submitHandler(f: NgForm) {
+    console.log(f.value)
   }
 
 }
