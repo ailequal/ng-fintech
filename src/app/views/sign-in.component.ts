@@ -2,8 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {NgForm} from "@angular/forms";
 
 /**
- * Based from Angular Material 13.3.5 and component "Input".
- * See "Basic Inputs" from the relative examples (check the docs).
+ * Useful resources.
  *
  * @link https://material.angular.io/components/input/examples
  * @link https://fireflysemantics.medium.com/angular-material-password-field-with-visibilitytoggle-d5342f97afbe
@@ -22,7 +21,7 @@ import {NgForm} from "@angular/forms";
           type="email"
           required
           email
-          placeholder="lucas@earth.org"
+          placeholder="lucastip@earth.org"
         >
       </mat-form-field>
 
