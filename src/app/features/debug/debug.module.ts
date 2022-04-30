@@ -8,11 +8,13 @@ import {MaterialModule} from "../../shared/material/material.module";
 
 import {DebugComponent} from './debug.component';
 import {SignInComponent} from "../../views/sign-in.component";
+import {RegisterComponent} from '../../views/register.component';
 
 @NgModule({
   declarations: [
     DebugComponent,
-    SignInComponent
+    SignInComponent,
+    RegisterComponent
   ],
   imports: [
     CommonModule,
