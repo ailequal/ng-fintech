@@ -5,19 +5,23 @@ import {Component, OnInit} from '@angular/core';
  * See "Basic Inputs" from the relative examples (check the docs).
  *
  * @link https://material.angular.io/components/input/examples
+ * @link https://fireflysemantics.medium.com/angular-material-password-field-with-visibilitytoggle-d5342f97afbe
  */
 @Component({
   selector: 'ae-sign-in',
   template: `
     <form class="sign-in-form">
       <mat-form-field class="full-width" appearance="fill">
+        <mat-icon color="primary" matPrefix aria-hidden="false" aria-label="Person icon">person</mat-icon>
         <mat-label>Email</mat-label>
         <input type="email" matInput placeholder="lucas@earth.org" required>
       </mat-form-field>
 
       <mat-form-field class="full-width" appearance="fill">
+        <mat-icon color="primary" matPrefix aria-hidden="false" aria-label="Lock icon">lock</mat-icon>
         <mat-label>Password</mat-label>
-        <input type="password" matInput required>
+        <input [type]="hide ? 'password': 'text'" matInput required>
+        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
       </mat-form-field>
 
       <button mat-raised-button class="full-width mb" color="primary">Accedi</button>
@@ -41,6 +45,8 @@ import {Component, OnInit} from '@angular/core';
   `]
 })
 export class SignInComponent implements OnInit {
+
+  hide: boolean = true;
 
   constructor() {
   }
