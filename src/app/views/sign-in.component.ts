@@ -9,27 +9,34 @@ import {Component, OnInit} from '@angular/core';
 @Component({
   selector: 'ae-sign-in',
   template: `
-    <form class="example-form">
-      <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Favorite food</mat-label>
-        <input matInput placeholder="Ex. Pizza" value="Sushi">
+    <form class="sign-in-form">
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>Email</mat-label>
+        <input type="email" matInput placeholder="lucas@earth.org" required>
       </mat-form-field>
 
-      <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Leave a comment</mat-label>
-        <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>Password</mat-label>
+        <input type="password" matInput required>
       </mat-form-field>
+
+      <button mat-raised-button class="full-width mb" color="primary">Accedi</button>
+      <button mat-raised-button class="full-width">Crea un nuovo account</button>
     </form>
   `,
   styles: [`
-    .example-form {
+    .sign-in-form {
       min-width: 150px;
       max-width: 500px;
       width: 100%;
     }
 
-    .example-full-width {
+    .full-width {
       width: 100%;
+    }
+
+    .mb {
+      margin-bottom: 20px;
     }
   `]
 })
