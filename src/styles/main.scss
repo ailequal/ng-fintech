@@ -8,14 +8,17 @@
 // Be sure that you only ever include this mixin once!
 @include mat.core();
 
+// Import custom palettes.
+@import "./abstracts/palettes";
+
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$ng-fintech-primary: mat.define-palette(mat.$indigo-palette);
-$ng-fintech-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$ng-fintech-primary: mat.define-palette($ae-palette-primary);
+$ng-fintech-accent: mat.define-palette($ae-palette-accent, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
-$ng-fintech-warn: mat.define-palette(mat.$red-palette);
+$ng-fintech-warn: mat.define-palette($ae-palette-warning);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
@@ -42,3 +45,9 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+// Other custom imports.
+// @link https://sass-guidelin.es/#architecture
+//@import "abstracts/functions";
+//@import "abstracts/mixins";
+//@import "abstracts/variables";

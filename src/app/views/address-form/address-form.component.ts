@@ -105,7 +105,6 @@ import {FormBuilder, Validators} from '@angular/forms';
         </mat-card-actions>
       </mat-card>
     </form>
-
   `,
   styles: [`
     .full-width {
@@ -135,7 +134,6 @@ import {FormBuilder, Validators} from '@angular/forms';
     .col:last-child {
       margin-right: 0;
     }
-
   `]
 })
 export class AddressFormComponent {

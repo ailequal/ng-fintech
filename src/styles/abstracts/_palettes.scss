@@ -1,0 +1,103 @@
+// Custom color palettes.
+// @link https://material.io/design/color/the-color-system.html#tools-for-picking-colors
+// @link https://material.io/resources/color
+// @link http://mcg.mbitson.com
+
+$ae-palette-primary: (
+  50 : #ece0ff,
+  100 : #d0b3ff,
+  200 : #b180ff,
+  300 : #914dff,
+  400 : #7a26ff,
+  500 : #6200ff,
+  600 : #5a00ff,
+  700 : #5000ff,
+  800 : #4600ff,
+  900 : #3400ff,
+  A100 : #ffffff,
+  A200 : #f4f2ff,
+  A400 : #c9bfff,
+  A700 : #b3a6ff,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #ffffff,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+$ae-palette-accent: (
+  50 : #ffe0f3,
+  100 : #ffb3e2,
+  200 : #ff80ce,
+  300 : #ff4dba,
+  400 : #ff26ac,
+  500 : #ff009d,
+  600 : #ff0095,
+  700 : #ff008b,
+  800 : #ff0081,
+  900 : #ff006f,
+  A100 : #ffffff,
+  A200 : #fff2f7,
+  A400 : #ffbfd7,
+  A700 : #ffa6c7,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+$ae-palette-warning: (
+  50 : #fff6e0,
+  100 : #ffe9b3,
+  200 : #ffdb80,
+  300 : #ffcd4d,
+  400 : #ffc226,
+  500 : #ffb700,
+  600 : #ffb000,
+  700 : #ffa700,
+  800 : #ff9f00,
+  900 : #ff9000,
+  A100 : #ffffff,
+  A200 : #fff9f2,
+  A400 : #ffe0bf,
+  A700 : #ffd4a6,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #000000,
+    600 : #000000,
+    700 : #000000,
+    800 : #000000,
+    900 : #000000,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
