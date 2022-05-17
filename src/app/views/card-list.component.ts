@@ -30,12 +30,24 @@ import {Card} from "../model/card";
             </div>
 
             <mat-action-list class="actions">
-              <button mat-list-item (click)="receiptHandler(card)">
+              <button
+                mat-list-item
+                (click)="onReceipt.emit(card)"
+                matTooltip="Vedi movimenti"
+                matTooltipPosition="below"
+                matTooltipHideDelay="500"
+              >
                 <mat-icon matPrefix color="primary" aria-hidden="false" aria-label="Receipt long icon">receipt_long
                 </mat-icon>
               </button>
 
-              <button mat-list-item (click)="deleteHandler(card)">
+              <button
+                mat-list-item
+                (click)="onDelete.emit(card)"
+                matTooltip="Rimuovi"
+                matTooltipPosition="below"
+                matTooltipHideDelay="500"
+              >
                 <mat-icon matPrefix color="primary" aria-hidden="false" aria-label="Delete icon">delete</mat-icon>
               </button>
             </mat-action-list>
@@ -149,20 +161,16 @@ export class CardListComponent implements OnInit {
     },
   ];
 
+  @Output() onReceipt: EventEmitter<Card> = new EventEmitter<Card>();
+
+  @Output() onDelete: EventEmitter<Card> = new EventEmitter<Card>();
+
   @Output() onAdd: EventEmitter<void> = new EventEmitter<void>();
 
   constructor() {
   }
 
   ngOnInit(): void {
-  }
-
-  receiptHandler(card: Card): void {
-    console.log('receiptHandler')
-  }
-
-  deleteHandler(card: Card): void {
-    console.log('deleteHandler')
   }
 
 }
