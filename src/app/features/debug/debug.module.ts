@@ -12,6 +12,7 @@ import {RegisterComponent} from '../../views/register.component';
 import {AddressFormComponent} from '../../views/address-form.component';
 import {LoginComponent} from '../../views/login.component';
 import {CardListComponent} from '../../views/card-list.component';
+import {CardFormComponent} from '../../views/card-form.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import {CardListComponent} from '../../views/card-list.component';
     RegisterComponent,
     AddressFormComponent,
     LoginComponent,
-    CardListComponent
+    CardListComponent,
+    CardFormComponent
   ],
   imports: [
     CommonModule,
