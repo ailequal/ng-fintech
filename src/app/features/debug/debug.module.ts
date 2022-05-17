@@ -11,6 +11,7 @@ import {SignInComponent} from "../../views/sign-in.component";
 import {RegisterComponent} from '../../views/register.component';
 import {AddressFormComponent} from '../../views/address-form.component';
 import {LoginComponent} from '../../views/login.component';
+import {CardListComponent} from '../../views/card-list.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import {LoginComponent} from '../../views/login.component';
     SignInComponent,
     RegisterComponent,
     AddressFormComponent,
-    LoginComponent
+    LoginComponent,
+    CardListComponent
   ],
   imports: [
     CommonModule,
