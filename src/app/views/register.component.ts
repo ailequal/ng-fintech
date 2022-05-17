@@ -1,12 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {NgForm} from "@angular/forms";
 
-/**
- * Useful resources.
- *
- * @link https://material.angular.io/components/input/examples
- * @link https://fireflysemantics.medium.com/angular-material-password-field-with-visibilitytoggle-d5342f97afbe
- */
 @Component({
   selector: 'ae-register',
   template: `
@@ -106,7 +100,7 @@ import {NgForm} from "@angular/forms";
           <button
             mat-raised-button
             type="submit"
-            [disabled]="f.invalid"
+            [disabled]="!f.valid"
             class="full-width mb"
             color="primary"
           >
@@ -172,11 +166,6 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  /**
-   * Handles the form submission.
-   *
-   * @param f
-   */
   submitHandler(f: NgForm) {
     if (f.value.passwordAlpha !== f.value.passwordBeta)
       throw new Error('The two passwords do not match!!')
