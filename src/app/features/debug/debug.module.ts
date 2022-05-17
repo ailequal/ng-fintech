@@ -9,14 +9,16 @@ import {MaterialModule} from "../../shared/material/material.module";
 import {DebugComponent} from './debug.component';
 import {SignInComponent} from "../../views/sign-in.component";
 import {RegisterComponent} from '../../views/register.component';
-import {AddressFormComponent} from '../../views/address-form/address-form.component';
+import {AddressFormComponent} from '../../views/address-form.component';
+import {LoginComponent} from '../../views/login.component';
 
 @NgModule({
   declarations: [
     DebugComponent,
     SignInComponent,
     RegisterComponent,
-    AddressFormComponent
+    AddressFormComponent,
+    LoginComponent
   ],
   imports: [
     CommonModule,

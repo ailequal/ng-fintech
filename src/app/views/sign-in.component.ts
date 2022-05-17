@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {NgForm} from "@angular/forms";
 
 /**
@@ -39,12 +39,13 @@ import {NgForm} from "@angular/forms";
               ngModel
               name="password"
               matInput
-              [type]="hide ? 'password': 'text'"
+              [type]="hidePassword ? 'password': 'text'"
               required
               minlength="8"
               maxlength="64"
             >
-            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            <mat-icon matSuffix
+                      (click)="hidePassword = !hidePassword">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
           </mat-form-field>
         </mat-card-content>
 
@@ -61,6 +62,7 @@ import {NgForm} from "@angular/forms";
 
           <button
             mat-raised-button
+            (click)="onRegister.emit()"
             type="button"
             class="full-width"
           >
@@ -96,11 +98,14 @@ import {NgForm} from "@angular/forms";
     .mat-card-actions .mat-stroked-button.mb {
       margin-bottom: 20px;
     }
-  `]
+  `],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SignInComponent implements OnInit {
 
-  hide: boolean = true;
+  hidePassword: boolean = true;
+
+  @Output() onRegister: EventEmitter<void> = new EventEmitter<void>();
 
   constructor() {
   }

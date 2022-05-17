@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {NgForm} from "@angular/forms";
 
 /**
@@ -77,13 +77,13 @@ import {NgForm} from "@angular/forms";
               ngModel
               name="passwordAlpha"
               matInput
-              [type]="hideAlpha ? 'password': 'text'"
+              [type]="hidePasswordAlpha ? 'password': 'text'"
               required
               minlength="8"
               maxlength="64"
             >
             <mat-icon matSuffix
-                      (click)="hideAlpha = !hideAlpha">{{hideAlpha ? 'visibility_off' : 'visibility'}}</mat-icon>
+                      (click)="hidePasswordAlpha = !hidePasswordAlpha">{{hidePasswordAlpha ? 'visibility_off' : 'visibility'}}</mat-icon>
           </mat-form-field>
 
           <mat-form-field class="full-width" appearance="fill">
@@ -92,12 +92,13 @@ import {NgForm} from "@angular/forms";
               ngModel
               name="passwordBeta"
               matInput
-              [type]="hideBeta ? 'password': 'text'"
+              [type]="hidePasswordBeta ? 'password': 'text'"
               required
               minlength="8"
               maxlength="64"
             >
-            <mat-icon matSuffix (click)="hideBeta = !hideBeta">{{hideBeta ? 'visibility_off' : 'visibility'}}</mat-icon>
+            <mat-icon matSuffix
+                      (click)="hidePasswordBeta = !hidePasswordBeta">{{hidePasswordBeta ? 'visibility_off' : 'visibility'}}</mat-icon>
           </mat-form-field>
         </mat-card-content>
 
@@ -114,6 +115,7 @@ import {NgForm} from "@angular/forms";
 
           <button
             mat-raised-button
+            (click)="onSignIn.emit()"
             type="button"
             class="full-width"
           >
@@ -149,7 +151,8 @@ import {NgForm} from "@angular/forms";
     .mat-card-actions .mat-stroked-button.mb {
       margin-bottom: 20px;
     }
-  `]
+  `],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegisterComponent implements OnInit {
 
@@ -157,9 +160,11 @@ export class RegisterComponent implements OnInit {
   //  We will use a custom validator for this requirement.
   // TODO: Implement a more robust password validation (use special characters...).
 
-  hideAlpha: boolean = true;
+  hidePasswordAlpha: boolean = true;
 
-  hideBeta: boolean = true;
+  hidePasswordBeta: boolean = true;
+
+  @Output() onSignIn: EventEmitter<void> = new EventEmitter<void>();
 
   constructor() {
   }
