@@ -12,6 +12,18 @@ import {NgForm} from "@angular/forms";
         </mat-card-header>
 
         <mat-card-content>
+          <mat-form-field appearance="fill">
+            <mat-label>Tipo di carta</mat-label>
+            <mat-select ngModel name="cardType" required>
+              <mat-option
+                *ngFor="let t of cardTypes"
+                [value]="t"
+              >
+                {{t | titlecase}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>Nome</mat-label>
             <input
@@ -121,6 +133,8 @@ import {NgForm} from "@angular/forms";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CardFormComponent implements OnInit {
+
+  cardTypes: string[] = ['mastercard', 'visa']
 
   @Output() onCancel: EventEmitter<void> = new EventEmitter<void>();
 

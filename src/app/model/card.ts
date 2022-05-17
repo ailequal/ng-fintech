@@ -3,6 +3,6 @@ export interface Card {
   number: string;
   ownerId: string;
   owner: string;
-  type: 'visa' | 'mastercard';
+  type: 'mastercard' | 'visa';
   amount: number;
 }

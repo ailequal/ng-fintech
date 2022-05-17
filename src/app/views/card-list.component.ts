@@ -148,7 +148,7 @@ export class CardListComponent implements OnInit {
       number: '4263982640269299',
       ownerId: '023923463256',
       owner: 'Mario',
-      type: 'visa',
+      type: 'mastercard',
       amount: 4500
     },
     {
@@ -156,7 +156,7 @@ export class CardListComponent implements OnInit {
       number: '4263982640269299',
       ownerId: '423973433276',
       owner: 'Luigi',
-      type: 'mastercard',
+      type: 'visa',
       amount: 5000
     },
   ];
