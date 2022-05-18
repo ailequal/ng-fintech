@@ -1,5 +1,5 @@
 export interface CardForm {
-  cardType: string;
+  cardType: 'mastercard' | 'visa';
   name: string;
   surname: string;
   cardNumber: string;

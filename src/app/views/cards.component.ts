@@ -1,6 +1,8 @@
 import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/core';
 import {CardForm} from "../model/card-form";
 import {MatDrawer} from "@angular/material/sidenav";
+import {Card} from "../model/card";
+import {CardFormComponent} from "./card-form.component";
 
 @Component({
   selector: 'ae-cards',
@@ -8,14 +10,16 @@ import {MatDrawer} from "@angular/material/sidenav";
     <mat-drawer-container class="container" autosize>
       <ae-card-list
         class="sidenav-content"
-        (onReceipt)="receiptHandler()"
-        (onDelete)="deleteHandler()"
+        [cards]="cards"
+        (onReceipt)="receiptHandler($event)"
+        (onDelete)="deleteHandler($event)"
         (onAdd)="addHandler()"
       >
       </ae-card-list>
 
-      <mat-drawer #drawer class="sidenav" mode="over" position="end">
+      <mat-drawer #drawerRef class="sidenav" mode="over" position="end">
         <ae-card-form
+          #cardFormRef
           (onSubmit)="submitHandler($event)"
           (onCancel)="cancelHandler()"
         >
@@ -45,7 +49,29 @@ import {MatDrawer} from "@angular/material/sidenav";
 })
 export class CardsComponent implements OnInit {
 
-  @ViewChild('drawer', {read: MatDrawer, static: true}) drawer!: MatDrawer;
+  // TODO: Hard coded values for now.
+  cards: Card[] = [
+    {
+      _id: '347987294424',
+      number: '4263982640269299',
+      ownerId: '023923463256',
+      owner: 'Mario',
+      type: 'mastercard',
+      amount: 4500
+    },
+    {
+      _id: '347427295724',
+      number: '4263982640269299',
+      ownerId: '423973433276',
+      owner: 'Luigi',
+      type: 'visa',
+      amount: 5000
+    },
+  ];
+
+  @ViewChild('drawerRef', {read: MatDrawer, static: true}) drawer!: MatDrawer;
+
+  @ViewChild('cardFormRef', {read: CardFormComponent, static: true}) cardForm!: CardFormComponent;
 
   constructor() {
   }
@@ -53,12 +79,15 @@ export class CardsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  receiptHandler(): void {
+  receiptHandler(card: Card): void {
+    console.log(card)
     console.log('receiptHandler')
   }
 
-  deleteHandler(): void {
-    console.log('deleteHandler')
+  deleteHandler(card: Card): void {
+    this.cards = this.cards.filter(element => {
+      return element._id !== card._id
+    })
   }
 
   addHandler(): void {
@@ -66,11 +95,25 @@ export class CardsComponent implements OnInit {
   }
 
   submitHandler(cardForm: CardForm): void {
-    console.log(cardForm)
+    // TODO: Some values are hard coded. Later on they will be provided from the backend.
+    const newId = String(Date.now())
+    const newCard: Card = {
+      _id: newId,
+      number: cardForm.cardNumber,
+      ownerId: `u-${newId}`,
+      owner: `${cardForm.name} ${cardForm.surname}`,
+      type: cardForm.cardType,
+      amount: 0
+    }
+
+    this.cards = [...this.cards, newCard]
+    this.drawer.toggle().then(r => console.log(r))
+    this.cardForm.cleanUp()
   }
 
   cancelHandler(): void {
     this.drawer.toggle().then(r => console.log(r))
+    this.cardForm.cleanUp()
   }
 
 }
