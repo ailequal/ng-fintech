@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {CardForm} from "../model/card-form";
 
@@ -96,7 +96,7 @@ import {CardForm} from "../model/card-form";
 
           <button
             mat-button
-            (click)="onCancel.emit()"
+            (click)="onCancel.emit();"
             type="button"
             class="full-width"
             color="warn"
@@ -150,6 +150,8 @@ export class CardFormComponent implements OnInit {
 
   cardTypes: string[] = ['mastercard', 'visa']
 
+  @ViewChild('f', {read: NgForm, static: true}) f!: NgForm;
+
   @Output() onSubmit: EventEmitter<CardForm> = new EventEmitter<CardForm>();
 
   @Output() onCancel: EventEmitter<void> = new EventEmitter<void>();
@@ -158,6 +160,12 @@ export class CardFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  cleanUp() {
+    // TODO: It will be implemented later on.
+    this.f.resetForm()
+    console.log('cleanUp')
   }
 
 }
