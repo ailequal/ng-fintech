@@ -165,7 +165,6 @@ export class CardFormComponent implements OnInit {
   cleanUp() {
     // TODO: It will be implemented later on.
     this.f.resetForm()
-    console.log('cleanUp')
   }
 
 }
