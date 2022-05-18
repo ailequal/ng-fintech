@@ -1,10 +1,11 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {NgForm} from "@angular/forms";
+import {CardForm} from "../model/card-form";
 
 @Component({
   selector: 'ae-card-form',
   template: `
-    <form #f="ngForm" (ngSubmit)="submitHandler(f)">
+    <form #f="ngForm">
       <mat-card class="card-form">
 
         <mat-card-header>
@@ -84,8 +85,9 @@ import {NgForm} from "@angular/forms";
         <mat-card-actions>
           <button
             mat-raised-button
-            type="submit"
+            (click)="onSubmit.emit(f.value)"
             [disabled]="!f.valid"
+            type="button"
             class="full-width mb"
             color="primary"
           >
@@ -148,16 +150,14 @@ export class CardFormComponent implements OnInit {
 
   cardTypes: string[] = ['mastercard', 'visa']
 
+  @Output() onSubmit: EventEmitter<CardForm> = new EventEmitter<CardForm>();
+
   @Output() onCancel: EventEmitter<void> = new EventEmitter<void>();
 
   constructor() {
   }
 
   ngOnInit(): void {
-  }
-
-  submitHandler(f: NgForm) {
-    console.log(f.value)
   }
 
 }
