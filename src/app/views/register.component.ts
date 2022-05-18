@@ -123,7 +123,6 @@ import {NgForm} from "@angular/forms";
   styles: [`
     .register {
       min-width: 120px;
-      margin: 20px auto;
     }
 
     .full-width {

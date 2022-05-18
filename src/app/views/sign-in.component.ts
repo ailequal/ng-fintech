@@ -70,7 +70,6 @@ import {NgForm} from "@angular/forms";
   styles: [`
     .sign-in {
       min-width: 120px;
-      margin: 20px auto;
     }
 
     .full-width {

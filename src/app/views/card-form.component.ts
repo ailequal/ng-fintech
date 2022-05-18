@@ -9,7 +9,7 @@ import {CardForm} from "../model/card-form";
       <mat-card class="card-form">
 
         <mat-card-header>
-          <mat-card-title>Aggiungi carta</mat-card-title>
+          <mat-card-title class="title">Aggiungi carta</mat-card-title>
         </mat-card-header>
 
         <mat-card-content>
@@ -109,9 +109,13 @@ import {CardForm} from "../model/card-form";
     </form>
   `,
   styles: [`
+    .title {
+      font-size: 18px;
+      color: rgba(0, 0, 0, 0.54);
+    }
+
     .card-form {
       min-width: 120px;
-      margin: 20px auto;
     }
 
     .full-width {

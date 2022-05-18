@@ -5,7 +5,9 @@ import {Card} from "../model/card";
   selector: 'ae-card-list',
   template: `
     <mat-card>
-      <mat-card-title class="title">Carte</mat-card-title>
+      <mat-card-header>
+        <mat-card-title class="title">Carte</mat-card-title>
+      </mat-card-header>
 
       <mat-list class="cards" role="list">
         <mat-list-item *ngFor="let card of cards;" role="listitem">
