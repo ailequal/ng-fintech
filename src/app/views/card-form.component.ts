@@ -12,7 +12,7 @@ import {NgForm} from "@angular/forms";
         </mat-card-header>
 
         <mat-card-content>
-          <mat-form-field appearance="fill">
+          <mat-form-field class="full-width" appearance="fill">
             <mat-label>Tipo di carta</mat-label>
             <mat-select ngModel name="cardType" required>
               <mat-option
@@ -24,33 +24,35 @@ import {NgForm} from "@angular/forms";
             </mat-select>
           </mat-form-field>
 
-          <mat-form-field class="full-width" appearance="fill">
-            <mat-label>Nome</mat-label>
-            <input
-              ngModel
-              name="name"
-              matInput
-              type="text"
-              required
-              minlength="3"
-              maxlength="24"
-              placeholder="Lucas"
-            >
-          </mat-form-field>
+          <div class="container">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Nome</mat-label>
+              <input
+                ngModel
+                name="name"
+                matInput
+                type="text"
+                required
+                minlength="3"
+                maxlength="24"
+                placeholder="Lucas"
+              >
+            </mat-form-field>
 
-          <mat-form-field class="full-width" appearance="fill">
-            <mat-label>Cognome</mat-label>
-            <input
-              ngModel
-              name="surname"
-              matInput
-              type="text"
-              required
-              minlength="3"
-              maxlength="24"
-              placeholder="Tip"
-            >
-          </mat-form-field>
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Cognome</mat-label>
+              <input
+                ngModel
+                name="surname"
+                matInput
+                type="text"
+                required
+                minlength="3"
+                maxlength="24"
+                placeholder="Tip"
+              >
+            </mat-form-field>
+          </div>
 
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>Nº Carta</mat-label>
@@ -105,7 +107,7 @@ import {NgForm} from "@angular/forms";
     </form>
   `,
   styles: [`
-    .sign-in {
+    .card-form {
       min-width: 120px;
       margin: 20px auto;
     }
@@ -114,8 +116,8 @@ import {NgForm} from "@angular/forms";
       width: 100%;
     }
 
-    .mat-card-header {
-      justify-content: center;
+    .mat-card-title {
+      font-weight: 400;
     }
 
     .mat-card-actions .mat-button,
@@ -128,6 +130,16 @@ import {NgForm} from "@angular/forms";
     .mat-card-actions .mat-raised-button.mb,
     .mat-card-actions .mat-stroked-button.mb {
       margin-bottom: 20px;
+    }
+
+    /* Small size */
+    @media screen and (min-width: 576px) {
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+      }
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
