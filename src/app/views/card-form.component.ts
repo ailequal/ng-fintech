@@ -58,7 +58,7 @@ import {NgForm} from "@angular/forms";
               ngModel
               name="cardNumber"
               matInput
-              type="number"
+              type="text"
               required
               pattern="^[0-9]{16}$"
               placeholder="0000111122223333"
@@ -71,7 +71,7 @@ import {NgForm} from "@angular/forms";
               ngModel
               name="cardSecurityCode"
               matInput
-              type="number"
+              type="text"
               required
               pattern="^[0-9]{3}$"
               placeholder="012"
