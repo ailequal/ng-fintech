@@ -3,6 +3,7 @@ import {CardForm} from "../model/card-form";
 import {MatDrawer} from "@angular/material/sidenav";
 import {Card} from "../model/card";
 import {CardFormComponent} from "./card-form.component";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'ae-cards',
@@ -73,7 +74,7 @@ export class CardsComponent implements OnInit {
 
   @ViewChild('cardFormRef', {read: CardFormComponent, static: true}) cardForm!: CardFormComponent;
 
-  constructor() {
+  constructor(private _snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
@@ -88,6 +89,12 @@ export class CardsComponent implements OnInit {
     this.cards = this.cards.filter(element => {
       return element._id !== card._id
     })
+
+    this._snackBar.open('Carta rimossa', '❌', {
+      horizontalPosition: 'end',
+      verticalPosition: 'top',
+      duration: 3000
+    });
   }
 
   addHandler(): void {
@@ -105,14 +112,23 @@ export class CardsComponent implements OnInit {
       type: cardForm.cardType,
       amount: 0
     }
-
     this.cards = [...this.cards, newCard]
-    this.drawer.toggle().then(r => console.log(r))
-    this.cardForm.cleanUp()
+
+    this._snackBar.open('Carta aggiunta', '❌', {
+      horizontalPosition: 'end',
+      verticalPosition: 'top',
+      duration: 3000
+    });
+
+    this.dispose()
   }
 
   cancelHandler(): void {
-    this.drawer.toggle().then(r => console.log(r))
+    this.dispose()
+  }
+
+  dispose() {
+    this.drawer.close().then(r => console.log(r))
     this.cardForm.cleanUp()
   }
 
