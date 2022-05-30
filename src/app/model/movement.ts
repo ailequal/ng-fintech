@@ -1,9 +1,11 @@
+export type MovementType = 'in' | 'out';
+
 export interface Movement {
   _id: string;
-  type: 'in' | 'out';
-  amount: number;
   title: string;
   description: string;
   cardId: string;
+  amount: number;
+  type: MovementType;
   timestamp: number;
 }

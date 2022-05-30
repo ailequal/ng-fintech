@@ -16,13 +16,24 @@ import {Component, OnInit} from '@angular/core';
       <h2>Saldo: {{2000 | currency: 'EUR'}}</h2>
 
       <div>
-        list of movements
+        <ae-movement
+          [title]="'First movement'"
+          [description]="'Bought a new house. Really nice and expensive. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eget hendrerit lorem, a sagittis nunc. Sed ullamcorper ipsum metus, at vestibulum magna ullamcorper et. Ut hendrerit consequat congue. Quisque ut facilisis massa, id pulvinar dolor. Fusce finibus, libero sed imperdiet blandit, justo lectus malesuada purus, non aliquam urna massa at nisl. Morbi mauris diam, feugiat eget quam vel, volutpat convallis orci. Proin porta mi arcu, nec semper massa tincidunt id. Etiam iaculis pretium maximus.'"
+          [amount]=400000
+          [type]="'out'"
+          [date]="'03/04/2028'"
+        ></ae-movement>
       </div>
 
-      <button>Carica altro</button>
+      <button class="load-more" mat-stroked-button>Carica altro</button>
     </div>
   `,
-  styles: []
+  styles: [`
+    .load-more {
+      width: 100%;
+      margin-top: 20px;
+    }
+  `]
 })
 export class MovementsComponent implements OnInit {
 
