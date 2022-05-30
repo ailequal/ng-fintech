@@ -5,8 +5,21 @@ import {Pipe, PipeTransform} from '@angular/core';
 })
 export class TrimWordsPipe implements PipeTransform {
 
-  transform(value: unknown, ...args: unknown[]): unknown {
-    return null;
+  /**
+   * Trims text to a certain length.
+   *
+   * @param value
+   * @param limit
+   * @param completeWords
+   * @param ellipsis
+   *
+   * @link https://stackoverflow.com/questions/44669340/how-to-truncate-text-in-angular2
+   */
+  transform(value: string, limit = 20, completeWords = false, ellipsis = '...'): string {
+    if (completeWords) // Updated the length accordingly to the last word status.
+      limit = value.substr(0, limit).lastIndexOf(' ');
+
+    return value.length > limit ? value.substr(0, limit) + ellipsis : value;
   }
 
 }

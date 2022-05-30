@@ -9,6 +9,9 @@ import {TrimWordsPipe} from './pipes/trim-words.pipe';
   ],
   imports: [
     CommonModule
+  ],
+  exports: [
+    TrimWordsPipe
   ]
 })
 export class SharedModule {

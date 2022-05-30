@@ -22,7 +22,9 @@ import {MovementType} from "../model/movement";
             <span class="title">{{title}}</span>
           </mat-panel-title>
           <mat-panel-description>
-            Currently I am {{panelOpenState ? 'open' : 'closed'}}
+            <p [hidden]="panelOpenState">
+              {{description | trimWords: 24 : true}}
+            </p>
           </mat-panel-description>
         </mat-expansion-panel-header>
 
@@ -32,9 +34,13 @@ import {MovementType} from "../model/movement";
     </mat-accordion>
   `,
   styles: [`
-    .mat-expansion-panel-header-title > span{
+    .mat-expansion-panel-header-title > span {
       margin-left: 10px;
       margin-right: 10px;
+    }
+
+    .mat-expansion-panel-header-description > p {
+      margin: 0;
     }
 
     .mat-form-field + .mat-form-field {
@@ -63,7 +69,7 @@ export class MovementComponent implements OnInit {
 
   @Input() title: string | null = null;
 
-  @Input() description: string | null = null;
+  @Input() description!: string;
 
   @Input() amount: number | null = null;
 
