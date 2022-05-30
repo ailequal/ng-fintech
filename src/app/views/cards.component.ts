@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/core';
-import {CardForm} from "../model/card-form";
+import {CardForm} from "../model/card";
 import {MatDrawer} from "@angular/material/sidenav";
 import {Card} from "../model/card";
 import {CardFormComponent} from "./card-form.component";

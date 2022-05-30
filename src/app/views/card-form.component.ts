@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {NgForm} from "@angular/forms";
-import {CardForm} from "../model/card-form";
+import {CardForm} from "../model/card";
 
 @Component({
   selector: 'ae-card-form',
