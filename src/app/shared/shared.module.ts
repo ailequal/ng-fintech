@@ -1,8 +1,12 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 
+import {TrimWordsPipe} from './pipes/trim-words.pipe';
+
 @NgModule({
-  declarations: [],
+  declarations: [
+    TrimWordsPipe
+  ],
   imports: [
     CommonModule
   ]
