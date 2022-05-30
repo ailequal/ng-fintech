@@ -1,4 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+import {Card} from "../model/card";
+import {Movement, MovementType} from "../model/movement";
 
 @Component({
   selector: 'ae-movements',
@@ -7,9 +9,9 @@ import {Component, OnInit} from '@angular/core';
       <mat-form-field appearance="fill">
         <mat-label>Seleziona una carta</mat-label>
         <mat-select>
-          <mat-option [value]="'card-01'">Carta 1</mat-option>
-          <mat-option [value]="'card-02'">Carta 2</mat-option>
-          <mat-option [value]="'card-03'">Carta 3</mat-option>
+          <mat-option *ngFor="let card of cards" [value]="card._id">
+            {{card.number}}
+          </mat-option>
         </mat-select>
       </mat-form-field>
 
@@ -17,12 +19,14 @@ import {Component, OnInit} from '@angular/core';
 
       <div>
         <ae-movement
-          [title]="'First movement'"
-          [description]="'Bought a new house. Really nice and expensive. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eget hendrerit lorem, a sagittis nunc. Sed ullamcorper ipsum metus, at vestibulum magna ullamcorper et. Ut hendrerit consequat congue. Quisque ut facilisis massa, id pulvinar dolor. Fusce finibus, libero sed imperdiet blandit, justo lectus malesuada purus, non aliquam urna massa at nisl. Morbi mauris diam, feugiat eget quam vel, volutpat convallis orci. Proin porta mi arcu, nec semper massa tincidunt id. Etiam iaculis pretium maximus.'"
-          [amount]=400000
-          [type]="'out'"
-          [date]="'03/04/2028'"
-        ></ae-movement>
+          *ngFor="let movement of movements"
+          [title]="movement.title"
+          [description]="movement.description"
+          [amount]=movement.amount
+          [type]="movement.type"
+          [date]="movement.timestamp | date: 'dd/MM/yyyy'"
+        >
+        </ae-movement>
       </div>
 
       <button class="load-more" mat-stroked-button>Carica altro</button>
@@ -36,6 +40,47 @@ import {Component, OnInit} from '@angular/core';
   `]
 })
 export class MovementsComponent implements OnInit {
+
+  // TODO: Hard coded values for now.
+  cards: Card[] = [
+    {
+      _id: '347987294424',
+      number: '4263982640269214',
+      ownerId: '023923463256',
+      owner: 'Mario',
+      type: 'mastercard',
+      amount: 4500
+    },
+    {
+      _id: '347987294425',
+      number: '4263982640269215',
+      ownerId: '023923463257',
+      owner: 'Luigi',
+      type: 'visa',
+      amount: 5000
+    },
+  ];
+
+  movements: Movement[] = [
+    {
+      _id: '437264958372',
+      title: 'Biglietto aereo Milano-Parigi',
+      description: 'Comprato un biglietto aereo per Parigi da Milano.',
+      cardId: '347987294424',
+      amount: 200,
+      type: 'out',
+      timestamp: 1643923659000
+    },
+    {
+      _id: '437264958373',
+      title: 'Spesa presso Despar',
+      description: 'Comprato la spesa della settimana al Despar.',
+      cardId: '347987294424',
+      amount: 160,
+      type: 'out',
+      timestamp: 1642923659000
+    },
+  ]
 
   constructor() {
   }

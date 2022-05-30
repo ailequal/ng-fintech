@@ -54,16 +54,16 @@ export class CardsComponent implements OnInit {
   cards: Card[] = [
     {
       _id: '347987294424',
-      number: '4263982640269299',
+      number: '4263982640269214',
       ownerId: '023923463256',
       owner: 'Mario',
       type: 'mastercard',
       amount: 4500
     },
     {
-      _id: '347427295724',
-      number: '4263982640269299',
-      ownerId: '423973433276',
+      _id: '347987294425',
+      number: '4263982640269215',
+      ownerId: '023923463257',
       owner: 'Luigi',
       type: 'visa',
       amount: 5000
