@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Contact} from "../model/contact";
-import {NgForm, NgModel} from "@angular/forms";
+import {NgModel} from "@angular/forms";
 
 @Component({
   selector: 'ae-contact-list',
