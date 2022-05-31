@@ -1,57 +1,56 @@
-import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
-import {NgForm} from "@angular/forms";
-import {ContactForm} from "../model/contact";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormControl, FormGroup} from "@angular/forms";
+import {Contact, ContactForm} from "../model/contact";
 
 @Component({
   selector: 'ae-contact-form',
   template: `
-    <form #f="ngForm">
+    <form [formGroup]="contactForm">
       <mat-card class="contact-form">
 
         <mat-card-header>
-          <mat-card-title class="title">Nuovo contatto</mat-card-title>
+          <mat-card-title class="title">
+            {{initialContact ? 'Modifica contatto' : 'Nuovo contatto'}}
+          </mat-card-title>
         </mat-card-header>
 
         <mat-card-content>
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>Nome</mat-label>
             <input
-              ngModel
-              name="name"
               matInput
               type="text"
               required
               minlength="3"
               maxlength="24"
               placeholder="Lucas"
+              formControlName="name"
             >
           </mat-form-field>
 
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>Cognome</mat-label>
             <input
-              ngModel
-              name="surname"
               matInput
               type="text"
               required
               minlength="3"
               maxlength="24"
               placeholder="Tip"
+              formControlName="surname"
             >
           </mat-form-field>
 
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>IBAN</mat-label>
             <input
-              ngModel
-              name="iban"
               matInput
               type="text"
               required
               minlength="27"
               maxlength="27"
               placeholder="IT02L1234512345123456789012"
+              formControlName="iban"
             >
           </mat-form-field>
         </mat-card-content>
@@ -60,7 +59,7 @@ import {ContactForm} from "../model/contact";
           <button
             mat-raised-button
             (click)="submitHandler()"
-            [disabled]="!f.valid"
+            [disabled]="!contactForm.valid"
             type="button"
             class="full-width mb"
             color="primary"
@@ -101,7 +100,13 @@ import {ContactForm} from "../model/contact";
 })
 export class ContactFormComponent implements OnInit {
 
-  @ViewChild('f', {read: NgForm, static: true}) f!: NgForm;
+  contactForm = new FormGroup({
+    name: new FormControl(''),
+    surname: new FormControl(''),
+    iban: new FormControl('')
+  });
+
+  @Input() initialContact: Contact | null = null
 
   @Output() onSubmit: EventEmitter<ContactForm> = new EventEmitter<ContactForm>();
 
@@ -109,14 +114,20 @@ export class ContactFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Update the form value for the edit scenario, if available.
+    this.contactForm.patchValue({
+      name: this.initialContact?.name,
+      surname: this.initialContact?.surname,
+      iban: this.initialContact?.iban
+    })
   }
 
   submitHandler() {
-    this.onSubmit.emit(this.f.value)
+    this.onSubmit.emit(this.contactForm.value)
   }
 
   cleanUp() {
-    this.f.resetForm()
+    this.contactForm.reset()
   }
 
 }

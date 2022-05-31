@@ -7,7 +7,7 @@ import {Contact, ContactForm} from "../model/contact";
     <mat-card class="contacts">
       <mat-card-content>
 
-        <ng-container *ngIf="true">
+        <ng-container *ngIf="show === 'contact-list'">
           <ae-contact-list
             [contacts]="contacts"
             (onCheck)="checkHandler($event)"
@@ -16,16 +16,19 @@ import {Contact, ContactForm} from "../model/contact";
           ></ae-contact-list>
 
           <mat-card-actions>
-            <button class="full-width" mat-raised-button color="primary">Nuovo contatto</button>
+            <button class="full-width" mat-raised-button color="primary" (click)="show = 'contact-form'">
+              Nuovo contatto
+            </button>
           </mat-card-actions>
         </ng-container>
 
-        <ng-container *ngIf="true">
+        <ng-container *ngIf="show === 'contact-form'">
           <mat-card-actions>
-            <button class="full-width" mat-stroked-button>Indietro</button>
+            <button class="full-width" mat-stroked-button (click)="show = 'contact-list'">Indietro</button>
           </mat-card-actions>
 
           <ae-contact-form
+            [initialContact]="selectedContact"
             (onSubmit)="submitHandler($event)"
           ></ae-contact-form>
         </ng-container>
@@ -45,6 +48,10 @@ import {Contact, ContactForm} from "../model/contact";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContactsComponent implements OnInit {
+
+  show: 'contact-list' | 'contact-form' = 'contact-list'
+
+  selectedContact: Contact | null = null
 
   // TODO: Hard coded values for now.
   contacts: Contact[] = [
@@ -73,11 +80,23 @@ export class ContactsComponent implements OnInit {
   }
 
   editHandler(contactId: string) {
-    console.log(contactId)
+    const selectedContact = this.contacts.find(element => {
+      return element._id === contactId
+    })
+
+    if (!selectedContact) {
+      this.show = "contact-list"
+      return
+    }
+
+    this.selectedContact = selectedContact
+    this.show = "contact-form"
   }
 
   deleteHandler(contactId: string) {
-    console.log(contactId)
+    this.contacts = this.contacts.filter(element => {
+      return element._id !== contactId
+    })
   }
 
   submitHandler(contactForm: ContactForm) {
