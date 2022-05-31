@@ -23,6 +23,7 @@ import {ContactListComponent} from '../../views/contact-list.component';
 import {ContactFormComponent} from '../../views/contact-form.component';
 import {AppointmentsComponent} from '../../views/appointments.component';
 import {AppointmentComponent} from '../../views/appointment.component';
+import {AppointmentListComponent} from '../../views/appointment-list.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import {AppointmentComponent} from '../../views/appointment.component';
     ContactListComponent,
     ContactFormComponent,
     AppointmentsComponent,
-    AppointmentComponent
+    AppointmentComponent,
+    AppointmentListComponent
   ],
   imports: [
     CommonModule,

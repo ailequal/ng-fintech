@@ -1,111 +1,39 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/core';
 import {DayWithSlot, DayWithSlots, Location} from "../model/location";
+import {MatDrawer} from "@angular/material/sidenav";
+import {AppointmentComponent} from "./appointment.component";
 
 @Component({
   selector: 'ae-appointments',
   template: `
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title class="title">Sedi</mat-card-title>
-      </mat-card-header>
+    <mat-drawer-container class="container" autosize>
+      <ae-appointment-list
+        class="sidenav-content"
+        [locations]="locations"
+        (onClick)="clickHandler($event)"
+      >
+      </ae-appointment-list>
 
-      <mat-card-content>
-        <mat-list class="locations" role="list">
-          <mat-list-item *ngFor="let location of locations;" role="listitem" (click)="onClick(location, $event)">
-            <div class="location">
-
-              <div class="info">
-                <div class="left">
-                  <mat-icon matPrefix color="primary" aria-hidden="false" aria-label="Business icon">business
-                  </mat-icon>
-                </div>
-
-                <div class="right">
-                  <div class="top">
-                    <span class="location-name">{{location.name}}</span>
-                  </div>
-                  <div class="bottom">
-                    <span class="location-address">{{location.address}}</span>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </mat-list-item>
-        </mat-list>
-      </mat-card-content>
-
-      <mat-card-actions>
-        <button class="full-width" mat-button>I DO NOT NEED THIS BUTTON</button>
-      </mat-card-actions>
-    </mat-card>
+      <mat-drawer #drawerRef class="sidenav" mode="side" position="end">
+        <ae-appointment [location]="selectedLocation" #appointmentRef></ae-appointment>
+      </mat-drawer>
+    </mat-drawer-container>
   `,
   styles: [`
-    .title {
-      font-size: 18px;
-      color: rgba(0, 0, 0, 0.54);
+    .container {
+      min-height: 530px;
     }
 
-    .locations > .mat-list-item {
-      height: 105px;
-      margin-top: 10px;
-      margin-bottom: 10px;
-      padding-top: 5px;
-      padding-bottom: 5px;
-      border-radius: 5px;
-      cursor: pointer;
+    .sidenav-content {
     }
 
-    .locations > .mat-list-item:hover {
-      background-color: #e9ecef;
-    }
-
-    .locations .location {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      flex-direction: column;
-      width: 100%;
-      height: 100%;
-    }
-
-    .locations .location > .info {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      gap: 30px;
-      max-width: 400px;
-      width: 100%;
-    }
-
-    .locations .location > .info > .left {
-    }
-
-    .locations .location > .info > .right {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-      gap: 10px;
-    }
-
-    .locations .location > .info > .right > .top .location-name {
-      font-weight: 700;
-    }
-
-    .full-width {
-      width: 100%;
+    .sidenav {
     }
 
     /* Small size */
     @media screen and (min-width: 576px) {
-      .locations > .mat-list-item {
-        height: 48px;
-      }
-
-      .locations .location {
-        flex-direction: row;
-        align-items: center;
+      .container {
+        min-height: 460px;
       }
     }
   `],
@@ -141,6 +69,8 @@ export class AppointmentsComponent implements OnInit {
     }
   ]
 
+  selectedLocation: Location | null = null
+
   dayWithSlot: DayWithSlot = {
     day: '01/01/2022',
     slot: 5
@@ -151,14 +81,23 @@ export class AppointmentsComponent implements OnInit {
     slots: [5, 6, 8]
   }
 
+  @ViewChild('drawerRef', {read: MatDrawer, static: true}) drawer!: MatDrawer;
+
+  @ViewChild('appointmentRef', {read: AppointmentComponent, static: true}) appointment!: AppointmentComponent;
+
   constructor() {
   }
 
   ngOnInit(): void {
   }
 
-  onClick(location: Location, event: MouseEvent) {
-    console.log(location)
-    console.log(event)
+  clickHandler(location: Location) {
+    this.selectedLocation = location
+    this.drawer.toggle().then(r => console.log(r))
   }
+
+  dispose() {
+    this.drawer.close().then(r => console.log(r))
+  }
+
 }
