@@ -5,6 +5,7 @@ import {TransferForm} from "../model/transfer";
 import {MatDialog} from "@angular/material/dialog";
 import {DialogConfirmComponent} from "./dialog-confirm.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {ContactsComponent} from "./contacts.component";
 
 @Component({
   selector: 'ae-transfer',
@@ -173,8 +174,15 @@ export class TransferComponent implements OnInit {
 
   contactListHandler(event: MouseEvent) {
     // TODO: Open a new modal component: ContactsComponent.
+    const dialogRef = this.dialog.open(ContactsComponent, {
+      width: '100%',
+      maxWidth: '768px',
+    })
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
 
-    this.onContactList.emit(event)
+      this.onContactList.emit(event)
+    });
   }
 
   submitHandler() {
