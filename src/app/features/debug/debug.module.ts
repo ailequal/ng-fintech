@@ -21,6 +21,8 @@ import {DialogConfirmComponent} from '../../views/dialog-confirm.component';
 import {ContactsComponent} from '../../views/contacts.component';
 import {ContactListComponent} from '../../views/contact-list.component';
 import {ContactFormComponent} from '../../views/contact-form.component';
+import {AppointmentsComponent} from '../../views/appointments.component';
+import {AppointmentComponent} from '../../views/appointment.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +40,9 @@ import {ContactFormComponent} from '../../views/contact-form.component';
     DialogConfirmComponent,
     ContactsComponent,
     ContactListComponent,
-    ContactFormComponent
+    ContactFormComponent,
+    AppointmentsComponent,
+    AppointmentComponent
   ],
   imports: [
     CommonModule,
