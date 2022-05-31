@@ -16,6 +16,7 @@ import {CardFormComponent} from '../../views/card-form.component';
 import {CardsComponent} from '../../views/cards.component';
 import {MovementComponent} from '../../views/movement.component';
 import {MovementsComponent} from '../../views/movements.component';
+import {TransferComponent} from '../../views/transfer.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import {MovementsComponent} from '../../views/movements.component';
     CardFormComponent,
     CardsComponent,
     MovementComponent,
-    MovementsComponent
+    MovementsComponent,
+    TransferComponent
   ],
   imports: [
     CommonModule,
