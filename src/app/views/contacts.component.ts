@@ -16,7 +16,12 @@ import {Contact, ContactForm} from "../model/contact";
           ></ae-contact-list>
 
           <mat-card-actions>
-            <button class="full-width" mat-raised-button color="primary" (click)="show = 'contact-form'">
+            <button
+              class="full-width"
+              mat-raised-button
+              color="primary"
+              (click)="show = 'contact-form'; selectedContact = null;"
+            >
               Nuovo contatto
             </button>
           </mat-card-actions>
@@ -24,7 +29,13 @@ import {Contact, ContactForm} from "../model/contact";
 
         <ng-container *ngIf="show === 'contact-form'">
           <mat-card-actions>
-            <button class="full-width" mat-stroked-button (click)="show = 'contact-list'">Indietro</button>
+            <button
+              class="full-width"
+              mat-stroked-button
+              (click)="show = 'contact-list'"
+            >
+              Indietro
+            </button>
           </mat-card-actions>
 
           <ae-contact-form
@@ -85,7 +96,7 @@ export class ContactsComponent implements OnInit {
     })
 
     if (!selectedContact) {
-      this.show = "contact-list"
+      this.resetState()
       return
     }
 
@@ -100,7 +111,27 @@ export class ContactsComponent implements OnInit {
   }
 
   submitHandler(contactForm: ContactForm) {
-    console.log(contactForm)
+    if (this.selectedContact) {
+      // Edit the already existing contact.
+      this.contacts = this.contacts.map(element => {
+        if (element._id !== this.selectedContact?._id)
+          return element
+
+        return {...element, ...contactForm}
+      })
+
+      this.resetState()
+      return
+    }
+
+    // Add a new contact.
+    this.contacts = [...this.contacts, {_id: String(Date.now()), ...contactForm}]
+    this.resetState()
+  }
+
+  resetState() {
+    this.selectedContact = null
+    this.show = "contact-list"
   }
 
 }
