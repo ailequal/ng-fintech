@@ -19,6 +19,7 @@ import {MovementsComponent} from '../../views/movements.component';
 import {TransferComponent} from '../../views/transfer.component';
 import {DialogConfirmComponent} from '../../views/dialog-confirm.component';
 import {ContactsComponent} from '../../views/contacts.component';
+import {ContactListComponent} from '../../views/contact-list.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import {ContactsComponent} from '../../views/contacts.component';
     MovementsComponent,
     TransferComponent,
     DialogConfirmComponent,
-    ContactsComponent
+    ContactsComponent,
+    ContactListComponent
   ],
   imports: [
     CommonModule,
