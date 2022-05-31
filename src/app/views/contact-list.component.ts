@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Contact} from "../model/contact";
 
 @Component({
@@ -13,7 +13,7 @@ import {Contact} from "../model/contact";
       <h3 class="title">Contatti</h3>
 
       <mat-list class="contacts-list" role="list">
-        <mat-list-item *ngFor="let contact of contacts;" role="listitem">
+        <mat-list-item *ngFor="let contact of (contacts | filter: '');" role="listitem">
           <div class="contact">
 
             <div class="info">
@@ -36,7 +36,7 @@ import {Contact} from "../model/contact";
             <mat-action-list class="actions">
               <button
                 mat-list-item
-                (click)="onCheck.emit(contact)"
+                (click)="onCheck.emit(contact._id)"
                 matTooltip="Seleziona"
                 matTooltipPosition="below"
                 matTooltipHideDelay="500"
@@ -46,7 +46,7 @@ import {Contact} from "../model/contact";
 
               <button
                 mat-list-item
-                (click)="onEdit.emit(contact)"
+                (click)="onEdit.emit(contact._id)"
                 matTooltip="Modifica"
                 matTooltipPosition="below"
                 matTooltipHideDelay="500"
@@ -56,7 +56,7 @@ import {Contact} from "../model/contact";
 
               <button
                 mat-list-item
-                (click)="onDelete.emit(contact)"
+                (click)="onDelete.emit(contact._id)"
                 matTooltip="Rimuovi"
                 matTooltipPosition="below"
                 matTooltipHideDelay="500"
@@ -151,27 +151,13 @@ import {Contact} from "../model/contact";
 })
 export class ContactListComponent implements OnInit {
 
-  // TODO: Hard coded values for now.
-  contacts: Contact[] = [
-    {
-      _id: '4jug89hsgvh73',
-      name: 'Mario',
-      surname: 'Mario',
-      iban: 'IT02L1234512345123456789013'
-    },
-    {
-      _id: '4jug89hsgvh74',
-      name: 'Luigi',
-      surname: 'Mario',
-      iban: 'IT02L1234512345123456789014'
-    },
-  ];
+  @Input() contacts: Contact[] = []
 
-  @Output() onCheck: EventEmitter<Contact> = new EventEmitter<Contact>()
+  @Output() onCheck: EventEmitter<string> = new EventEmitter<string>()
 
-  @Output() onEdit: EventEmitter<Contact> = new EventEmitter<Contact>()
+  @Output() onEdit: EventEmitter<string> = new EventEmitter<string>()
 
-  @Output() onDelete: EventEmitter<Contact> = new EventEmitter<Contact>()
+  @Output() onDelete: EventEmitter<string> = new EventEmitter<string>()
 
   constructor() {
   }

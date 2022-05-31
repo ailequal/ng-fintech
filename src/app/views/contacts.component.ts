@@ -1,4 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {Contact} from "../model/contact";
 
 @Component({
   selector: 'ae-contacts',
@@ -6,7 +7,7 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
     <mat-card class="contacts">
       <mat-card-content>
 
-        <ae-contact-list></ae-contact-list>
+        <ae-contact-list [contacts]="contacts"></ae-contact-list>
 
         <mat-card-actions>
           <button class="full-width" mat-raised-button color="primary">Nuovo contatto</button>
@@ -27,6 +28,22 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContactsComponent implements OnInit {
+
+  // TODO: Hard coded values for now.
+  contacts: Contact[] = [
+    {
+      _id: '4jug89hsgvh73',
+      name: 'Mario',
+      surname: 'Mario',
+      iban: 'IT02L1234512345123456789013'
+    },
+    {
+      _id: '4jug89hsgvh74',
+      name: 'Luigi',
+      surname: 'Mario',
+      iban: 'IT02L1234512345123456789014'
+    }
+  ];
 
   constructor() {
   }
