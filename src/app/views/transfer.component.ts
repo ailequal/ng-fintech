@@ -10,7 +10,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
   selector: 'ae-transfer',
   template: `
     <form #f="ngForm">
-      <mat-card class="card-form">
+      <mat-card class="transfer-form">
 
         <mat-card-header>
           <mat-card-title class="title">Trasferimenti</mat-card-title>
