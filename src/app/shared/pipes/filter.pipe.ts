@@ -7,6 +7,9 @@ import {Contact} from "../../model/contact";
 export class FilterPipe implements PipeTransform {
 
   transform(value: Contact[], filter: string = ''): Contact[] {
+    if (!filter)
+      return value;
+
     return value.filter(element => {
       const fullName = element.name.toLowerCase() + ' ' + element.surname.toLowerCase()
 

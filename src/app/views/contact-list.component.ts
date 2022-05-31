@@ -1,19 +1,24 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Contact} from "../model/contact";
+import {NgForm, NgModel} from "@angular/forms";
 
 @Component({
   selector: 'ae-contact-list',
   template: `
     <mat-form-field class="full-width" appearance="fill">
       <mat-label>Cerca</mat-label>
-      <input matInput type="search">
+      <input matInput type="search" #searchRef="ngModel" [(ngModel)]="searchValue">
+      <button *ngIf="searchValue" matSuffix mat-icon-button aria-label="Clear" (click)="searchValue=''">
+        <mat-icon>close</mat-icon>
+      </button>
+
     </mat-form-field>
 
     <div class="contacts-container">
       <h3 class="title">Contatti</h3>
 
       <mat-list class="contacts-list" role="list">
-        <mat-list-item *ngFor="let contact of (contacts | filter: '');" role="listitem">
+        <mat-list-item *ngFor="let contact of (contacts | filter: searchRef.value);" role="listitem">
           <div class="contact">
 
             <div class="info">
@@ -150,6 +155,10 @@ import {Contact} from "../model/contact";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContactListComponent implements OnInit {
+
+  searchValue = '';
+
+  @ViewChild('searchRef', {read: NgModel, static: true}) searchRef!: NgModel
 
   @Input() contacts: Contact[] = []
 
