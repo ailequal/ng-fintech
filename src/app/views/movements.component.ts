@@ -16,7 +16,7 @@ import {MatSelectChange} from "@angular/material/select";
         </mat-select>
       </mat-form-field>
 
-      <h2>Saldo: {{selectedCard?.amount | currency: 'EUR'}}</h2>
+      <h2>Saldo: {{selectedCard ? (selectedCard.amount | currency: 'EUR') : '---'}}</h2>
 
       <div *ngIf="selectedCard" class="movements">
         <ae-movement
@@ -30,7 +30,7 @@ import {MatSelectChange} from "@angular/material/select";
         </ae-movement>
       </div>
 
-      <button class="load-more" mat-stroked-button>Carica altro</button>
+      <button (click)="onLoadMore($event)" class="load-more" mat-stroked-button>Carica altro</button>
     </div>
   `,
   styles: [`
@@ -128,7 +128,12 @@ export class MovementsComponent implements OnInit {
       return;
     }
 
+    // TODO: Only add 5 more movements each time, until it's full.
     this.selectedMovements = selectedMovements.movements
+  }
+
+  onLoadMore(event: MouseEvent) {
+    console.log(event)
   }
 
 }
