@@ -171,16 +171,12 @@ export class TransferComponent implements OnInit {
   }
 
   submitHandler(event: any) {
-    console.log(event)
-
     const dialogRef = this.dialog.open(DialogConfirmComponent);
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+      if (result)
+        this.onSubmit.emit(this.f.value)
     });
-
-    // Emit the event outside based on the result of the dialog.
-    // this.onSubmit.emit(this.f.value)
   }
 
 }
