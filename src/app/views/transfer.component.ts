@@ -1,16 +1,18 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {NgForm} from "@angular/forms";
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormControl, FormGroup} from "@angular/forms";
 import {Card} from "../model/card";
 import {TransferForm} from "../model/transfer";
 import {MatDialog} from "@angular/material/dialog";
 import {DialogConfirmComponent} from "./dialog-confirm.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ContactsComponent} from "./contacts.component";
+import {Contact} from "../model/contact";
+import {contacts} from 'src/assets/mock-contacts';
 
 @Component({
   selector: 'ae-transfer',
   template: `
-    <form #f="ngForm">
+    <form [formGroup]="transferForm">
       <mat-card class="transfer-form">
 
         <mat-card-header>
@@ -27,60 +29,56 @@ import {ContactsComponent} from "./contacts.component";
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>Nome</mat-label>
             <input
-              ngModel
-              name="name"
               matInput
               type="text"
               required
               minlength="3"
               maxlength="24"
               placeholder="Lucas"
+              formControlName="name"
             >
           </mat-form-field>
 
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>Cognome</mat-label>
             <input
-              ngModel
-              name="surname"
               matInput
               type="text"
               required
               minlength="3"
               maxlength="24"
               placeholder="Tip"
+              formControlName="surname"
             >
           </mat-form-field>
 
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>IBAN</mat-label>
             <input
-              ngModel
-              name="iban"
               matInput
               type="text"
               required
               minlength="27"
               maxlength="27"
               placeholder="IT02L1234512345123456789012"
+              formControlName="iban"
             >
           </mat-form-field>
 
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>Importo</mat-label>
             <input
-              ngModel
-              name="amount"
               matInput
               type="number"
               required
               placeholder="100"
+              formControlName="amount"
             >
           </mat-form-field>
 
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>Seleziona una carta</mat-label>
-            <mat-select ngModel name="card" required>
+            <mat-select formControlName="card" required>
               <mat-option *ngFor="let card of cards" [value]="card._id">
                 {{card.number}}
               </mat-option>
@@ -92,7 +90,7 @@ import {ContactsComponent} from "./contacts.component";
           <button
             mat-raised-button
             (click)="submitHandler()"
-            [disabled]="!f.valid"
+            [disabled]="!transferForm.valid"
             type="button"
             class="full-width mb"
             color="primary"
@@ -138,6 +136,14 @@ import {ContactsComponent} from "./contacts.component";
 })
 export class TransferComponent implements OnInit {
 
+  transferForm = new FormGroup({
+    name: new FormControl(''),
+    surname: new FormControl(''),
+    iban: new FormControl(''),
+    amount: new FormControl(''),
+    card: new FormControl(''),
+  });
+
   // TODO: Hard coded values for now.
   cards: Card[] = [
     {
@@ -158,7 +164,7 @@ export class TransferComponent implements OnInit {
     },
   ];
 
-  @ViewChild('f', {read: NgForm, static: true}) f!: NgForm;
+  contacts: Contact[] = contacts
 
   @Input() selectedContact: any = null;
 
@@ -173,13 +179,32 @@ export class TransferComponent implements OnInit {
   }
 
   contactListHandler(event: MouseEvent) {
-    // TODO: Open a new modal component: ContactsComponent.
     const dialogRef = this.dialog.open(ContactsComponent, {
       width: '100%',
       maxWidth: '768px',
     })
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      // Fill the form transfer values, if the id is available.
+      if (!result) {
+        this.onContactList.emit(event)
+        return
+      }
+
+      const selectedUser = this.contacts.find(element => {
+        return element._id === result
+      })
+
+      if (!selectedUser) {
+        this.onContactList.emit(event)
+        return
+      }
+
+      // Finally, fill the form with the new data.
+      this.transferForm.patchValue({
+        name: selectedUser.name,
+        surname: selectedUser.surname,
+        iban: selectedUser.iban
+      })
 
       this.onContactList.emit(event)
     });
@@ -191,7 +216,8 @@ export class TransferComponent implements OnInit {
       if (!result)
         return
 
-      this.onSubmit.emit(this.f.value)
+      // TODO: Save the data on the server.
+      this.onSubmit.emit(this.transferForm.value)
 
       this._snackBar.open('Trasferimento inviato', '✅', {
         horizontalPosition: 'end',
@@ -202,7 +228,7 @@ export class TransferComponent implements OnInit {
   }
 
   cleanUp() {
-    this.f.resetForm()
+    this.transferForm.reset()
   }
 
 }

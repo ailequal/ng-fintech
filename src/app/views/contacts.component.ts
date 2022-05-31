@@ -1,5 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {Contact, ContactForm} from "../model/contact";
+import {MatDialogRef} from "@angular/material/dialog";
+import {contacts} from "../../assets/mock-contacts";
 
 @Component({
   selector: 'ae-contacts',
@@ -65,29 +67,18 @@ export class ContactsComponent implements OnInit {
   selectedContact: Contact | null = null
 
   // TODO: Hard coded values for now.
-  contacts: Contact[] = [
-    {
-      _id: '4jug89hsgvh73',
-      name: 'Mario',
-      surname: 'Mario',
-      iban: 'IT02L1234512345123456789013'
-    },
-    {
-      _id: '4jug89hsgvh74',
-      name: 'Luigi',
-      surname: 'Mario',
-      iban: 'IT02L1234512345123456789014'
-    }
-  ];
+  contacts: Contact[] = contacts
 
-  constructor() {
+  constructor(public dialogRef: MatDialogRef<ContactsComponent>) {
   }
 
   ngOnInit(): void {
   }
 
   checkHandler(contactId: string) {
-    console.log(contactId)
+    // TODO: Get the new contacts list from the server.
+
+    this.dialogRef.close(contactId)
   }
 
   editHandler(contactId: string) {
