@@ -4,6 +4,7 @@ import {Card} from "../model/card";
 import {TransferForm} from "../model/transfer";
 import {MatDialog} from "@angular/material/dialog";
 import {DialogConfirmComponent} from "./dialog-confirm.component";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'ae-transfer',
@@ -17,7 +18,7 @@ import {DialogConfirmComponent} from "./dialog-confirm.component";
 
         <mat-card-content>
           <mat-card-actions>
-            <button mat-stroked-button type="button" class="full-width" (click)="onContactList.emit($event)">
+            <button mat-stroked-button type="button" class="full-width" (click)="contactListHandler($event)">
               Lista contatti
             </button>
           </mat-card-actions>
@@ -89,7 +90,7 @@ import {DialogConfirmComponent} from "./dialog-confirm.component";
         <mat-card-actions>
           <button
             mat-raised-button
-            (click)="submitHandler($event)"
+            (click)="submitHandler()"
             [disabled]="!f.valid"
             type="button"
             class="full-width mb"
@@ -160,23 +161,40 @@ export class TransferComponent implements OnInit {
 
   @Input() selectedContact: any = null;
 
-  @Output() onSubmit: EventEmitter<TransferForm> = new EventEmitter<TransferForm>();
-
   @Output() onContactList: EventEmitter<MouseEvent> = new EventEmitter<MouseEvent>();
 
-  constructor(public dialog: MatDialog) {
+  @Output() onSubmit: EventEmitter<TransferForm> = new EventEmitter<TransferForm>();
+
+  constructor(public dialog: MatDialog, private _snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
   }
 
-  submitHandler(event: any) {
-    const dialogRef = this.dialog.open(DialogConfirmComponent);
+  contactListHandler(event: MouseEvent) {
+    // TODO: Open a new modal component: ContactsComponent.
 
+    this.onContactList.emit(event)
+  }
+
+  submitHandler() {
+    const dialogRef = this.dialog.open(DialogConfirmComponent);
     dialogRef.afterClosed().subscribe(result => {
-      if (result)
-        this.onSubmit.emit(this.f.value)
+      if (!result)
+        return
+
+      this.onSubmit.emit(this.f.value)
+
+      this._snackBar.open('Trasferimento inviato', '✅', {
+        horizontalPosition: 'end',
+        verticalPosition: 'top',
+        duration: 3000
+      });
     });
+  }
+
+  cleanUp() {
+    this.f.resetForm()
   }
 
 }
