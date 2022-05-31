@@ -1,6 +1,6 @@
 import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {NgForm} from "@angular/forms";
-import {TransferForm} from "../model/transfer";
+import {ContactForm} from "../model/contact";
 
 @Component({
   selector: 'ae-contact-form',
@@ -103,7 +103,7 @@ export class ContactFormComponent implements OnInit {
 
   @ViewChild('f', {read: NgForm, static: true}) f!: NgForm;
 
-  @Output() onSubmit: EventEmitter<TransferForm> = new EventEmitter<TransferForm>();
+  @Output() onSubmit: EventEmitter<ContactForm> = new EventEmitter<ContactForm>();
 
   constructor() {
   }

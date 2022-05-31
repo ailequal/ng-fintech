@@ -4,3 +4,9 @@ export interface Contact {
   surname: string;
   iban: string;
 }
+
+export interface ContactForm {
+  name: string;
+  surname: string;
+  iban: string;
+}
