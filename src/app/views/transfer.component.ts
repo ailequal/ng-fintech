@@ -2,6 +2,8 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output,
 import {NgForm} from "@angular/forms";
 import {Card} from "../model/card";
 import {TransferForm} from "../model/transfer";
+import {MatDialog} from "@angular/material/dialog";
+import {DialogConfirmComponent} from "./dialog-confirm.component";
 
 @Component({
   selector: 'ae-transfer',
@@ -87,7 +89,7 @@ import {TransferForm} from "../model/transfer";
         <mat-card-actions>
           <button
             mat-raised-button
-            (click)="onSubmit.emit(f.value)"
+            (click)="submitHandler($event)"
             [disabled]="!f.valid"
             type="button"
             class="full-width mb"
@@ -162,10 +164,23 @@ export class TransferComponent implements OnInit {
 
   @Output() onContactList: EventEmitter<MouseEvent> = new EventEmitter<MouseEvent>();
 
-  constructor() {
+  constructor(public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
+  }
+
+  submitHandler(event: any) {
+    console.log(event)
+
+    const dialogRef = this.dialog.open(DialogConfirmComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+
+    // Emit the event outside based on the result of the dialog.
+    // this.onSubmit.emit(this.f.value)
   }
 
 }

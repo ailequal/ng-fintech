@@ -17,6 +17,7 @@ import {CardsComponent} from '../../views/cards.component';
 import {MovementComponent} from '../../views/movement.component';
 import {MovementsComponent} from '../../views/movements.component';
 import {TransferComponent} from '../../views/transfer.component';
+import {DialogConfirmComponent} from '../../views/dialog-confirm.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import {TransferComponent} from '../../views/transfer.component';
     CardsComponent,
     MovementComponent,
     MovementsComponent,
-    TransferComponent
+    TransferComponent,
+    DialogConfirmComponent
   ],
   imports: [
     CommonModule,
