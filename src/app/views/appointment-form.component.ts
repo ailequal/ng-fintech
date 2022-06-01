@@ -8,6 +8,16 @@ import {FormBuilder} from "@angular/forms";
 @Component({
   selector: 'ae-appointment-form',
   template: `
+    <ng-container *ngIf="location">
+      <ae-leaflet
+        [coords]="location.coords"
+        [zoom]="9"
+        [markerText]="location.name"
+      ></ae-leaflet>
+
+      <br>
+    </ng-container>
+
     <mat-card class="appointment-form">
 
       <form [formGroup]="appointmentForm">

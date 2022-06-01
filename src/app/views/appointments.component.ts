@@ -65,7 +65,7 @@ export class AppointmentsComponent implements OnInit {
       address: 'Via Wow 34, Milano',
       phone: '+39 055 483928',
       email: 'milan-02@bank.com',
-      coords: [2243, 4333]
+      coords: [43, 13]
     },
     {
       _id: 'fjds9j3h2l4',
@@ -73,7 +73,7 @@ export class AppointmentsComponent implements OnInit {
       address: 'Via Cosimo 52, Milano',
       phone: '+39 055 483929',
       email: 'milan-03@bank.com',
-      coords: [252, 343]
+      coords: [52, 52]
     }
   ]
 
