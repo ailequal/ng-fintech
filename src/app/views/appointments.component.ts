@@ -1,7 +1,8 @@
 import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/core';
-import {DayWithSlots, Location} from "../model/location";
+import {DayWithSlot, DayWithSlots, Location} from "../model/location";
 import {MatDrawer} from "@angular/material/sidenav";
 import {AppointmentFormComponent} from "./appointment-form.component";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'ae-appointments',
@@ -19,6 +20,7 @@ import {AppointmentFormComponent} from "./appointment-form.component";
           #appointmentFormRef
           [location]="selectedLocation"
           [allDayWithSlots]="selectedDayWithSlots"
+          (onBook)="bookHandler($event)"
           (onClose)="closedHandler($event)"
         >
         </ae-appointment-form>
@@ -124,7 +126,7 @@ export class AppointmentsComponent implements OnInit {
     static: true
   }) appointmentForm!: AppointmentFormComponent;
 
-  constructor() {
+  constructor(private _snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
@@ -163,6 +165,19 @@ export class AppointmentsComponent implements OnInit {
     this.selectedDayWithSlots = selectedDayWithSlots.dayWithSlots
 
     this.drawer.toggle().then(r => console.log(r))
+  }
+
+  bookHandler(dayWithSlot: DayWithSlot) {
+    // TODO: Save the data on the server.
+    console.log(dayWithSlot);
+
+    this._snackBar.open('Appuntamento prenotato', '✅', {
+      horizontalPosition: 'end',
+      verticalPosition: 'top',
+      duration: 3000
+    });
+
+    this.dispose();
   }
 
   closedHandler(event: MouseEvent | void) {

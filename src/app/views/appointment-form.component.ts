@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {DayWithSlots, Location} from "../model/location";
+import {DayWithSlot, DayWithSlots, Location} from "../model/location";
 import {MatDatepicker, MatDatepickerInputEvent} from "@angular/material/datepicker";
 import {FormBuilder} from "@angular/forms";
 
@@ -51,6 +51,9 @@ import {FormBuilder} from "@angular/forms";
       </form>
 
       <mat-card-actions align="end">
+        <button mat-raised-button (click)="bookHandler()" [disabled]="!appointmentForm.valid" color="primary">
+          Prenota
+        </button>
         <button mat-stroked-button (click)="onClose.emit($event)">Chiudi</button>
       </mat-card-actions>
 
@@ -73,7 +76,7 @@ import {FormBuilder} from "@angular/forms";
     .mat-card-actions .mat-button,
     .mat-card-actions .mat-raised-button,
     .mat-card-actions .mat-stroked-button {
-      margin: 0 0 0 0;
+      margin: 0 10px 0 10px;
     }
 
     .mat-card-actions .mat-button.mb,
@@ -93,6 +96,10 @@ export class AppointmentFormComponent implements OnInit {
   @Input() allDayWithSlots: DayWithSlots[] = []
 
   selectedDayWithSlots: DayWithSlots | null = null
+
+  selectedDayWithSlot: DayWithSlot | null = null
+
+  @Output() onBook: EventEmitter<DayWithSlot> = new EventEmitter<DayWithSlot>()
 
   @Output() onClose: EventEmitter<MouseEvent> = new EventEmitter<MouseEvent>()
 
@@ -124,16 +131,11 @@ export class AppointmentFormComponent implements OnInit {
     })
   };
 
-  cleanUp() {
-    this.selectedDayWithSlots = null
-    this.time?.disable()
-    this.appointmentForm.reset()
-  }
-
   dateChangeHandler(event: MatDatepickerInputEvent<Date, Date | null>) {
+    this.time?.reset()
+
     if (!event || !event.value) {
       this.selectedDayWithSlots = null
-      this.time?.disable()
       return
     }
 
@@ -144,7 +146,6 @@ export class AppointmentFormComponent implements OnInit {
 
     if (!selectedDayWithSlots) {
       this.selectedDayWithSlots = null
-      this.time?.disable()
       return
     }
 
@@ -163,6 +164,26 @@ export class AppointmentFormComponent implements OnInit {
       day = '0' + day;
 
     return [month, day, year].join('/');
+  }
+
+  bookHandler() {
+    if (!this.selectedDayWithSlots || !this.time)
+      throw new Error('Day and slot should be filled at this point.')
+
+    const selectedDayWithSlot: DayWithSlot = {
+      day: this.selectedDayWithSlots.day,
+      slot: this.time.value
+    }
+
+    this.selectedDayWithSlot = selectedDayWithSlot
+    this.onBook.emit(selectedDayWithSlot)
+  }
+
+  cleanUp() {
+    this.selectedDayWithSlots = null
+    this.selectedDayWithSlot = null
+    this.time?.disable()
+    this.appointmentForm.reset()
   }
 
 }
