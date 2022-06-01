@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {DayWithSlots, Location} from "../model/location";
 import {MatDatepicker} from "@angular/material/datepicker";
 import {FormControl, FormGroup} from "@angular/forms";
@@ -20,7 +20,7 @@ import {FormControl, FormGroup} from "@angular/forms";
             <input
               matInput
               [matDatepicker]="picker"
-              [matDatepickerFilter]="myFilter"
+              [matDatepickerFilter]="appointmentFilter"
               formControlName="date"
             >
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -29,8 +29,8 @@ import {FormControl, FormGroup} from "@angular/forms";
 
         </mat-card-content>
 
-        <mat-card-actions>
-          <button (click)="debugHandler($event)">debug</button>
+        <mat-card-actions align="end">
+          <button mat-stroked-button (click)="onClose.emit($event)">Chiudi</button>
         </mat-card-actions>
 
       </mat-card>
@@ -48,6 +48,18 @@ import {FormControl, FormGroup} from "@angular/forms";
 
     .mat-card-title {
       font-weight: 400;
+    }
+
+    .mat-card-actions .mat-button,
+    .mat-card-actions .mat-raised-button,
+    .mat-card-actions .mat-stroked-button {
+      margin: 0 0 0 0;
+    }
+
+    .mat-card-actions .mat-button.mb,
+    .mat-card-actions .mat-raised-button.mb,
+    .mat-card-actions .mat-stroked-button.mb {
+      margin-bottom: 20px;
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -67,24 +79,22 @@ export class AppointmentFormComponent implements OnInit {
 
   @Input() dayWithSlots: DayWithSlots[] = []
 
+  @Output() onClose: EventEmitter<MouseEvent> = new EventEmitter<MouseEvent>()
+
   constructor() {
   }
 
   ngOnInit(): void {
   }
 
-  myFilter = (d: Date | null): boolean => {
-    const day = (d || new Date()).getDay();
-    // Prevent Saturday and Sunday from being selected.
-    return day !== 0 && day !== 6;
-  };
+  appointmentFilter = (d: Date | null): boolean => {
+    // Only allow a date from day with slots.
+    const day = (d || new Date());
 
-  debugHandler(event: MouseEvent) {
-    console.log(event)
-    console.log(this.location)
-    console.log(this.dayWithSlots)
-    console.log(this.picker)
-  }
+    return this.dayWithSlots.some(element => {
+      return (new Date(element.day)).getTime() === day.getTime()
+    })
+  };
 
   cleanUp() {
     this.appointmentForm.reset()

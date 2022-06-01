@@ -14,11 +14,12 @@ import {AppointmentFormComponent} from "./appointment-form.component";
       >
       </ae-appointment-list>
 
-      <mat-drawer #drawerRef class="sidenav" mode="side" position="end">
+      <mat-drawer (closed)="closedHandler($event)" #drawerRef class="sidenav" mode="side" position="end">
         <ae-appointment-form
-          #appointmentRef
+          #appointmentFormRef
           [location]="selectedLocation"
           [dayWithSlots]="selectedDayWithSlots"
+          (onClose)="closedHandler($event)"
         >
         </ae-appointment-form>
       </mat-drawer>
@@ -81,15 +82,15 @@ export class AppointmentsComponent implements OnInit {
       id: 'fjds9j3h2l2',
       dayWithSlots: [
         {
-          day: '20/06/2022',
+          day: '06/20/2022',
           slots: [9, 11, 12]
         },
         {
-          day: '22/06/2022',
+          day: '06/22/2022',
           slots: [11, 15]
         },
         {
-          day: '23/06/2022',
+          day: '06/23/2022',
           slots: [10]
         }
       ]
@@ -98,7 +99,7 @@ export class AppointmentsComponent implements OnInit {
       id: 'fjds9j3h2l3',
       dayWithSlots: [
         {
-          day: '21/06/2022',
+          day: '06/21/2022',
           slots: [11]
         }
       ]
@@ -107,7 +108,7 @@ export class AppointmentsComponent implements OnInit {
       id: 'fjds9j3h2l4',
       dayWithSlots: [
         {
-          day: '24/06/2022',
+          day: '06/24/2022',
           slots: [9, 11]
         }
       ]
@@ -118,7 +119,10 @@ export class AppointmentsComponent implements OnInit {
 
   @ViewChild('drawerRef', {read: MatDrawer, static: true}) drawer!: MatDrawer;
 
-  @ViewChild('appointmentRef', {read: AppointmentFormComponent, static: true}) appointment!: AppointmentFormComponent;
+  @ViewChild('appointmentFormRef', {
+    read: AppointmentFormComponent,
+    static: true
+  }) appointmentForm!: AppointmentFormComponent;
 
   constructor() {
   }
@@ -161,8 +165,13 @@ export class AppointmentsComponent implements OnInit {
     this.drawer.toggle().then(r => console.log(r))
   }
 
+  closedHandler(event: MouseEvent | void) {
+    this.dispose()
+  }
+
   dispose() {
     this.drawer.close().then(r => console.log(r))
+    this.appointmentForm.cleanUp()
   }
 
 }
