@@ -18,7 +18,7 @@ import {AppointmentFormComponent} from "./appointment-form.component";
         <ae-appointment-form
           #appointmentFormRef
           [location]="selectedLocation"
-          [dayWithSlots]="selectedDayWithSlots"
+          [allDayWithSlots]="selectedDayWithSlots"
           (onClose)="closedHandler($event)"
         >
         </ae-appointment-form>
