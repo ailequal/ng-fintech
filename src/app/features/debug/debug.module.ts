@@ -24,6 +24,7 @@ import {ContactFormComponent} from '../../views/contact-form.component';
 import {AppointmentsComponent} from '../../views/appointments.component';
 import {AppointmentFormComponent} from '../../views/appointment-form.component';
 import {AppointmentListComponent} from '../../views/appointment-list.component';
+import {LeafletComponent} from '../../views/leaflet.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import {AppointmentListComponent} from '../../views/appointment-list.component';
     ContactFormComponent,
     AppointmentsComponent,
     AppointmentFormComponent,
-    AppointmentListComponent
+    AppointmentListComponent,
+    LeafletComponent
   ],
   imports: [
     CommonModule,
