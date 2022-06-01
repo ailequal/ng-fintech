@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit, ViewChild} from '@angular/core';
-import {Location} from "../model/location";
+import {DayWithSlots, Location} from "../model/location";
 import {MatDatepicker} from "@angular/material/datepicker";
 import {FormControl, FormGroup} from "@angular/forms";
 
@@ -10,7 +10,7 @@ import {FormControl, FormGroup} from "@angular/forms";
       <mat-card class="appointment-form">
 
         <mat-card-header>
-          <mat-card-title class="title">Prenotazione</mat-card-title>
+          <mat-card-title class="title">Data e ora</mat-card-title>
         </mat-card-header>
 
         <mat-card-content>
@@ -49,18 +49,6 @@ import {FormControl, FormGroup} from "@angular/forms";
     .mat-card-title {
       font-weight: 400;
     }
-
-    .mat-card-actions .mat-button,
-    .mat-card-actions .mat-raised-button,
-    .mat-card-actions .mat-stroked-button {
-      margin: 0 0 0 0;
-    }
-
-    .mat-card-actions .mat-button.mb,
-    .mat-card-actions .mat-raised-button.mb,
-    .mat-card-actions .mat-stroked-button.mb {
-      margin-bottom: 20px;
-    }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -77,6 +65,8 @@ export class AppointmentFormComponent implements OnInit {
 
   @Input() location: Location | null = null
 
+  @Input() dayWithSlots: DayWithSlots[] = []
+
   constructor() {
   }
 
@@ -92,6 +82,7 @@ export class AppointmentFormComponent implements OnInit {
   debugHandler(event: MouseEvent) {
     console.log(event)
     console.log(this.location)
+    console.log(this.dayWithSlots)
     console.log(this.picker)
   }
 

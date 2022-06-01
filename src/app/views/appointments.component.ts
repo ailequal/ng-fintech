@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/core';
-import {DayWithSlot, DayWithSlots, Location} from "../model/location";
+import {DayWithSlots, Location} from "../model/location";
 import {MatDrawer} from "@angular/material/sidenav";
 import {AppointmentFormComponent} from "./appointment-form.component";
 
@@ -15,7 +15,12 @@ import {AppointmentFormComponent} from "./appointment-form.component";
       </ae-appointment-list>
 
       <mat-drawer #drawerRef class="sidenav" mode="side" position="end">
-        <ae-appointment-form [location]="selectedLocation" #appointmentRef></ae-appointment-form>
+        <ae-appointment-form
+          #appointmentRef
+          [location]="selectedLocation"
+          [dayWithSlots]="selectedDayWithSlots"
+        >
+        </ae-appointment-form>
       </mat-drawer>
     </mat-drawer-container>
   `,
@@ -60,7 +65,7 @@ export class AppointmentsComponent implements OnInit {
       coords: [2243, 4333]
     },
     {
-      _id: 'fjds9j3h2l3',
+      _id: 'fjds9j3h2l4',
       name: 'Sede Milano 03',
       address: 'Via Cosimo 52, Milano',
       phone: '+39 055 483929',
@@ -71,15 +76,45 @@ export class AppointmentsComponent implements OnInit {
 
   selectedLocation: Location | null = null
 
-  dayWithSlot: DayWithSlot = {
-    day: '01/01/2022',
-    slot: 5
-  }
+  dayWithSlots: { id: string, dayWithSlots: DayWithSlots[] }[] = [
+    {
+      id: 'fjds9j3h2l2',
+      dayWithSlots: [
+        {
+          day: '20/06/2022',
+          slots: [9, 11, 12]
+        },
+        {
+          day: '22/06/2022',
+          slots: [11, 15]
+        },
+        {
+          day: '23/06/2022',
+          slots: [10]
+        }
+      ]
+    },
+    {
+      id: 'fjds9j3h2l3',
+      dayWithSlots: [
+        {
+          day: '21/06/2022',
+          slots: [11]
+        }
+      ]
+    },
+    {
+      id: 'fjds9j3h2l4',
+      dayWithSlots: [
+        {
+          day: '24/06/2022',
+          slots: [9, 11]
+        }
+      ]
+    }
+  ]
 
-  daysWithSlot: DayWithSlots = {
-    day: '05/04/2022',
-    slots: [5, 6, 8]
-  }
+  selectedDayWithSlots: DayWithSlots[] = []
 
   @ViewChild('drawerRef', {read: MatDrawer, static: true}) drawer!: MatDrawer;
 
@@ -92,7 +127,37 @@ export class AppointmentsComponent implements OnInit {
   }
 
   clickHandler(location: Location) {
-    this.selectedLocation = location
+    if (!location) {
+      this.selectedLocation = null
+      this.selectedDayWithSlots = []
+      return
+    }
+
+    // Set the active location.
+    const selectedLocation = this.locations.find(element => {
+      return element._id === location._id
+    })
+
+    if (!selectedLocation) {
+      this.selectedLocation = null;
+      this.selectedDayWithSlots = []
+      return;
+    }
+
+    this.selectedLocation = selectedLocation
+
+    // Set the active day with slots.
+    const selectedDayWithSlots = this.dayWithSlots.find(element => {
+      return element.id === this.selectedLocation?._id
+    })
+
+    if (!selectedDayWithSlots) {
+      this.selectedDayWithSlots = []
+      return;
+    }
+
+    this.selectedDayWithSlots = selectedDayWithSlots.dayWithSlots
+
     this.drawer.toggle().then(r => console.log(r))
   }
 
