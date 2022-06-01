@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/core';
 import {DayWithSlot, DayWithSlots, Location} from "../model/location";
 import {MatDrawer} from "@angular/material/sidenav";
-import {AppointmentComponent} from "./appointment.component";
+import {AppointmentFormComponent} from "./appointment-form.component";
 
 @Component({
   selector: 'ae-appointments',
@@ -15,7 +15,7 @@ import {AppointmentComponent} from "./appointment.component";
       </ae-appointment-list>
 
       <mat-drawer #drawerRef class="sidenav" mode="side" position="end">
-        <ae-appointment [location]="selectedLocation" #appointmentRef></ae-appointment>
+        <ae-appointment-form [location]="selectedLocation" #appointmentRef></ae-appointment-form>
       </mat-drawer>
     </mat-drawer-container>
   `,
@@ -83,7 +83,7 @@ export class AppointmentsComponent implements OnInit {
 
   @ViewChild('drawerRef', {read: MatDrawer, static: true}) drawer!: MatDrawer;
 
-  @ViewChild('appointmentRef', {read: AppointmentComponent, static: true}) appointment!: AppointmentComponent;
+  @ViewChild('appointmentRef', {read: AppointmentFormComponent, static: true}) appointment!: AppointmentFormComponent;
 
   constructor() {
   }
