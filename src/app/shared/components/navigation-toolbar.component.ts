@@ -1,18 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'ae-navigation-toolbar',
   template: `
-    <p>
-      navigation-toolbar works!
-    </p>
+    <mat-toolbar color="primary">
+      <span>NgFintech</span>
+    </mat-toolbar>
   `,
-  styles: [
-  ]
+  styles: [`
+  `],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavigationToolbarComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }

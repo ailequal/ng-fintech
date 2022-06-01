@@ -4,9 +4,9 @@ import it from "@angular/common/locales/it";
 import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MaterialModule} from "./shared/material/material.module";
 
 import {AppComponent} from './app.component';
+import {SharedModule} from "./shared/shared.module";
 
 registerLocaleData(it)
 
@@ -18,7 +18,7 @@ registerLocaleData(it)
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MaterialModule
+    SharedModule
   ],
   providers: [{provide: LOCALE_ID, useValue: 'it'}],
   bootstrap: [AppComponent]
