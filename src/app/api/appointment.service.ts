@@ -20,12 +20,8 @@ export class AppointmentService {
     return this._http.get<DayWithSlots[]>(environment.apiUrl + '/slots/' + locationId)
   }
 
-  setSchedule(dayWithSlot: DayWithSlot): any {
-    const sub = this._http.post<any>(environment.apiUrl + '/schedule', {...dayWithSlot}).subscribe((v) => {
-      console.log(v)
-    })
-
-    console.log(sub)
+  setSchedule(schedule: DayWithSlot): Observable<boolean> {
+    return this._http.post<boolean>(environment.apiUrl + '/schedule', schedule)
   }
 
 }
