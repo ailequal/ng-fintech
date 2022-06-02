@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Card} from "../../models/card";
+import {Card} from "../../../models/card";
 
 @Component({
   selector: 'ae-card-list',

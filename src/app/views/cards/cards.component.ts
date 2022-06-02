@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/co
 import {CardForm} from "../../models/card";
 import {MatDrawer} from "@angular/material/sidenav";
 import {Card} from "../../models/card";
-import {CardFormComponent} from "./card-form.component";
+import {CardFormComponent} from "./components/card-form.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
