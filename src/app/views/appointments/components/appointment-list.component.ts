@@ -109,7 +109,7 @@ import {Location} from "../../../models/location";
 })
 export class AppointmentListComponent implements OnInit {
 
-  @Input() locations: Location[] = []
+  @Input() locations: Location[] | null = null
 
   @Output() onClick: EventEmitter<Location> = new EventEmitter<Location>()
 

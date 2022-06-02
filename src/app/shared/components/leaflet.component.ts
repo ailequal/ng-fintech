@@ -40,7 +40,6 @@ export class LeafletComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    // TODO: For some unknown reason, the component inside a drawer does not visualize the map correctly...
     // TODO: leaflet does not import correctly the marker-shadow image, see the console "http://localhost:4200/marker-shadow.png".
     // TODO: The markerText is disabled, since when it's closed it will automatically redirect to "/#closed".
 
@@ -49,8 +48,7 @@ export class LeafletComponent implements OnInit, OnChanges {
       const coords: L.LatLngExpression = this.coords as L.LatLngExpression;
       this.map = L.map(this.host.nativeElement).setView(coords, this.zoom);
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
-        .addTo(this.map);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
 
       this.marker = L.marker(coords)
         .addTo(this.map)
@@ -68,8 +66,15 @@ export class LeafletComponent implements OnInit, OnChanges {
     }
 
     // Any following changes to the zoom.
-    if (changes['zoom'])
+    if (changes['zoom'] && !changes['zoom'].firstChange)
       this.map.setZoom(changes['zoom'].currentValue);
+
+    // For some reason (probably related to the dynamic size), the component inside a drawer does not visualize the map correctly...
+    // This fixes the issue somehow. It will always be executed with any kind of data change...
+    // @link https://stackoverflow.com/questions/15089541/leaflet-map-loading-half-greyed-tiles
+    setTimeout(() => {
+      this.map.invalidateSize()
+    }, 100)
   }
 
 }

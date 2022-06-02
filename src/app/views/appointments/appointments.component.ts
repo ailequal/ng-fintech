@@ -11,9 +11,8 @@ import {Observable} from "rxjs";
   template: `
     <mat-drawer-container class="container" autosize>
       <ae-appointment-list
-        *ngIf="(locations$ | async) as locations"
         class="sidenav-content"
-        [locations]="locations"
+        [locations]="locations$ | async"
         (onClick)="clickHandler($event)"
       >
       </ae-appointment-list>
@@ -22,7 +21,7 @@ import {Observable} from "rxjs";
         <ae-appointment-form
           #appointmentFormRef
           [location]="selectedLocation"
-          [allDayWithSlots]="selectedDayWithSlots"
+          [allSlots]="slots$ | async"
           (onBook)="bookHandler($event)"
           (onClose)="closedHandler($event)"
         >
@@ -56,7 +55,7 @@ export class AppointmentsComponent implements OnInit {
 
   selectedLocation: Location | null = null
 
-  selectedDayWithSlots: DayWithSlots[] = []
+  slots$: Observable<DayWithSlots[]> | null = null
 
   @ViewChild('drawerRef', {read: MatDrawer, static: true}) drawer!: MatDrawer;
 
@@ -72,45 +71,22 @@ export class AppointmentsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this._appointmentService.getLocations().subscribe(console.log)
-    // this._appointmentService.getSlots(3).subscribe(console.log)
-    // this._appointmentService.setSchedule({day: '6/21/2022', slot: 4}).subscribe(console.log)
   }
 
   clickHandler(location: Location) {
+    // Set the active location.
     if (!location) {
       this.selectedLocation = null
-      this.selectedDayWithSlots = []
+      this.slots$ = null
+      this.drawer.close().then(console.log)
       return
     }
+    this.selectedLocation = location;
 
-    // // Set the active location.
-    // const selectedLocation = this.locations.find(element => {
-    //   return element._id === location._id
-    // })
-    //
-    // if (!selectedLocation) {
-    //   this.selectedLocation = null;
-    //   this.selectedDayWithSlots = []
-    //   return;
-    // }
-    //
-    // this.selectedLocation = selectedLocation
-    //
-    // // Set the active day with slots.
-    // this._appointmentService.getSlots(this.selectedLocation._id).subscribe(v => {
-    //   const selectedDayWithSlots = v
-    //
-    //   if (!selectedDayWithSlots) {
-    //     this.selectedDayWithSlots = []
-    //     return;
-    //   }
-    //
-    //   this.selectedDayWithSlots = selectedDayWithSlots
-    //   console.log(this.selectedDayWithSlots)
-    //
-    //   this.drawer.toggle().then(r => console.log(r))
-    // })
+    // Set the relative slots.
+    this.slots$ = this._appointmentService.getSlots(this.selectedLocation._id)
+
+    this.drawer.toggle().then(console.log)
   }
 
   bookHandler(dayWithSlot: DayWithSlot) {

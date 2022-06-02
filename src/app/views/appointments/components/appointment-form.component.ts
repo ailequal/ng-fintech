@@ -3,15 +3,13 @@ import {DayWithSlot, DayWithSlots, Location} from "../../../models/location";
 import {MatDatepicker, MatDatepickerInputEvent} from "@angular/material/datepicker";
 import {FormBuilder} from "@angular/forms";
 
-// @link https://stackoverflow.com/questions/54915681/how-to-hide-material-input
-
 @Component({
   selector: 'ae-appointment-form',
   template: `
     <ng-container *ngIf="location">
       <ae-leaflet
         [coords]="location.coords"
-        [zoom]="9"
+        [zoom]="16"
         [markerText]="location.name"
       ></ae-leaflet>
 
@@ -44,11 +42,11 @@ import {FormBuilder} from "@angular/forms";
 
           <br>
 
-          <mat-form-field [class.cdk-visually-hidden]="!selectedDayWithSlots" class="full-width" appearance="fill">
+          <mat-form-field [class.cdk-visually-hidden]="!availableSlots" class="full-width" appearance="fill">
             <mat-label>Orari disponibili</mat-label>
             <mat-select formControlName="time" required>
               <mat-option
-                *ngFor="let timeSlot of selectedDayWithSlots?.slots"
+                *ngFor="let timeSlot of availableSlots?.slots"
                 [value]="timeSlot"
               >
                 {{timeSlot}}
@@ -103,11 +101,11 @@ export class AppointmentFormComponent implements OnInit {
 
   @Input() location: Location | null = null
 
-  @Input() allDayWithSlots: DayWithSlots[] = []
+  @Input() allSlots: DayWithSlots[] | null = null
 
-  selectedDayWithSlots: DayWithSlots | null = null
+  availableSlots: DayWithSlots | null = null
 
-  selectedDayWithSlot: DayWithSlot | null = null
+  selectedSlot: DayWithSlot | null = null
 
   @Output() onBook: EventEmitter<DayWithSlot> = new EventEmitter<DayWithSlot>()
 
@@ -133,10 +131,13 @@ export class AppointmentFormComponent implements OnInit {
   }
 
   appointmentFilter = (d: Date | null): boolean => {
+    if (!this.allSlots)
+      return false
+
     // Only allow a date from day with slots.
     const day = (d || new Date());
 
-    return this.allDayWithSlots.some(element => {
+    return this.allSlots.some(element => {
       return (new Date(element.day)).getTime() === day.getTime()
     })
   };
@@ -144,22 +145,22 @@ export class AppointmentFormComponent implements OnInit {
   dateChangeHandler(event: MatDatepickerInputEvent<Date, Date | null>) {
     this.time?.reset()
 
-    if (!event || !event.value) {
-      this.selectedDayWithSlots = null
+    if (!event || !event.value || !this.allSlots) {
+      this.availableSlots = null
       return
     }
 
     const selectedDate = this.dateToString(event.value);
-    const selectedDayWithSlots = this.allDayWithSlots.find(element => {
+    const availableSlots = this.allSlots.find(element => {
       return element.day === selectedDate
     })
 
-    if (!selectedDayWithSlots) {
-      this.selectedDayWithSlots = null
+    if (!availableSlots) {
+      this.availableSlots = null
       return
     }
 
-    this.selectedDayWithSlots = selectedDayWithSlots;
+    this.availableSlots = availableSlots;
     this.time?.enable()
   }
 
@@ -168,30 +169,25 @@ export class AppointmentFormComponent implements OnInit {
     let day = '' + d.getDate();
     const year = d.getFullYear();
 
-    if (month.length < 2)
-      month = '0' + month;
-    if (day.length < 2)
-      day = '0' + day;
-
     return [month, day, year].join('/');
   }
 
   bookHandler() {
-    if (!this.selectedDayWithSlots || !this.time)
+    if (!this.availableSlots || !this.time)
       throw new Error('Day and slot should be filled at this point.')
 
-    const selectedDayWithSlot: DayWithSlot = {
-      day: this.selectedDayWithSlots.day,
+    const selectedSlot: DayWithSlot = {
+      day: this.availableSlots.day,
       slot: this.time.value
     }
 
-    this.selectedDayWithSlot = selectedDayWithSlot
-    this.onBook.emit(selectedDayWithSlot)
+    this.selectedSlot = selectedSlot
+    this.onBook.emit(selectedSlot)
   }
 
   cleanUp() {
-    this.selectedDayWithSlots = null
-    this.selectedDayWithSlot = null
+    this.availableSlots = null
+    this.selectedSlot = null
     this.time?.disable()
     this.appointmentForm.reset()
   }
