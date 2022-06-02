@@ -1,7 +1,8 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {DayWithSlot, DayWithSlots, Location} from "../../../models/location";
-import {MatDatepicker, MatDatepickerInputEvent} from "@angular/material/datepicker";
 import {FormBuilder} from "@angular/forms";
+import {MatDatepicker, MatDatepickerInputEvent} from "@angular/material/datepicker";
+import {dateToString} from "../../../shared/utilities/date-to-string";
 
 @Component({
   selector: 'ae-appointment-form',
@@ -150,7 +151,7 @@ export class AppointmentFormComponent implements OnInit {
       return
     }
 
-    const selectedDate = this.dateToString(event.value);
+    const selectedDate = dateToString(event.value);
     const availableSlots = this.allSlots.find(element => {
       return element.day === selectedDate
     })
@@ -162,14 +163,6 @@ export class AppointmentFormComponent implements OnInit {
 
     this.availableSlots = availableSlots;
     this.time?.enable()
-  }
-
-  dateToString(d: Date): string {
-    let month = '' + (d.getMonth() + 1);
-    let day = '' + d.getDate();
-    const year = d.getFullYear();
-
-    return [month, day, year].join('/');
   }
 
   bookHandler() {
