@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MovementType} from "../../models/movement";
+import {MovementType} from "../../../models/movement";
 
 @Component({
   selector: 'ae-movement',
