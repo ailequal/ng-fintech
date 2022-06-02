@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {DayWithSlot, DayWithSlots, Location} from "../../models/location";
+import {DayWithSlot, DayWithSlots, Location} from "../../../models/location";
 import {MatDatepicker, MatDatepickerInputEvent} from "@angular/material/datepicker";
 import {FormBuilder} from "@angular/forms";
 

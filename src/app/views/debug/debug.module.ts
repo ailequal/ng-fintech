@@ -20,9 +20,9 @@ import {DialogConfirmComponent} from '../../shared/components/dialog-confirm.com
 import {ContactsComponent} from '../movements/components/contacts.component';
 import {ContactListComponent} from '../movements/components/contact-list.component';
 import {ContactFormComponent} from '../movements/components/contact-form.component';
-import {AppointmentsComponent} from '../apointments/appointments.component';
-import {AppointmentFormComponent} from '../apointments/appointment-form.component';
-import {AppointmentListComponent} from '../apointments/appointment-list.component';
+import {AppointmentsComponent} from '../appointments/appointments.component';
+import {AppointmentFormComponent} from '../appointments/components/appointment-form.component';
+import {AppointmentListComponent} from '../appointments/components/appointment-list.component';
 import {LeafletComponent} from '../../shared/components/leaflet.component';
 
 @NgModule({

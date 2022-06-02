@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Location} from "../../models/location";
+import {Location} from "../../../models/location";
 
 @Component({
   selector: 'ae-appointment-list',
