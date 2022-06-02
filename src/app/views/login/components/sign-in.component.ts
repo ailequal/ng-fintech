@@ -56,9 +56,9 @@ import {NgForm} from "@angular/forms";
 
           <button
             mat-raised-button
-            (click)="onRegister.emit()"
             type="button"
             class="full-width"
+            routerLink="/login/register"
           >
             Crea un nuovo account
           </button>
@@ -96,11 +96,7 @@ import {NgForm} from "@angular/forms";
 })
 export class SignInComponent implements OnInit {
 
-  // TODO: We do not need onRegister anymore, probably.
-
   hidePassword: boolean = true;
-
-  @Output() onRegister: EventEmitter<void> = new EventEmitter<void>();
 
   constructor() {
   }

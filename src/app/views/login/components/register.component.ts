@@ -109,9 +109,9 @@ import {NgForm} from "@angular/forms";
 
           <button
             mat-raised-button
-            (click)="onSignIn.emit()"
             type="button"
             class="full-width"
+            routerLink="/login/signin"
           >
             Hai già un account? Accedi
           </button>
@@ -152,13 +152,10 @@ export class RegisterComponent implements OnInit {
   // TODO: The two passwords inputs must check that they hold the same value before sending the request.
   //  We will use a custom validator for this requirement.
   // TODO: Implement a more robust password validation (use special characters...).
-  // TODO: We do not need onSignIn anymore, probably.
 
   hidePasswordAlpha: boolean = true;
 
   hidePasswordBeta: boolean = true;
-
-  @Output() onSignIn: EventEmitter<void> = new EventEmitter<void>();
 
   constructor() {
   }
