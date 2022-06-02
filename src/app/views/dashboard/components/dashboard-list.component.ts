@@ -15,6 +15,7 @@ import {NavigationLink} from "../../../models/link";
         *ngFor="let link of links"
         [routerLink]="link.routerLink"
         routerLinkActive="selected"
+        [routerLinkActiveOptions]="{exact: true}"
       >
         <mat-icon mat-list-icon>{{link.icon}}</mat-icon>
         {{link.title}}
