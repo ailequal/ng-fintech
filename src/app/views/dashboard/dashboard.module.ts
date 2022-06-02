@@ -4,6 +4,7 @@ import {DashboardRoutingModule} from './dashboard-routing.module';
 import {SharedModule} from "../../shared/shared.module";
 
 import {DashboardComponent} from './dashboard.component';
+import {WelcomeComponent} from "./components/welcome.component";
 import {DashboardListComponent} from "./components/dashboard-list.component";
 import {DashboardSidenavComponent} from "./components/dashboard-sidenav.component";
 import {DashboardToolbarComponent} from "./components/dashboard-toolbar.component";
@@ -11,6 +12,7 @@ import {DashboardToolbarComponent} from "./components/dashboard-toolbar.componen
 @NgModule({
   declarations: [
     DashboardComponent,
+    WelcomeComponent,
     DashboardListComponent,
     DashboardSidenavComponent,
     DashboardToolbarComponent

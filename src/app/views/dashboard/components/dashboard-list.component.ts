@@ -6,9 +6,9 @@ import {NavigationLink} from "../../../models/link";
   template: `
     <mat-selection-list #shoes [multiple]="false">
 
-      <mat-list-option class="menu" value="menu">
+      <mat-list-item class="menu">
         Menu
-      </mat-list-option>
+      </mat-list-item>
 
       <mat-list-option
         [value]="link.value"
@@ -37,11 +37,12 @@ import {NavigationLink} from "../../../models/link";
       padding-top: 0;
     }
 
+    .mat-list-base .mat-list-item,
     .mat-list-base .mat-list-option {
       height: 64px;
     }
 
-    .mat-list-base .mat-list-option.menu {
+    .mat-list-base .mat-list-item.menu {
       background-color: #e9ecef;
       font-size: 20px;
       font-weight: 700;
