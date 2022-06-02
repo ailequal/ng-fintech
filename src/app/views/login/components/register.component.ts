@@ -1,5 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {NgForm} from "@angular/forms";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'ae-register',
@@ -157,7 +158,7 @@ export class RegisterComponent implements OnInit {
 
   hidePasswordBeta: boolean = true;
 
-  constructor() {
+  constructor(private router: Router) {
   }
 
   ngOnInit(): void {
@@ -168,6 +169,8 @@ export class RegisterComponent implements OnInit {
       throw new Error('The two passwords do not match!!')
 
     console.log(f.value)
+
+    this.router.navigateByUrl('/login/signin').then(console.log)
   }
 
 }

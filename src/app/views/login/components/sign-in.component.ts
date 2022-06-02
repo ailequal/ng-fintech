@@ -1,5 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {NgForm} from "@angular/forms";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'ae-sign-in',
@@ -98,7 +99,7 @@ export class SignInComponent implements OnInit {
 
   hidePassword: boolean = true;
 
-  constructor() {
+  constructor(private router: Router) {
   }
 
   ngOnInit(): void {
@@ -106,6 +107,8 @@ export class SignInComponent implements OnInit {
 
   submitHandler(f: NgForm) {
     console.log(f.value)
+
+    this.router.navigateByUrl('/dashboard').then(console.log)
   }
 
 }
