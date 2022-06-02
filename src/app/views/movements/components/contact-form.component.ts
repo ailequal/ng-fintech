@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {Contact, ContactForm} from "../../../models/contact";
 
@@ -96,7 +96,8 @@ import {Contact, ContactForm} from "../../../models/contact";
     .mat-card-actions .mat-stroked-button.mb {
       margin-bottom: 20px;
     }
-  `]
+  `],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContactFormComponent implements OnInit {
 

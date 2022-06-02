@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'ae-debug',
@@ -18,7 +18,9 @@ import {Component, OnInit} from '@angular/core';
       <br><br>
     </div>
   `,
-  styles: []
+  styles: [`
+  `],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DebugComponent implements OnInit {
 

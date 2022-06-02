@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {MovementType} from "../../../models/movement";
 
 @Component({
@@ -63,7 +63,8 @@ import {MovementType} from "../../../models/movement";
       font-size: 13px;
       color: #adb5bd
     }
-  `]
+  `],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MovementComponent implements OnInit {
 

@@ -16,6 +16,8 @@ import {NavigationLink} from "../../models/link";
 
         <div class="side-content" sideContent>
           <ae-dashboard-toolbar></ae-dashboard-toolbar>
+
+          <router-outlet></router-outlet>
         </div>
       </ae-dashboard-sidenav>
     </div>
@@ -44,31 +46,31 @@ export class DashboardComponent implements OnInit {
       title: 'Carte',
       value: 'cards',
       icon: 'credit_card',
-      routerLink: '/cards'
+      routerLink: '/dashboard/cards'
     },
     {
       title: 'Movimenti',
       value: 'movements',
       icon: 'receipt_long',
-      routerLink: '/movements'
+      routerLink: '/dashboard/movements'
     },
     {
       title: 'Trasferisci',
       value: 'transfer',
       icon: 'paid',
-      routerLink: '/transfer'
+      routerLink: '/dashboard/transfer'
     },
     {
       title: 'Appuntamenti',
       value: 'appointments',
       icon: 'event',
-      routerLink: '/appointments'
+      routerLink: '/dashboard/appointments'
     },
     {
       title: 'Tasse',
       value: 'taxes',
       icon: 'summarize',
-      routerLink: '/taxes'
+      routerLink: '/dashboard/taxes'
     },
     {
       title: 'Debug',

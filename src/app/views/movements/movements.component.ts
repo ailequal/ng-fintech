@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {Card} from "../../models/card";
 import {Movement} from "../../models/movement";
 import {MatSelectChange} from "@angular/material/select";
@@ -38,7 +38,8 @@ import {MatSelectChange} from "@angular/material/select";
       width: 100%;
       margin-top: 20px;
     }
-  `]
+  `],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MovementsComponent implements OnInit {
 

@@ -6,7 +6,34 @@ import {DashboardComponent} from './dashboard.component';
 const routes: Routes = [
   {
     path: '',
-    component: DashboardComponent
+    component: DashboardComponent,
+    children: [
+      {
+        path: 'cards',
+        loadChildren: () => import('../cards/cards.module').then(m => m.CardsModule),
+        pathMatch: 'full'
+      },
+      {
+        path: 'movements',
+        loadChildren: () => import('../movements/movements.module').then(m => m.MovementsModule),
+        pathMatch: 'full'
+      },
+      {
+        path: 'transfer',
+        loadChildren: () => import('../transfer/transfer.module').then(m => m.TransferModule),
+        pathMatch: 'full'
+      },
+      {
+        path: 'appointments',
+        loadChildren: () => import('../appointments/appointments.module').then(m => m.AppointmentsModule),
+        pathMatch: 'full'
+      },
+      {
+        path: 'taxes',
+        loadChildren: () => import('../taxes/taxes.module').then(m => m.TaxesModule),
+        pathMatch: 'full'
+      }
+    ]
   }
 ];
 

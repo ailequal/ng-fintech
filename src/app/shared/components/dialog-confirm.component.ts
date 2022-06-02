@@ -15,7 +15,8 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
       <button mat-raised-button [mat-dialog-close]="true" cdkFocusInitial color="primary">Conferma</button>
     </mat-dialog-actions>
   `,
-  styles: [],
+  styles: [`
+  `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DialogConfirmComponent implements OnInit {
