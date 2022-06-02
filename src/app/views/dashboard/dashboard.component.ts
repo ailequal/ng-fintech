@@ -2,22 +2,22 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {NavigationLink} from "../../models/link";
 
 @Component({
-  selector: 'ae-navigation',
+  selector: 'ae-dashboard',
   template: `
     <div>
-      <ae-navigation-sidenav>
-        <ae-navigation-list
+      <ae-dashboard-sidenav>
+        <ae-dashboard-list
           (onLogout)="handleLogout($event)"
           [links]="links"
           class="side-drawer"
           sideDrawer
         >
-        </ae-navigation-list>
+        </ae-dashboard-list>
 
         <div class="side-content" sideContent>
-          <ae-navigation-toolbar></ae-navigation-toolbar>
+          <ae-dashboard-toolbar></ae-dashboard-toolbar>
         </div>
-      </ae-navigation-sidenav>
+      </ae-dashboard-sidenav>
     </div>
   `,
   styles: [`
@@ -31,7 +31,7 @@ import {NavigationLink} from "../../models/link";
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NavigationComponent implements OnInit {
+export class DashboardComponent implements OnInit {
 
   links: NavigationLink[] = [
     {

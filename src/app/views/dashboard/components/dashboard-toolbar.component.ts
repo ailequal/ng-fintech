@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 
 @Component({
-  selector: 'ae-navigation-toolbar',
+  selector: 'ae-dashboard-toolbar',
   template: `
     <mat-toolbar color="primary">
       <span>NgFintech</span>
@@ -11,7 +11,7 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NavigationToolbarComponent implements OnInit {
+export class DashboardToolbarComponent implements OnInit {
 
   constructor() {
   }

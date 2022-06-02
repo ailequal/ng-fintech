@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {NavigationLink} from "../../models/link";
+import {NavigationLink} from "../../../models/link";
 
 @Component({
-  selector: 'ae-navigation-list',
+  selector: 'ae-dashboard-list',
   template: `
     <mat-selection-list #shoes [multiple]="false">
 
@@ -57,7 +57,7 @@ import {NavigationLink} from "../../models/link";
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NavigationListComponent implements OnInit {
+export class DashboardListComponent implements OnInit {
 
   @Input() links: NavigationLink[] = []
 

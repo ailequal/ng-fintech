@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 
 @Component({
-  selector: 'ae-navigation-sidenav',
+  selector: 'ae-dashboard-sidenav',
   template: `
     <mat-drawer-container class="example-container">
 
@@ -23,7 +23,7 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NavigationSidenavComponent implements OnInit {
+export class DashboardSidenavComponent implements OnInit {
 
   constructor() {
   }
