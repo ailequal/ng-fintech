@@ -1,14 +1,17 @@
+import {AppointmentFormComponent} from "./components/appointment-form.component";
+import {AppointmentService} from "../../api/appointment.service";
 import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/core';
 import {DayWithSlot, DayWithSlots, Location} from "../../models/location";
 import {MatDrawer} from "@angular/material/sidenav";
-import {AppointmentFormComponent} from "./components/appointment-form.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'ae-appointments',
   template: `
     <mat-drawer-container class="container" autosize>
       <ae-appointment-list
+        *ngIf="(locations$ | async) as locations"
         class="sidenav-content"
         [locations]="locations"
         (onClick)="clickHandler($event)"
@@ -49,73 +52,9 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 })
 export class AppointmentsComponent implements OnInit {
 
-  // TODO: Hard coded values for now.
-  locations: Location[] = [
-    {
-      _id: 'fjds9j3h2l2',
-      name: 'Sede Milano 01',
-      address: 'Via Ciao 22, Milano',
-      phone: '+39 055 483927',
-      email: 'milan-01@bank.com',
-      coords: [22, 33]
-    },
-    {
-      _id: 'fjds9j3h2l3',
-      name: 'Sede Milano 02',
-      address: 'Via Wow 34, Milano',
-      phone: '+39 055 483928',
-      email: 'milan-02@bank.com',
-      coords: [43, 13]
-    },
-    {
-      _id: 'fjds9j3h2l4',
-      name: 'Sede Milano 03',
-      address: 'Via Cosimo 52, Milano',
-      phone: '+39 055 483929',
-      email: 'milan-03@bank.com',
-      coords: [52, 52]
-    }
-  ]
+  locations$: Observable<Location[]> = this._appointmentService.getLocations()
 
   selectedLocation: Location | null = null
-
-  dayWithSlots: { id: string, dayWithSlots: DayWithSlots[] }[] = [
-    {
-      id: 'fjds9j3h2l2',
-      dayWithSlots: [
-        {
-          day: '06/20/2022',
-          slots: [9, 11, 12]
-        },
-        {
-          day: '06/22/2022',
-          slots: [11, 15]
-        },
-        {
-          day: '06/23/2022',
-          slots: [10]
-        }
-      ]
-    },
-    {
-      id: 'fjds9j3h2l3',
-      dayWithSlots: [
-        {
-          day: '06/21/2022',
-          slots: [11]
-        }
-      ]
-    },
-    {
-      id: 'fjds9j3h2l4',
-      dayWithSlots: [
-        {
-          day: '06/24/2022',
-          slots: [9, 11]
-        }
-      ]
-    }
-  ]
 
   selectedDayWithSlots: DayWithSlots[] = []
 
@@ -126,10 +65,16 @@ export class AppointmentsComponent implements OnInit {
     static: true
   }) appointmentForm!: AppointmentFormComponent;
 
-  constructor(private _snackBar: MatSnackBar) {
+  constructor(
+    private _snackBar: MatSnackBar,
+    private _appointmentService: AppointmentService
+  ) {
   }
 
   ngOnInit(): void {
+    // this._appointmentService.getLocations().subscribe(console.log)
+    // this._appointmentService.getSlots(3).subscribe(console.log)
+    // this._appointmentService.setSchedule({day: '6/21/2022', slot: 4}).subscribe(console.log)
   }
 
   clickHandler(location: Location) {
@@ -139,32 +84,33 @@ export class AppointmentsComponent implements OnInit {
       return
     }
 
-    // Set the active location.
-    const selectedLocation = this.locations.find(element => {
-      return element._id === location._id
-    })
-
-    if (!selectedLocation) {
-      this.selectedLocation = null;
-      this.selectedDayWithSlots = []
-      return;
-    }
-
-    this.selectedLocation = selectedLocation
-
-    // Set the active day with slots.
-    const selectedDayWithSlots = this.dayWithSlots.find(element => {
-      return element.id === this.selectedLocation?._id
-    })
-
-    if (!selectedDayWithSlots) {
-      this.selectedDayWithSlots = []
-      return;
-    }
-
-    this.selectedDayWithSlots = selectedDayWithSlots.dayWithSlots
-
-    this.drawer.toggle().then(r => console.log(r))
+    // // Set the active location.
+    // const selectedLocation = this.locations.find(element => {
+    //   return element._id === location._id
+    // })
+    //
+    // if (!selectedLocation) {
+    //   this.selectedLocation = null;
+    //   this.selectedDayWithSlots = []
+    //   return;
+    // }
+    //
+    // this.selectedLocation = selectedLocation
+    //
+    // // Set the active day with slots.
+    // this._appointmentService.getSlots(this.selectedLocation._id).subscribe(v => {
+    //   const selectedDayWithSlots = v
+    //
+    //   if (!selectedDayWithSlots) {
+    //     this.selectedDayWithSlots = []
+    //     return;
+    //   }
+    //
+    //   this.selectedDayWithSlots = selectedDayWithSlots
+    //   console.log(this.selectedDayWithSlots)
+    //
+    //   this.drawer.toggle().then(r => console.log(r))
+    // })
   }
 
   bookHandler(dayWithSlot: DayWithSlot) {

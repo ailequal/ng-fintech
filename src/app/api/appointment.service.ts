@@ -16,7 +16,7 @@ export class AppointmentService {
     return this._http.get<Location[]>(environment.apiUrl + '/locations');
   }
 
-  getSlots(locationId: number): Observable<DayWithSlots[]> {
+  getSlots(locationId: string): Observable<DayWithSlots[]> {
     return this._http.get<DayWithSlots[]>(environment.apiUrl + '/slots/' + locationId)
   }
 
