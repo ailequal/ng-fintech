@@ -14,11 +14,11 @@ const routes: Routes = [
     path: 'debug',
     loadChildren: () => import('./views/debug/debug.module').then(m => m.DebugModule)
   },
-  {
-    path: 'page-not-found',
-    loadChildren: () => import('./views/page-not-found/page-not-found.module').then(m => m.PageNotFoundModule),
-    pathMatch: 'full'
-  },
+  // {
+  //   path: 'page-not-found',
+  //   loadChildren: () => import('./views/page-not-found/page-not-found.module').then(m => m.PageNotFoundModule),
+  //   pathMatch: 'full'
+  // },
   {
     path: '',
     redirectTo: 'dashboard',
@@ -26,7 +26,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'page-not-found',
+    redirectTo: 'dashboard', // Or "page-not-found", if active.
     pathMatch: 'full'
   }
 ];
