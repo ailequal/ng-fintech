@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
-import {Contact, ContactForm} from "../model/contact";
+import {Contact, ContactForm} from "../../../models/contact";
 
 @Component({
   selector: 'ae-contact-form',

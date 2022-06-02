@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/core';
-import {DayWithSlot, DayWithSlots, Location} from "../model/location";
+import {DayWithSlot, DayWithSlots, Location} from "../../models/location";
 import {MatDrawer} from "@angular/material/sidenav";
 import {AppointmentFormComponent} from "./appointment-form.component";
 import {MatSnackBar} from "@angular/material/snack-bar";

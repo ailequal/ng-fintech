@@ -1,4 +1,4 @@
-import {Contact} from "../app/model/contact";
+import {Contact} from "../app/models/contact";
 
 export const contacts: Contact[] = [
   {

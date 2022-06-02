@@ -4,10 +4,10 @@ import {RouterModule} from "@angular/router";
 import {MaterialModule} from "./material/material.module";
 
 import {FilterPipe} from './pipes/filter.pipe';
-import {NavigationComponent} from './components/navigation.component';
-import {NavigationListComponent} from './components/navigation-list.component';
-import {NavigationSidenavComponent} from './components/navigation-sidenav.component';
-import {NavigationToolbarComponent} from './components/navigation-toolbar.component';
+import {NavigationComponent} from '../views/dashboard/navigation.component';
+import {NavigationListComponent} from '../views/dashboard/navigation-list.component';
+import {NavigationSidenavComponent} from '../views/dashboard/navigation-sidenav.component';
+import {NavigationToolbarComponent} from '../views/dashboard/navigation-toolbar.component';
 import {TrimWordsPipe} from './pipes/trim-words.pipe';
 
 @NgModule({

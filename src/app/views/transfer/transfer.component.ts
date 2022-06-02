@@ -1,12 +1,12 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
-import {Card} from "../model/card";
-import {TransferForm} from "../model/transfer";
+import {Card} from "../../models/card";
+import {TransferForm} from "../../models/transfer";
 import {MatDialog} from "@angular/material/dialog";
-import {DialogConfirmComponent} from "./dialog-confirm.component";
+import {DialogConfirmComponent} from "../../shared/components/dialog-confirm.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {ContactsComponent} from "./contacts.component";
-import {Contact} from "../model/contact";
+import {ContactsComponent} from "../movements/components/contacts.component";
+import {Contact} from "../../models/contact";
 import {contacts} from 'src/assets/mock-contacts';
 
 @Component({

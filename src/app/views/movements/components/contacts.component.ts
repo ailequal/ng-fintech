@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {Contact, ContactForm} from "../model/contact";
+import {Contact, ContactForm} from "../../../models/contact";
 import {MatDialogRef} from "@angular/material/dialog";
-import {contacts} from "../../assets/mock-contacts";
+import {contacts} from "../../../../assets/mock-contacts";
 
 @Component({
   selector: 'ae-contacts',

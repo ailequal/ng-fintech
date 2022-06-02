@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {Contact} from "../model/contact";
+import {Contact} from "../../../models/contact";
 import {NgModel} from "@angular/forms";
 
 @Component({

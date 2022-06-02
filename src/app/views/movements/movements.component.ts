@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {Card} from "../model/card";
-import {Movement} from "../model/movement";
+import {Card} from "../../models/card";
+import {Movement} from "../../models/movement";
 import {MatSelectChange} from "@angular/material/select";
 
 @Component({

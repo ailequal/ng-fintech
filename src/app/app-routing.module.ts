@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {NavigationComponent} from "./shared/components/navigation.component";
+import {NavigationComponent} from "./views/dashboard/navigation.component";
 
 const routes: Routes = [
   {
@@ -9,7 +9,7 @@ const routes: Routes = [
   },
   {
     path: 'debug',
-    loadChildren: () => import('./features/debug/debug.module').then(m => m.DebugModule)
+    loadChildren: () => import('./views/debug/debug.module').then(m => m.DebugModule)
   }
 ];
 

@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {NavigationLink} from "../../model/link";
+import {NavigationLink} from "../../models/link";
 
 @Component({
   selector: 'ae-navigation',
