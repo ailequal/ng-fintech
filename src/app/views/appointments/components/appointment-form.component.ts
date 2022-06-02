@@ -113,7 +113,7 @@ export class AppointmentFormComponent implements OnInit {
 
   @Output() onClose: EventEmitter<MouseEvent> = new EventEmitter<MouseEvent>()
 
-  appointmentForm = this.fb.group({
+  appointmentForm = this._fb.group({
     date: [''],
     time: [{value: '', disabled: true}]
   });
@@ -126,7 +126,7 @@ export class AppointmentFormComponent implements OnInit {
     return this.appointmentForm.get('time')
   }
 
-  constructor(private fb: FormBuilder) {
+  constructor(private _fb: FormBuilder) {
   }
 
   ngOnInit(): void {

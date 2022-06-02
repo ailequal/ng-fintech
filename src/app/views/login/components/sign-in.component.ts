@@ -99,7 +99,7 @@ export class SignInComponent implements OnInit {
 
   hidePassword: boolean = true;
 
-  constructor(private router: Router) {
+  constructor(private _router: Router) {
   }
 
   ngOnInit(): void {
@@ -108,7 +108,7 @@ export class SignInComponent implements OnInit {
   submitHandler(f: NgForm) {
     console.log(f.value)
 
-    this.router.navigateByUrl('/dashboard').then(console.log)
+    this._router.navigateByUrl('/dashboard').then(console.log)
   }
 
 }

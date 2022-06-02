@@ -158,7 +158,7 @@ export class RegisterComponent implements OnInit {
 
   hidePasswordBeta: boolean = true;
 
-  constructor(private router: Router) {
+  constructor(private _router: Router) {
   }
 
   ngOnInit(): void {
@@ -170,7 +170,7 @@ export class RegisterComponent implements OnInit {
 
     console.log(f.value)
 
-    this.router.navigateByUrl('/login/signin').then(console.log)
+    this._router.navigateByUrl('/login/signin').then(console.log)
   }
 
 }
