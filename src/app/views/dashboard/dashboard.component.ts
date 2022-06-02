@@ -40,7 +40,7 @@ export class DashboardComponent implements OnInit {
       title: 'Home',
       value: 'home',
       icon: 'home',
-      routerLink: '/'
+      routerLink: '/dashboard'
     },
     {
       title: 'Carte',
