@@ -96,6 +96,8 @@ import {NgForm} from "@angular/forms";
 })
 export class SignInComponent implements OnInit {
 
+  // TODO: We do not need onRegister anymore, probably.
+
   hidePassword: boolean = true;
 
   @Output() onRegister: EventEmitter<void> = new EventEmitter<void>();

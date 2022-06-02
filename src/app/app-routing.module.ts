@@ -8,11 +8,12 @@ const routes: Routes = [
   },
   {
     path: 'dashboard',
-    loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule)
+    loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule),
   },
   {
     path: 'debug',
-    loadChildren: () => import('./views/debug/debug.module').then(m => m.DebugModule)
+    loadChildren: () => import('./views/debug/debug.module').then(m => m.DebugModule),
+    pathMatch: 'full'
   },
   // {
   //   path: 'page-not-found',

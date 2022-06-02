@@ -152,6 +152,7 @@ export class RegisterComponent implements OnInit {
   // TODO: The two passwords inputs must check that they hold the same value before sending the request.
   //  We will use a custom validator for this requirement.
   // TODO: Implement a more robust password validation (use special characters...).
+  // TODO: We do not need onSignIn anymore, probably.
 
   hidePasswordAlpha: boolean = true;
 

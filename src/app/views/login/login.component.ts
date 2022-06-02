@@ -4,18 +4,9 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
   selector: 'ae-login',
   template: `
     <div class="login">
-      <ae-sign-in
-        *ngIf="showSignIn"
-        (onRegister)="registerHandler()"
-      >
 
-      </ae-sign-in>
-      <br><br>
-      <ae-register
-        *ngIf="showRegister"
-        (onSignIn)="signInHandler()"
-      >
-      </ae-register>
+      <router-outlet></router-outlet>
+
     </div>
   `,
   styles: [`
@@ -28,26 +19,10 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 })
 export class LoginComponent implements OnInit {
 
-  showSignIn: boolean = true;
-
-  showRegister: boolean = false;
-
   constructor() {
   }
 
   ngOnInit(): void {
-  }
-
-  signInHandler(): void {
-    this.showSignIn = true;
-    this.showRegister = false;
-    console.log('signInHandler')
-  }
-
-  registerHandler(): void {
-    this.showSignIn = false;
-    this.showRegister = true;
-    console.log('registerHandler')
   }
 
 }
