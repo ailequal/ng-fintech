@@ -3,20 +3,27 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 @Component({
   selector: 'ae-login',
   template: `
-    <ae-sign-in
-      *ngIf="showSignIn"
-      (onRegister)="registerHandler()"
-    >
+    <div class="login">
+      <ae-sign-in
+        *ngIf="showSignIn"
+        (onRegister)="registerHandler()"
+      >
 
-    </ae-sign-in>
-    <br><br>
-    <ae-register
-      *ngIf="showRegister"
-      (onSignIn)="signInHandler()"
-    >
-    </ae-register>
+      </ae-sign-in>
+      <br><br>
+      <ae-register
+        *ngIf="showRegister"
+        (onSignIn)="signInHandler()"
+      >
+      </ae-register>
+    </div>
   `,
-  styles: [],
+  styles: [`
+    div.login {
+      max-width: 576px;
+      margin: 60px auto 20px;
+    }
+  `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent implements OnInit {
