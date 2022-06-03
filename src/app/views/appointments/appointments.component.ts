@@ -89,17 +89,32 @@ export class AppointmentsComponent implements OnInit {
     this.drawer.toggle().then(console.log)
   }
 
-  bookHandler(dayWithSlot: DayWithSlot) {
-    // TODO: Save the data on the server.
-    console.log(dayWithSlot);
+  bookHandler(schedule: DayWithSlot) {
+    this._appointmentService.setSchedule(schedule).subscribe({
+      next: v => {
+        console.log(v)
 
-    this._snackBar.open('Appuntamento prenotato', '✅', {
-      horizontalPosition: 'end',
-      verticalPosition: 'top',
-      duration: 3000
-    });
+        this._snackBar.open('Appuntamento prenotato', '✅', {
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          duration: 3000
+        });
 
-    this.dispose();
+        this.dispose();
+      },
+      error: v => {
+        console.log(v)
+
+        this._snackBar.open('Impossibile prenotare l\'appuntamento', '❌', {
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          duration: 3000
+        });
+      },
+      complete: () => {
+        console.log('Completed "_appointmentService.setSchedule()".')
+      }
+    })
   }
 
   closedHandler(event: MouseEvent | void) {
