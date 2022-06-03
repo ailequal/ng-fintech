@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {Contact, ContactForm} from "../../../models/contact";
 
 @Component({
@@ -101,17 +101,17 @@ import {Contact, ContactForm} from "../../../models/contact";
 })
 export class ContactFormComponent implements OnInit {
 
-  contactForm = new FormGroup({
-    name: new FormControl(''),
-    surname: new FormControl(''),
-    iban: new FormControl('')
+  contactForm = this._fb.group({
+    name: [''],
+    surname: [''],
+    iban: ['']
   });
 
   @Input() initialContact: Contact | null = null
 
   @Output() onSubmit: EventEmitter<ContactForm> = new EventEmitter<ContactForm>();
 
-  constructor() {
+  constructor(private _fb: FormBuilder) {
   }
 
   ngOnInit(): void {

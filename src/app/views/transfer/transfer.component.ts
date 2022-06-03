@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {Card} from "../../models/card";
 import {TransferForm} from "../../models/transfer";
 import {MatDialog} from "@angular/material/dialog";
@@ -136,12 +136,12 @@ import {contacts} from 'src/assets/mock-contacts';
 })
 export class TransferComponent implements OnInit {
 
-  transferForm = new FormGroup({
-    name: new FormControl(''),
-    surname: new FormControl(''),
-    iban: new FormControl(''),
-    amount: new FormControl(''),
-    card: new FormControl(''),
+  transferForm = this._fb.group({
+    name: [''],
+    surname: [''],
+    iban: [''],
+    amount: [''],
+    card: [''],
   });
 
   // TODO: Hard coded values for now.
@@ -172,7 +172,11 @@ export class TransferComponent implements OnInit {
 
   @Output() onSubmit: EventEmitter<TransferForm> = new EventEmitter<TransferForm>();
 
-  constructor(public dialog: MatDialog, private _snackBar: MatSnackBar) {
+  constructor(
+    public dialog: MatDialog,
+    private _snackBar: MatSnackBar,
+    private _fb: FormBuilder
+  ) {
   }
 
   ngOnInit(): void {
