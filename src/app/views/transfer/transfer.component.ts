@@ -5,9 +5,11 @@ import {TransferForm} from "../../models/transfer";
 import {MatDialog} from "@angular/material/dialog";
 import {DialogConfirmComponent} from "../../shared/components/dialog-confirm.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {ContactsComponent} from "../movements/components/contacts.component";
+import {ContactsComponent} from "./components/contacts.component";
 import {Contact} from "../../models/contact";
 import {contacts} from 'src/assets/mock-contacts';
+import {Observable} from "rxjs";
+import {CardService} from "../../api/card.service";
 
 @Component({
   selector: 'ae-transfer',
@@ -79,7 +81,7 @@ import {contacts} from 'src/assets/mock-contacts';
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>Seleziona una carta</mat-label>
             <mat-select formControlName="card" required>
-              <mat-option *ngFor="let card of cards" [value]="card._id">
+              <mat-option *ngFor="let card of (cards$ | async)" [value]="card._id">
                 {{card.number}}
               </mat-option>
             </mat-select>
@@ -144,25 +146,7 @@ export class TransferComponent implements OnInit {
     card: [''],
   });
 
-  // TODO: Hard coded values for now.
-  cards: Card[] = [
-    {
-      _id: '347987294424',
-      number: '4263982640269214',
-      ownerId: '023923463256',
-      owner: 'Mario',
-      type: 'mastercard',
-      amount: 4500
-    },
-    {
-      _id: '347987294425',
-      number: '4263982640269215',
-      ownerId: '023923463257',
-      owner: 'Luigi',
-      type: 'visa',
-      amount: 5000
-    },
-  ];
+  cards$: Observable<Card[]> = this._cardService.getCards()
 
   contacts: Contact[] = contacts
 
@@ -173,9 +157,10 @@ export class TransferComponent implements OnInit {
   @Output() onSubmit: EventEmitter<TransferForm> = new EventEmitter<TransferForm>();
 
   constructor(
+    private _fb: FormBuilder,
     public dialog: MatDialog,
     private _snackBar: MatSnackBar,
-    private _fb: FormBuilder
+    private _cardService: CardService
   ) {
   }
 
