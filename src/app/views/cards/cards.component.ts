@@ -31,6 +31,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
   styles: [`
     .container {
       min-height: 530px;
+      background-color: white;
     }
 
     .sidenav-content {

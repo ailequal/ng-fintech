@@ -3,7 +3,7 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 @Component({
   selector: 'ae-dashboard-sidenav',
   template: `
-    <mat-drawer-container class="example-container">
+    <mat-drawer-container class="container">
 
       <mat-drawer mode="side" opened>
         <ng-content select="[sideDrawer]"></ng-content>

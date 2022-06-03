@@ -28,7 +28,7 @@ import {NavigationLink} from "../../models/link";
 
     .side-content {
       min-height: 100vh;
-      background-color: #e9ecef;
+      background-color: white;
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
