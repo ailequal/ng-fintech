@@ -13,7 +13,6 @@ export class TransferService {
   }
 
   setTransfer(transfer: TransferForm): Observable<boolean> {
-    // TODO: Maybe we will need to change the TransferForm card's property into cardId.
     return this._http.post<boolean>(environment.apiUrl + '/transfer', transfer);
   }
 

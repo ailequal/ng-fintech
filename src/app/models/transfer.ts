@@ -3,5 +3,5 @@ export interface TransferForm {
   surname: string;
   iban: number;
   amount: number;
-  card: string;
+  cardId: string;
 }

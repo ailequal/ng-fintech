@@ -8,6 +8,8 @@ import {ContactsComponent} from "./components/contacts.component";
 import {Contact} from "../../models/contact";
 import {Observable} from "rxjs";
 import {CardService} from "../../api/card.service";
+import {TransferService} from "../../api/transfer.service";
+import {TransferForm} from "../../models/transfer";
 
 @Component({
   selector: 'ae-transfer',
@@ -78,9 +80,9 @@ import {CardService} from "../../api/card.service";
 
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>Seleziona una carta</mat-label>
-            <mat-select formControlName="card" required>
+            <mat-select formControlName="cardId" required>
               <mat-option *ngFor="let card of (cards$ | async)" [value]="card._id">
-                {{card.number}}
+                {{card._id}}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -141,7 +143,7 @@ export class TransferComponent implements OnInit {
     surname: [''],
     iban: [''],
     amount: [''],
-    card: [''],
+    cardId: [''],
   });
 
   cards$: Observable<Card[]> = this._cardService.getCards()
@@ -150,6 +152,7 @@ export class TransferComponent implements OnInit {
     private _fb: FormBuilder,
     public dialog: MatDialog,
     private _snackBar: MatSnackBar,
+    private _transferService: TransferService,
     private _cardService: CardService
   ) {
   }
@@ -183,13 +186,19 @@ export class TransferComponent implements OnInit {
       if (!result)
         return
 
-      // TODO: Save the data on the server.
+      const transferForm = this.transferForm.value as TransferForm
 
-      this._snackBar.open('Trasferimento inviato', '✅', {
-        horizontalPosition: 'end',
-        verticalPosition: 'top',
-        duration: 3000
-      });
+      this._transferService.setTransfer(transferForm).subscribe(v => {
+        console.log(v)
+
+        this._snackBar.open('Trasferimento inviato', '✅', {
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          duration: 3000
+        });
+
+        this.cleanUp()
+      })
     });
   }
 
