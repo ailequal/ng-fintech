@@ -75,10 +75,10 @@ export class ContactsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  checkHandler(contactId: string) {
+  checkHandler(contact: Contact) {
     // TODO: Get the new contacts list from the server.
 
-    this.dialogRef.close(contactId)
+    this.dialogRef.close(contact)
   }
 
   editHandler(contactId: string) {

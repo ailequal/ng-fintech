@@ -148,14 +148,6 @@ export class TransferComponent implements OnInit {
 
   cards$: Observable<Card[]> = this._cardService.getCards()
 
-  contacts: Contact[] = contacts
-
-  @Input() selectedContact: any = null;
-
-  @Output() onContactList: EventEmitter<MouseEvent> = new EventEmitter<MouseEvent>();
-
-  @Output() onSubmit: EventEmitter<TransferForm> = new EventEmitter<TransferForm>();
-
   constructor(
     private _fb: FormBuilder,
     public dialog: MatDialog,
@@ -173,29 +165,17 @@ export class TransferComponent implements OnInit {
       maxWidth: '768px',
     })
     dialogRef.afterClosed().subscribe(result => {
-      // Fill the form transfer values, if the id is available.
-      if (!result) {
-        this.onContactList.emit(event)
+      // Fill the form transfer values with the selected contact information.
+      if (!result)
         return
-      }
 
-      const selectedUser = this.contacts.find(element => {
-        return element._id === result
-      })
+      const selectedContact = result as Contact;
 
-      if (!selectedUser) {
-        this.onContactList.emit(event)
-        return
-      }
-
-      // Finally, fill the form with the new data.
       this.transferForm.patchValue({
-        name: selectedUser.name,
-        surname: selectedUser.surname,
-        iban: selectedUser.iban
+        name: selectedContact.name,
+        surname: selectedContact.surname,
+        iban: selectedContact.iban
       })
-
-      this.onContactList.emit(event)
     });
   }
 
@@ -206,7 +186,6 @@ export class TransferComponent implements OnInit {
         return
 
       // TODO: Save the data on the server.
-      this.onSubmit.emit(this.transferForm.value)
 
       this._snackBar.open('Trasferimento inviato', '✅', {
         horizontalPosition: 'end',

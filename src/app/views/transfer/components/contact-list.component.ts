@@ -41,7 +41,7 @@ import {NgModel} from "@angular/forms";
             <mat-action-list class="actions">
               <button
                 mat-list-item
-                (click)="onCheck.emit(contact._id)"
+                (click)="onCheck.emit(contact)"
                 matTooltip="Seleziona"
                 matTooltipPosition="below"
                 matTooltipHideDelay="500"
@@ -162,7 +162,7 @@ export class ContactListComponent implements OnInit {
 
   @Input() contacts: Contact[] = []
 
-  @Output() onCheck: EventEmitter<string> = new EventEmitter<string>()
+  @Output() onCheck: EventEmitter<Contact> = new EventEmitter<Contact>()
 
   @Output() onEdit: EventEmitter<string> = new EventEmitter<string>()
 
