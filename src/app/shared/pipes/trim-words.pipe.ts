@@ -15,7 +15,10 @@ export class TrimWordsPipe implements PipeTransform {
    *
    * @link https://stackoverflow.com/questions/44669340/how-to-truncate-text-in-angular2
    */
-  transform(value: string, limit = 20, completeWords = false, ellipsis = '...'): string {
+  transform(value: string | null, limit = 20, completeWords = false, ellipsis = '...'): string {
+    if (!value)
+      return ''
+
     if (completeWords) // Updated the length accordingly to the last word status.
       limit = value.substr(0, limit).lastIndexOf(' ');
 

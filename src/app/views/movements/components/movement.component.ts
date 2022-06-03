@@ -70,7 +70,7 @@ export class MovementComponent implements OnInit {
 
   @Input() title: string | null = null;
 
-  @Input() description!: string;
+  @Input() description: string | null = null;
 
   @Input() amount: number | null = null;
 

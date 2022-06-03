@@ -43,11 +43,11 @@ import {dateToString} from "../../../shared/utilities/date-to-string";
 
           <br>
 
-          <mat-form-field [class.cdk-visually-hidden]="!availableSlots" class="full-width" appearance="fill">
+          <mat-form-field [class.cdk-visually-hidden]="!daySlots" class="full-width" appearance="fill">
             <mat-label>Orari disponibili</mat-label>
             <mat-select formControlName="time" required>
               <mat-option
-                *ngFor="let timeSlot of availableSlots?.slots"
+                *ngFor="let timeSlot of daySlots?.slots"
                 [value]="timeSlot"
               >
                 {{timeSlot}}
@@ -104,7 +104,7 @@ export class AppointmentFormComponent implements OnInit {
 
   @Input() allSlots: DayWithSlots[] | null = null
 
-  availableSlots: DayWithSlots | null = null
+  daySlots: DayWithSlots | null = null
 
   selectedSlot: DayWithSlot | null = null
 
@@ -135,7 +135,7 @@ export class AppointmentFormComponent implements OnInit {
     if (!this.allSlots)
       return false
 
-    // Only allow a date from day with slots.
+    // Only allow a date from all slots.
     const day = (d || new Date());
 
     return this.allSlots.some(element => {
@@ -147,30 +147,30 @@ export class AppointmentFormComponent implements OnInit {
     this.time?.reset()
 
     if (!event || !event.value || !this.allSlots) {
-      this.availableSlots = null
+      this.daySlots = null
       return
     }
 
     const selectedDate = dateToString(event.value);
-    const availableSlots = this.allSlots.find(element => {
+    const daySlots = this.allSlots.find(element => {
       return element.day === selectedDate
     })
 
-    if (!availableSlots) {
-      this.availableSlots = null
+    if (!daySlots) {
+      this.daySlots = null
       return
     }
 
-    this.availableSlots = availableSlots;
+    this.daySlots = daySlots;
     this.time?.enable()
   }
 
   bookHandler() {
-    if (!this.availableSlots || !this.time)
+    if (!this.daySlots || !this.time)
       throw new Error('Day and slot should be filled at this point.')
 
     const selectedSlot: DayWithSlot = {
-      day: this.availableSlots.day,
+      day: this.daySlots.day,
       slot: this.time.value
     }
 
@@ -179,7 +179,7 @@ export class AppointmentFormComponent implements OnInit {
   }
 
   cleanUp() {
-    this.availableSlots = null
+    this.daySlots = null
     this.selectedSlot = null
     this.time?.disable()
     this.appointmentForm.reset()

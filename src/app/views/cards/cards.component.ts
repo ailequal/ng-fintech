@@ -20,7 +20,7 @@ import {CardService} from "../../api/card.service";
       >
       </ae-card-list>
 
-      <mat-drawer #drawerRef class="sidenav" mode="over" position="end">
+      <mat-drawer #drawerRef class="sidenav" mode="side" position="end">
         <ae-card-form
           #cardFormRef
           (onSubmit)="submitHandler($event)"
@@ -71,7 +71,10 @@ export class CardsComponent implements OnInit {
 
   receiptHandler(card: Card): void {
     this.movements$ = this._cardService.getCardMovements(card._id)
-    this.movements$.subscribe(console.log) // TODO: We will print these information.
+    this.movements$.subscribe(console.log)
+
+    // TODO: We will print these information.
+    //  Or even better: route the user to "transfer" with the selected card already visible.
   }
 
   deleteHandler(card: Card): void {
