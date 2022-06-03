@@ -17,7 +17,9 @@ import {NavigationLink} from "../../models/link";
         <div class="side-content" sideContent>
           <ae-dashboard-toolbar></ae-dashboard-toolbar>
 
-          <router-outlet></router-outlet>
+          <div class="inner-content">
+            <router-outlet></router-outlet>
+          </div>
         </div>
       </ae-dashboard-sidenav>
     </div>
@@ -29,6 +31,10 @@ import {NavigationLink} from "../../models/link";
     .side-content {
       min-height: 100vh;
       background-color: white;
+    }
+
+    .inner-content {
+      margin: 50px 100px 0 100px;
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush

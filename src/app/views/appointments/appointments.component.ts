@@ -44,7 +44,7 @@ import {Observable} from "rxjs";
     /* Small size */
     @media screen and (min-width: 576px) {
       .container {
-        min-height: 460px;
+        min-height: 600px;
       }
     }
   `],

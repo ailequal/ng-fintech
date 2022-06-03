@@ -11,7 +11,6 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
   `,
   styles: [`
     .welcome {
-      padding: 50px 30px;
     }
 
     .welcome .title {
