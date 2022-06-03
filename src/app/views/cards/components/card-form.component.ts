@@ -15,7 +15,7 @@ import {CardForm} from "../../../models/card";
         <mat-card-content>
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>Tipo di carta</mat-label>
-            <mat-select ngModel name="cardType" required>
+            <mat-select ngModel name="type" required>
               <mat-option
                 *ngFor="let t of cardTypes"
                 [value]="t"
@@ -59,7 +59,7 @@ import {CardForm} from "../../../models/card";
             <mat-label>Nº Carta</mat-label>
             <input
               ngModel
-              name="cardNumber"
+              name="number"
               matInput
               type="text"
               required
@@ -72,7 +72,7 @@ import {CardForm} from "../../../models/card";
             <mat-label>Codice di sicurezza</mat-label>
             <input
               ngModel
-              name="cardSecurityCode"
+              name="csc"
               matInput
               type="text"
               required

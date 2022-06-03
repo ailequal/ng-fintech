@@ -10,9 +10,9 @@ export interface Card {
 }
 
 export interface CardForm {
-  cardType: CardType;
+  number: string;
+  type: CardType;
+  csc: string;
   name: string;
   surname: string;
-  cardNumber: string;
-  cardSecurityCode: string;
 }

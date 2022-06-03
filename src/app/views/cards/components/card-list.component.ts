@@ -143,7 +143,7 @@ import {Card} from "../../../models/card";
 })
 export class CardListComponent implements OnInit {
 
-  @Input() cards!: Card[];
+  @Input() cards: Card[] | null = null;
 
   @Output() onReceipt: EventEmitter<Card> = new EventEmitter<Card>();
 

@@ -4,6 +4,8 @@ import {MatDrawer} from "@angular/material/sidenav";
 import {Card} from "../../models/card";
 import {CardFormComponent} from "./components/card-form.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {Observable} from "rxjs";
+import {CardService} from "../../api/card.service";
 
 @Component({
   selector: 'ae-cards',
@@ -11,7 +13,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
     <mat-drawer-container class="container" autosize>
       <ae-card-list
         class="sidenav-content"
-        [cards]="cards"
+        [cards]="cards$ | async"
         (onReceipt)="receiptHandler($event)"
         (onDelete)="deleteHandler($event)"
         (onAdd)="addHandler()"
@@ -43,7 +45,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
     /* Small size */
     @media screen and (min-width: 576px) {
       .container {
-        min-height: 460px;
+        min-height: 580px;
       }
     }
   `],
@@ -51,51 +53,39 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 })
 export class CardsComponent implements OnInit {
 
-  // TODO: Hard coded values for now.
-  cards: Card[] = [
-    {
-      _id: '347987294424',
-      number: '4263982640269214',
-      ownerId: '023923463256',
-      owner: 'Mario',
-      type: 'mastercard',
-      amount: 4500
-    },
-    {
-      _id: '347987294425',
-      number: '4263982640269215',
-      ownerId: '023923463257',
-      owner: 'Luigi',
-      type: 'visa',
-      amount: 5000
-    },
-  ];
+  cards$: Observable<Card[]> = this._cardService.getCards()
+
+  movements$: Observable<any> | null = null
 
   @ViewChild('drawerRef', {read: MatDrawer, static: true}) drawer!: MatDrawer;
 
   @ViewChild('cardFormRef', {read: CardFormComponent, static: true}) cardForm!: CardFormComponent;
 
-  constructor(private _snackBar: MatSnackBar) {
+  constructor(
+    private _snackBar: MatSnackBar,
+    private _cardService: CardService) {
   }
 
   ngOnInit(): void {
   }
 
   receiptHandler(card: Card): void {
-    console.log(card)
-    console.log('receiptHandler')
+    this.movements$ = this._cardService.getCardMovements(card._id)
+    this.movements$.subscribe(console.log) // TODO: We will print these information.
   }
 
   deleteHandler(card: Card): void {
-    this.cards = this.cards.filter(element => {
-      return element._id !== card._id
-    })
+    this._cardService.deleteCard(card._id).subscribe(v => {
+      console.log(v)
 
-    this._snackBar.open('Carta rimossa', '❌', {
-      horizontalPosition: 'end',
-      verticalPosition: 'top',
-      duration: 3000
-    });
+      this.cards$ = this._cardService.getCards() // TODO: Manually re-trigger the subscription for now.
+
+      this._snackBar.open('Carta rimossa', '❌', {
+        horizontalPosition: 'end',
+        verticalPosition: 'top',
+        duration: 3000
+      });
+    })
   }
 
   addHandler(): void {
@@ -103,25 +93,19 @@ export class CardsComponent implements OnInit {
   }
 
   submitHandler(cardForm: CardForm): void {
-    // TODO: Some values are hard coded. Later on they will be provided from the backend.
-    const newId = String(Date.now())
-    const newCard: Card = {
-      _id: newId,
-      number: cardForm.cardNumber,
-      ownerId: `u-${newId}`,
-      owner: `${cardForm.name} ${cardForm.surname}`,
-      type: cardForm.cardType,
-      amount: 0
-    }
-    this.cards = [...this.cards, newCard]
+    this._cardService.setCard(cardForm).subscribe(v => {
+      console.log(v)
 
-    this._snackBar.open('Carta aggiunta', '❌', {
-      horizontalPosition: 'end',
-      verticalPosition: 'top',
-      duration: 3000
-    });
+      this.cards$ = this._cardService.getCards() // TODO: Manually re-trigger the subscription for now.
 
-    this.dispose()
+      this._snackBar.open('Carta aggiunta', '❌', {
+        horizontalPosition: 'end',
+        verticalPosition: 'top',
+        duration: 3000
+      });
+
+      this.dispose()
+    })
   }
 
   cancelHandler(): void {

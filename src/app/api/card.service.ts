@@ -26,7 +26,7 @@ export class CardService {
   }
 
   getCardMovements(cardId: string, limit: number = 5, offset: number = 0): Observable<{ data: Movement[], total: number }> {
-    return this._http.get<{ data: Movement[], total: number }>(environment.apiUrl + '/cards/' + cardId, {
+    return this._http.get<{ data: Movement[], total: number }>(environment.apiUrl + '/cards/' + cardId + '/movements', {
       params: {
         limit: limit,
         offset: offset
