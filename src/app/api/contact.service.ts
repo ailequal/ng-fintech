@@ -20,9 +20,8 @@ export class ContactService {
     return this._http.post<Contact>(environment.apiUrl + '/contacts', contact);
   }
 
-  updateContact(contact: Partial<Contact>): Observable<Contact> {
-    // The contact is mandatory, even if we have Partial<Contact>.
-    return this._http.put<Contact>(environment.apiUrl + '/contacts/' + contact._id, contact);
+  updateContact(contactId: string, contact: Partial<Contact>): Observable<Contact> {
+    return this._http.put<Contact>(environment.apiUrl + '/contacts/' + contactId, contact);
   }
 
   deleteContact(contactId: string): Observable<boolean> {

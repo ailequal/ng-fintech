@@ -51,7 +51,7 @@ import {NgModel} from "@angular/forms";
 
               <button
                 mat-list-item
-                (click)="onEdit.emit(contact._id)"
+                (click)="onEdit.emit(contact)"
                 matTooltip="Modifica"
                 matTooltipPosition="below"
                 matTooltipHideDelay="500"
@@ -160,11 +160,11 @@ export class ContactListComponent implements OnInit {
 
   @ViewChild('searchRef', {read: NgModel, static: true}) searchRef!: NgModel
 
-  @Input() contacts: Contact[] = []
+  @Input() contacts: Contact[] | null = null
 
   @Output() onCheck: EventEmitter<Contact> = new EventEmitter<Contact>()
 
-  @Output() onEdit: EventEmitter<string> = new EventEmitter<string>()
+  @Output() onEdit: EventEmitter<Contact> = new EventEmitter<Contact>()
 
   @Output() onDelete: EventEmitter<string> = new EventEmitter<string>()
 

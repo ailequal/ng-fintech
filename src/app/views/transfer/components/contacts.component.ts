@@ -1,7 +1,8 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {Contact, ContactForm} from "../../../models/contact";
 import {MatDialogRef} from "@angular/material/dialog";
-import {contacts} from "../../../../assets/mock-contacts";
+import {Observable} from "rxjs";
+import {ContactService} from "../../../api/contact.service";
 
 @Component({
   selector: 'ae-contacts',
@@ -11,7 +12,7 @@ import {contacts} from "../../../../assets/mock-contacts";
 
         <ng-container *ngIf="show === 'contact-list'">
           <ae-contact-list
-            [contacts]="contacts"
+            [contacts]="contacts$ | async"
             (onCheck)="checkHandler($event)"
             (onEdit)="editHandler($event)"
             (onDelete)="deleteHandler($event)"
@@ -58,66 +59,64 @@ import {contacts} from "../../../../assets/mock-contacts";
       width: 100%;
     }
   `],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  // changeDetection: ChangeDetectionStrategy.OnPush // TODO: We might not be able to use it in this component, at least for now.
 })
 export class ContactsComponent implements OnInit {
 
   show: 'contact-list' | 'contact-form' = 'contact-list'
 
+  contacts$: Observable<Contact[]> = this._contactService.getContacts()
+
   selectedContact: Contact | null = null
 
-  // TODO: Hard coded values for now.
-  contacts: Contact[] = contacts
-
-  constructor(public dialogRef: MatDialogRef<ContactsComponent>) {
+  constructor(
+    public dialogRef: MatDialogRef<ContactsComponent>,
+    private _contactService: ContactService
+  ) {
   }
 
   ngOnInit(): void {
   }
 
-  checkHandler(contact: Contact) {
-    // TODO: Get the new contacts list from the server.
-
-    this.dialogRef.close(contact)
+  checkHandler(selectedContact: Contact) {
+    // Send the selected contact back to the "original" component (this is a dialog window).
+    this.dialogRef.close(selectedContact)
   }
 
-  editHandler(contactId: string) {
-    const selectedContact = this.contacts.find(element => {
-      return element._id === contactId
-    })
-
-    if (!selectedContact) {
-      this.resetState()
-      return
-    }
-
+  editHandler(selectedContact: Contact) {
+    // Open the edit contact window with the relative data already filled.
     this.selectedContact = selectedContact
     this.show = "contact-form"
   }
 
   deleteHandler(contactId: string) {
-    this.contacts = this.contacts.filter(element => {
-      return element._id !== contactId
+    this._contactService.deleteContact(contactId).subscribe(v => {
+      console.log(v)
+
+      this.contacts$ = this._contactService.getContacts() // TODO: Manually re-trigger the subscription for now.
     })
   }
 
   submitHandler(contactForm: ContactForm) {
     if (this.selectedContact) {
-      // Edit the already existing contact.
-      this.contacts = this.contacts.map(element => {
-        if (element._id !== this.selectedContact?._id)
-          return element
+      // Update the already existing contact.
+      this._contactService.updateContact(this.selectedContact._id, contactForm).subscribe(v => {
+        console.log(v)
 
-        return {...element, ...contactForm}
+        this.contacts$ = this._contactService.getContacts() // TODO: Manually re-trigger the subscription for now.
+        this.resetState()
       })
 
-      this.resetState()
       return
     }
 
     // Add a new contact.
-    this.contacts = [...this.contacts, {_id: String(Date.now()), ...contactForm}]
-    this.resetState()
+    this._contactService.setContact(contactForm).subscribe(v => {
+      console.log(v)
+
+      this.contacts$ = this._contactService.getContacts() // TODO: Manually re-trigger the subscription for now.
+      this.resetState()
+    })
   }
 
   resetState() {

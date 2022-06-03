@@ -1,13 +1,11 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {FormBuilder} from "@angular/forms";
 import {Card} from "../../models/card";
-import {TransferForm} from "../../models/transfer";
 import {MatDialog} from "@angular/material/dialog";
 import {DialogConfirmComponent} from "../../shared/components/dialog-confirm.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ContactsComponent} from "./components/contacts.component";
 import {Contact} from "../../models/contact";
-import {contacts} from 'src/assets/mock-contacts';
 import {Observable} from "rxjs";
 import {CardService} from "../../api/card.service";
 

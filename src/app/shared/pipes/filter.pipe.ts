@@ -6,7 +6,10 @@ import {Contact} from "../../models/contact";
 })
 export class FilterPipe implements PipeTransform {
 
-  transform(value: Contact[], filter: string = ''): Contact[] {
+  transform(value: Contact[] | null, filter: string = ''): Contact[] {
+    if (!value)
+      return []
+
     if (!filter)
       return value;
 
