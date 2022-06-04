@@ -4,13 +4,15 @@ import {EqualFieldsValidatorDirective} from "./equal-fields.validator";
 import {AmountValidatorDirective} from "./amount.validator";
 import {IbanValidatorDirective} from "./iban.validator";
 import {CodiceFiscaleValidatorDirective} from "./codice-fiscale.validator";
+import {CardIdValidatorDirective} from "./card-id.validator";
 
 @NgModule({
   declarations: [
     EqualFieldsValidatorDirective,
     AmountValidatorDirective,
     IbanValidatorDirective,
-    CodiceFiscaleValidatorDirective
+    CodiceFiscaleValidatorDirective,
+    CardIdValidatorDirective
   ],
   imports: [
     CommonModule
@@ -19,7 +21,8 @@ import {CodiceFiscaleValidatorDirective} from "./codice-fiscale.validator";
     EqualFieldsValidatorDirective,
     AmountValidatorDirective,
     IbanValidatorDirective,
-    CodiceFiscaleValidatorDirective
+    CodiceFiscaleValidatorDirective,
+    CardIdValidatorDirective
   ]
 })
 export class ValidatorsModule {

@@ -15,6 +15,9 @@ import {CardService} from "../../api/card.service";
           <mat-option *ngFor="let card of (cards$ | async)" [value]="card">
             {{card.number}}
           </mat-option>
+          <mat-option [value]="'zaq1xsw2cde3vfr4'">
+            0123456789012345 (FAKE)
+          </mat-option>
         </mat-select>
       </mat-form-field>
 

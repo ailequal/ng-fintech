@@ -12,6 +12,7 @@ import {TransferService} from "../../api/transfer.service";
 import {TransferForm} from "../../models/transfer";
 import {amountValidator} from "../../shared/validators/amount.validator";
 import {ibanValidator} from "../../shared/validators/iban.validator";
+import {CardIdValidator} from "../../shared/validators/card-id.validator";
 
 @Component({
   selector: 'ae-transfer',
@@ -74,7 +75,10 @@ import {ibanValidator} from "../../shared/validators/iban.validator";
             <mat-label>Seleziona una carta</mat-label>
             <mat-select formControlName="cardId" required>
               <mat-option *ngFor="let card of (cards$ | async)" [value]="card._id">
-                {{card._id}}
+                {{card.number}}
+              </mat-option>
+              <mat-option [value]="'zaq1xsw2cde3vfr4'">
+                0123456789012345 (FAKE)
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -135,7 +139,7 @@ export class TransferComponent implements OnInit {
     surname: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(24)]],
     iban: ['', [Validators.required, ibanValidator]],
     amount: ['', [Validators.required, amountValidator]],
-    cardId: ['', [Validators.required]],
+    cardId: ['', [Validators.required], [this._cardIdValidator.validate()]],
   });
 
   cards$: Observable<Card[]> = this._cardService.getCards()
@@ -145,7 +149,8 @@ export class TransferComponent implements OnInit {
     public dialog: MatDialog,
     private _snackBar: MatSnackBar,
     private _transferService: TransferService,
-    private _cardService: CardService
+    private _cardService: CardService,
+    private _cardIdValidator: CardIdValidator
   ) {
   }
 
