@@ -10,6 +10,7 @@ import {Observable} from "rxjs";
 import {CardService} from "../../api/card.service";
 import {TransferService} from "../../api/transfer.service";
 import {TransferForm} from "../../models/transfer";
+import {amountValidator} from "../../shared/validators/amount.validator";
 
 @Component({
   selector: 'ae-transfer',
@@ -71,7 +72,7 @@ import {TransferForm} from "../../models/transfer";
             <mat-label>Importo</mat-label>
             <input
               matInput
-              type="number"
+              type="text"
               required
               placeholder="100"
               formControlName="amount"
@@ -142,7 +143,7 @@ export class TransferComponent implements OnInit {
     name: [''],
     surname: [''],
     iban: [''],
-    amount: [''],
+    amount: ['', [amountValidator]],
     cardId: [''],
   });
 
