@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder} from "@angular/forms";
+import {FormBuilder, Validators} from "@angular/forms";
 import {Contact, ContactForm} from "../../../models/contact";
+import {ibanValidator} from "../../../shared/validators/iban.validator";
 
 @Component({
   selector: 'ae-contact-form',
@@ -20,9 +21,6 @@ import {Contact, ContactForm} from "../../../models/contact";
             <input
               matInput
               type="text"
-              required
-              minlength="3"
-              maxlength="24"
               placeholder="Lucas"
               formControlName="name"
             >
@@ -33,9 +31,6 @@ import {Contact, ContactForm} from "../../../models/contact";
             <input
               matInput
               type="text"
-              required
-              minlength="3"
-              maxlength="24"
               placeholder="Tip"
               formControlName="surname"
             >
@@ -46,9 +41,6 @@ import {Contact, ContactForm} from "../../../models/contact";
             <input
               matInput
               type="text"
-              required
-              minlength="27"
-              maxlength="27"
               placeholder="IT02L1234512345123456789012"
               formControlName="iban"
             >
@@ -102,9 +94,9 @@ import {Contact, ContactForm} from "../../../models/contact";
 export class ContactFormComponent implements OnInit {
 
   contactForm = this._fb.group({
-    name: [''],
-    surname: [''],
-    iban: ['']
+    name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(24)]],
+    surname: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(24)]],
+    iban: ['', [Validators.required, ibanValidator]],
   });
 
   @Input() initialContact: Contact | null = null

@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {FormBuilder} from "@angular/forms";
+import {FormBuilder, Validators} from "@angular/forms";
 import {Card} from "../../models/card";
 import {MatDialog} from "@angular/material/dialog";
 import {DialogConfirmComponent} from "../../shared/components/dialog-confirm.component";
@@ -11,6 +11,7 @@ import {CardService} from "../../api/card.service";
 import {TransferService} from "../../api/transfer.service";
 import {TransferForm} from "../../models/transfer";
 import {amountValidator} from "../../shared/validators/amount.validator";
+import {ibanValidator} from "../../shared/validators/iban.validator";
 
 @Component({
   selector: 'ae-transfer',
@@ -34,9 +35,6 @@ import {amountValidator} from "../../shared/validators/amount.validator";
             <input
               matInput
               type="text"
-              required
-              minlength="3"
-              maxlength="24"
               placeholder="Lucas"
               formControlName="name"
             >
@@ -47,9 +45,6 @@ import {amountValidator} from "../../shared/validators/amount.validator";
             <input
               matInput
               type="text"
-              required
-              minlength="3"
-              maxlength="24"
               placeholder="Tip"
               formControlName="surname"
             >
@@ -60,9 +55,6 @@ import {amountValidator} from "../../shared/validators/amount.validator";
             <input
               matInput
               type="text"
-              required
-              minlength="27"
-              maxlength="27"
               placeholder="IT02L1234512345123456789012"
               formControlName="iban"
             >
@@ -73,7 +65,6 @@ import {amountValidator} from "../../shared/validators/amount.validator";
             <input
               matInput
               type="text"
-              required
               placeholder="100"
               formControlName="amount"
             >
@@ -140,11 +131,11 @@ import {amountValidator} from "../../shared/validators/amount.validator";
 export class TransferComponent implements OnInit {
 
   transferForm = this._fb.group({
-    name: [''],
-    surname: [''],
-    iban: [''],
-    amount: ['', [amountValidator]],
-    cardId: [''],
+    name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(24)]],
+    surname: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(24)]],
+    iban: ['', [Validators.required, ibanValidator]],
+    amount: ['', [Validators.required, amountValidator]],
+    cardId: ['', [Validators.required]],
   });
 
   cards$: Observable<Card[]> = this._cardService.getCards()
