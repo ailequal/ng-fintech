@@ -1,6 +1,8 @@
 import {AbstractControl, NG_VALIDATORS, ValidationErrors, Validators} from "@angular/forms";
 import {Directive} from "@angular/core";
 
+// Real validation check (the common part)
+// Used by reactive forms as it is; called from a directive for the template driven forms.
 export const amountValidator = (control: AbstractControl): ValidationErrors | null => {
   const value = parseInt(control.value)
 
