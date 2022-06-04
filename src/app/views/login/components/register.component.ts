@@ -1,11 +1,13 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {NgForm} from "@angular/forms";
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {FormBuilder, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
+import {equalFieldsValidatorReactive} from "../../../shared/validators/equal-fields.validator";
+import {amountValidator} from "../../../shared/validators/amount.validator";
 
 @Component({
   selector: 'ae-register',
   template: `
-    <form #f="ngForm" (ngSubmit)="submitHandler(f)">
+    <form [formGroup]="registerForm" (ngSubmit)="submitHandler()">
       <mat-card class="register">
 
         <mat-card-header>
@@ -16,38 +18,25 @@ import {Router} from "@angular/router";
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>Email</mat-label>
             <input
-              ngModel
-              #nameRef="ngModel"
-              name="email"
+              formControlName="email"
               matInput
               type="email"
-              required
-              email
               placeholder="lucastip@earth.org"
             >
-            <mat-error *ngIf="nameRef.errors?.['email']">
+            <mat-error *ngIf="email?.errors?.['email']">
               Inserire un indirizzo email valido.
             </mat-error>
-            <mat-error *ngIf="nameRef.errors?.['required']">
+            <mat-error *ngIf="email?.errors?.['required']">
               Il campo email è <strong>obbligatorio</strong>.
             </mat-error>
           </mat-form-field>
 
-          <!--debut input status-->
-          <pre>
-            {{nameRef.errors | json}}
-          </pre>
-
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>Nome</mat-label>
             <input
-              ngModel
-              name="name"
+              formControlName="name"
               matInput
               type="text"
-              required
-              minlength="3"
-              maxlength="24"
               placeholder="Lucas"
             >
           </mat-form-field>
@@ -55,53 +44,66 @@ import {Router} from "@angular/router";
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>Cognome</mat-label>
             <input
-              ngModel
-              name="surname"
+              formControlName="surname"
               matInput
               type="text"
-              required
-              minlength="3"
-              maxlength="24"
               placeholder="Tip"
             >
           </mat-form-field>
 
           <mat-form-field class="full-width" appearance="fill">
-            <mat-label>Password</mat-label>
+            <mat-label>Test</mat-label>
             <input
-              ngModel
-              name="passwordAlpha"
+              formControlName="test"
               matInput
-              [type]="hidePasswordAlpha ? 'password': 'text'"
-              required
-              minlength="8"
-              maxlength="64"
+              type="number"
             >
-            <mat-icon matSuffix
-                      (click)="hidePasswordAlpha = !hidePasswordAlpha">{{hidePasswordAlpha ? 'visibility_off' : 'visibility'}}</mat-icon>
           </mat-form-field>
 
-          <mat-form-field class="full-width" appearance="fill">
-            <mat-label>Ripeti la password</mat-label>
-            <input
-              ngModel
-              name="passwordBeta"
-              matInput
-              [type]="hidePasswordBeta ? 'password': 'text'"
-              required
-              minlength="8"
-              maxlength="64"
-            >
-            <mat-icon matSuffix
-                      (click)="hidePasswordBeta = !hidePasswordBeta">{{hidePasswordBeta ? 'visibility_off' : 'visibility'}}</mat-icon>
-          </mat-form-field>
+          <div formGroupName="passwords" class="passwords"
+               [ngClass]="{error: passwords?.errors?.['equalFields'] && passwordBeta?.touched}">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Password</mat-label>
+              <input
+                formControlName="passwordAlpha"
+                matInput
+                [type]="hidePasswordAlpha ? 'password': 'text'"
+              >
+              <mat-icon matSuffix
+                        (click)="hidePasswordAlpha = !hidePasswordAlpha">{{hidePasswordAlpha ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Ripeti la password</mat-label>
+              <input
+                formControlName="passwordBeta"
+                matInput
+                [type]="hidePasswordBeta ? 'password': 'text'"
+              >
+              <mat-icon matSuffix
+                        (click)="hidePasswordBeta = !hidePasswordBeta">{{hidePasswordBeta ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </mat-form-field>
+
+            <mat-error *ngIf="passwords?.errors?.['equalFields'] && passwordBeta?.touched">
+              Le password inserite <strong>non</strong> coincidono.
+            </mat-error>
+          </div>
+
+          <div style="border:3px solid red; padding: 20px;">
+            <pre><strong>form</strong> {{registerForm.errors|json}}</pre>
+            <pre><strong>email</strong> {{email?.errors|json}}</pre>
+            <pre><strong>test</strong> {{test?.errors|json}}</pre>
+            <pre><strong>passwords</strong> {{passwords?.errors | json}}</pre>
+            <pre>{{passwordAlpha?.errors | json}}</pre>
+            <pre>{{passwordBeta?.errors | json}}</pre>
+          </div>
         </mat-card-content>
 
         <mat-card-actions>
           <button
             mat-raised-button
             type="submit"
-            [disabled]="!f.valid"
+            [disabled]="!registerForm.valid"
             class="full-width mb"
             color="primary"
           >
@@ -134,6 +136,10 @@ import {Router} from "@angular/router";
       justify-content: center;
     }
 
+    .passwords.error {
+      //  TODO: How can I get the colors variable from Angular Material??
+    }
+
     .mat-card-actions .mat-button,
     .mat-card-actions .mat-raised-button,
     .mat-card-actions .mat-stroked-button {
@@ -158,17 +164,57 @@ export class RegisterComponent implements OnInit {
 
   hidePasswordBeta: boolean = true;
 
-  constructor(private _router: Router) {
+  constructor(
+    private _fb: FormBuilder,
+    private _router: Router
+  ) {
+  }
+
+  registerForm = this._fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(24)]],
+    surname: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(24)]],
+    test: ['', [Validators.required, amountValidator]],
+    passwords: this._fb.group({
+      passwordAlpha: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(64)]],
+      passwordBeta: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(64)
+      ]],
+    }, {validators: [equalFieldsValidatorReactive(['passwordAlpha', 'passwordBeta'])]})
+  })
+
+  get email() {
+    return this.registerForm.get('email')
+  }
+
+  get name() {
+    return this.registerForm.get('name')
+  }
+
+  get surname() {
+    return this.registerForm.get('surname')
+  }
+
+  get test() {
+    return this.registerForm.get('test')
+  }
+
+  get passwords() {
+    return this.registerForm.get('passwords')
+  }
+
+  get passwordAlpha() {
+    return this.registerForm.get('passwords.passwordAlpha')
+  }
+
+  get passwordBeta() {
+    return this.registerForm.get('passwords.passwordBeta')
   }
 
   ngOnInit(): void {
   }
 
-  submitHandler(f: NgForm) {
-    if (f.value.passwordAlpha !== f.value.passwordBeta)
-      throw new Error('The two passwords do not match!!')
-
-    console.log(f.value)
+  submitHandler() {
+    console.log(this.registerForm.value)
 
     this._router.navigateByUrl('/login/signin').then(console.log)
   }

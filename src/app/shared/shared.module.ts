@@ -1,5 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {ValidatorsModule} from "./validators/validators.module";
 import {MaterialModule} from "./material/material.module";
 
 import {DialogConfirmComponent} from "./components/dialog-confirm.component";
@@ -16,9 +17,11 @@ import {TrimWordsPipe} from './pipes/trim-words.pipe';
   ],
   imports: [
     CommonModule,
+    ValidatorsModule,
     MaterialModule
   ],
   exports: [
+    ValidatorsModule,
     MaterialModule,
     DialogConfirmComponent,
     LeafletComponent,
