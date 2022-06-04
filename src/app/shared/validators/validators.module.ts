@@ -5,6 +5,7 @@ import {AmountValidatorDirective} from "./amount.validator";
 import {IbanValidatorDirective} from "./iban.validator";
 import {CodiceFiscaleValidatorDirective} from "./codice-fiscale.validator";
 import {CardIdValidatorDirective} from "./card-id.validator";
+import {TransferValidatorDirective} from "./transfer.validator";
 
 @NgModule({
   declarations: [
@@ -12,7 +13,8 @@ import {CardIdValidatorDirective} from "./card-id.validator";
     AmountValidatorDirective,
     IbanValidatorDirective,
     CodiceFiscaleValidatorDirective,
-    CardIdValidatorDirective
+    CardIdValidatorDirective,
+    TransferValidatorDirective
   ],
   imports: [
     CommonModule
@@ -22,7 +24,8 @@ import {CardIdValidatorDirective} from "./card-id.validator";
     AmountValidatorDirective,
     IbanValidatorDirective,
     CodiceFiscaleValidatorDirective,
-    CardIdValidatorDirective
+    CardIdValidatorDirective,
+    TransferValidatorDirective
   ]
 })
 export class ValidatorsModule {

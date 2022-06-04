@@ -1,11 +1,12 @@
 import {Directive, Injectable} from "@angular/core";
 import {
-  AbstractControl, AsyncValidator,
+  AbstractControl,
+  AsyncValidator,
   AsyncValidatorFn,
   NG_ASYNC_VALIDATORS,
   ValidationErrors
 } from "@angular/forms";
-import {map, Observable} from "rxjs";
+import {map, Observable, of} from "rxjs";
 import {Card} from "../../models/card";
 import {CardService} from "../../api/card.service";
 
@@ -19,13 +20,13 @@ export class CardIdValidator {
 
   validate(): AsyncValidatorFn {
     return (control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
+      if (!control.value)
+        return of(null)
+
+      const cardId = control.value as string
+
       return this._cardService.getCards().pipe(
         map((v: Card[]) => {
-          if (!control.value)
-            return null
-
-          const cardId = control.value as string
-
           const card = v.find(element => {
             return element._id === cardId
           })

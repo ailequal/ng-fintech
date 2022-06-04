@@ -13,6 +13,7 @@ import {TransferForm} from "../../models/transfer";
 import {amountValidator} from "../../shared/validators/amount.validator";
 import {ibanValidator} from "../../shared/validators/iban.validator";
 import {CardIdValidator} from "../../shared/validators/card-id.validator";
+import {TransferValidator} from "../../shared/validators/transfer.validator";
 
 @Component({
   selector: 'ae-transfer',
@@ -97,6 +98,10 @@ import {CardIdValidator} from "../../shared/validators/card-id.validator";
           </button>
         </mat-card-actions>
 
+        <pre>
+          {{transferForm.errors | json}}
+        </pre>
+
       </mat-card>
     </form>
   `,
@@ -140,7 +145,7 @@ export class TransferComponent implements OnInit {
     iban: ['', [Validators.required, ibanValidator]],
     amount: ['', [Validators.required, amountValidator]],
     cardId: ['', [Validators.required], [this._cardIdValidator.validate()]],
-  });
+  }, {asyncValidators: [this._transferValidator.validate({fieldCard: 'cardId', fieldAmount: 'amount'})]});
 
   cards$: Observable<Card[]> = this._cardService.getCards()
 
@@ -150,7 +155,8 @@ export class TransferComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private _transferService: TransferService,
     private _cardService: CardService,
-    private _cardIdValidator: CardIdValidator
+    private _cardIdValidator: CardIdValidator,
+    private _transferValidator: TransferValidator
   ) {
   }
 
