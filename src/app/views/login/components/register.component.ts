@@ -2,7 +2,6 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {equalFieldsValidatorReactive} from "../../../shared/validators/equal-fields.validator";
-import {amountValidator} from "../../../shared/validators/amount.validator";
 
 @Component({
   selector: 'ae-register',
@@ -51,15 +50,6 @@ import {amountValidator} from "../../../shared/validators/amount.validator";
             >
           </mat-form-field>
 
-          <mat-form-field class="full-width" appearance="fill">
-            <mat-label>Test</mat-label>
-            <input
-              formControlName="test"
-              matInput
-              type="number"
-            >
-          </mat-form-field>
-
           <div formGroupName="passwords" class="passwords"
                [ngClass]="{error: passwords?.errors?.['equalFields'] && passwordBeta?.touched}">
             <mat-form-field class="full-width" appearance="fill">
@@ -89,14 +79,13 @@ import {amountValidator} from "../../../shared/validators/amount.validator";
             </mat-error>
           </div>
 
-          <div style="border:3px solid red; padding: 20px;">
-            <pre><strong>form</strong> {{registerForm.errors|json}}</pre>
-            <pre><strong>email</strong> {{email?.errors|json}}</pre>
-            <pre><strong>test</strong> {{test?.errors|json}}</pre>
-            <pre><strong>passwords</strong> {{passwords?.errors | json}}</pre>
-            <pre>{{passwordAlpha?.errors | json}}</pre>
-            <pre>{{passwordBeta?.errors | json}}</pre>
-          </div>
+          <!--          <div style="border:3px solid red; padding: 20px;">-->
+          <!--            <pre><strong>form</strong> {{registerForm.errors|json}}</pre>-->
+          <!--            <pre><strong>email</strong> {{email?.errors|json}}</pre>-->
+          <!--            <pre><strong>passwords</strong> {{passwords?.errors | json}}</pre>-->
+          <!--            <pre>{{passwordAlpha?.errors | json}}</pre>-->
+          <!--            <pre>{{passwordBeta?.errors | json}}</pre>-->
+          <!--          </div>-->
         </mat-card-content>
 
         <mat-card-actions>
@@ -156,8 +145,6 @@ import {amountValidator} from "../../../shared/validators/amount.validator";
 })
 export class RegisterComponent implements OnInit {
 
-  // TODO: The two passwords inputs must check that they hold the same value before sending the request.
-  //  We will use a custom validator for this requirement.
   // TODO: Implement a more robust password validation (use special characters...).
 
   hidePasswordAlpha: boolean = true;
@@ -174,7 +161,6 @@ export class RegisterComponent implements OnInit {
     email: ['', [Validators.required, Validators.email]],
     name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(24)]],
     surname: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(24)]],
-    test: ['', [Validators.required, amountValidator]],
     passwords: this._fb.group({
       passwordAlpha: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(64)]],
       passwordBeta: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(64)
@@ -192,10 +178,6 @@ export class RegisterComponent implements OnInit {
 
   get surname() {
     return this.registerForm.get('surname')
-  }
-
-  get test() {
-    return this.registerForm.get('test')
   }
 
   get passwords() {
