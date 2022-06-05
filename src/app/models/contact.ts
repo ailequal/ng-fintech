@@ -10,3 +10,8 @@ export interface ContactForm {
   surname: string;
   iban: string;
 }
+
+export interface ContactsComponentState {
+  type: 'list' | 'new' | 'edit',
+  id?: string
+}

@@ -1,7 +1,7 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {Contact, ContactForm} from "../../../models/contact";
+import {Component, OnInit} from '@angular/core';
+import {Contact, ContactForm, ContactsComponentState} from "../../../models/contact";
 import {MatDialogRef} from "@angular/material/dialog";
-import {Observable} from "rxjs";
+import {BehaviorSubject, combineLatest, map, Observable} from "rxjs";
 import {ContactService} from "../../../api/contact.service";
 
 @Component({
@@ -10,7 +10,7 @@ import {ContactService} from "../../../api/contact.service";
     <mat-card class="contacts">
       <mat-card-content>
 
-        <ng-container *ngIf="show === 'contact-list'">
+        <ng-container *ngIf="(state$ | async)?.type === 'list'">
           <ae-contact-list
             [contacts]="contacts$ | async"
             (onCheck)="checkHandler($event)"
@@ -23,26 +23,26 @@ import {ContactService} from "../../../api/contact.service";
               class="full-width"
               mat-raised-button
               color="primary"
-              (click)="show = 'contact-form'; selectedContact = null;"
+              (click)="state$.next({type: 'new'})"
             >
               Nuovo contatto
             </button>
           </mat-card-actions>
         </ng-container>
 
-        <ng-container *ngIf="show === 'contact-form'">
+        <ng-container *ngIf="(state$ | async)?.type !== 'list'">
           <mat-card-actions>
             <button
               class="full-width"
               mat-stroked-button
-              (click)="show = 'contact-list'"
+              (click)="state$.next({type: 'list'})"
             >
               Indietro
             </button>
           </mat-card-actions>
 
           <ae-contact-form
-            [initialContact]="selectedContact"
+            [initialContact]="selectedContact$ | async"
             (onSubmit)="submitHandler($event)"
           ></ae-contact-form>
         </ng-container>
@@ -63,16 +63,32 @@ import {ContactService} from "../../../api/contact.service";
 })
 export class ContactsComponent implements OnInit {
 
-  show: 'contact-list' | 'contact-form' = 'contact-list'
+  contacts$: BehaviorSubject<Contact[]> = new BehaviorSubject<Contact[]>([])
 
-  contacts$: Observable<Contact[]> = this._contactService.getContacts()
+  state$: BehaviorSubject<ContactsComponentState> = new BehaviorSubject<ContactsComponentState>({type: 'list'})
 
-  selectedContact: Contact | null = null
+  selectedContact$: Observable<Contact | null> = combineLatest([this.contacts$, this.state$]).pipe(
+    map(combinedValues => {
+      const [contacts, state] = combinedValues
+      if (!contacts.length || 'edit' !== state.type || !state.id)
+        return null
+
+      const contactId = state.id
+      const contact = contacts.find(element => {
+        return element._id === contactId
+      })
+
+      return contact ? contact : null
+    })
+  )
 
   constructor(
     public dialogRef: MatDialogRef<ContactsComponent>,
     private _contactService: ContactService
   ) {
+    this._contactService.getContacts().subscribe(contacts => {
+      this.contacts$.next(contacts)
+    })
   }
 
   ngOnInit(): void {
@@ -85,43 +101,47 @@ export class ContactsComponent implements OnInit {
 
   editHandler(selectedContact: Contact) {
     // Open the edit contact window with the relative data already filled.
-    this.selectedContact = selectedContact
-    this.show = "contact-form"
+    this.state$.next({type: "edit", id: selectedContact._id})
   }
 
   deleteHandler(contactId: string) {
     this._contactService.deleteContact(contactId).subscribe(v => {
-      console.log(v)
-
-      this.contacts$ = this._contactService.getContacts() // TODO: Manually re-trigger the subscription for now.
+      this.contacts$.next(
+        this.contacts$.value.filter(contact => {
+          return contact._id !== contactId
+        })
+      )
     })
   }
 
   submitHandler(contactForm: ContactForm) {
-    if (this.selectedContact) {
+    if (this.state$.value.type === 'edit') {
       // Update the already existing contact.
-      this._contactService.updateContact(this.selectedContact._id, contactForm).subscribe(v => {
-        console.log(v)
+      const contactId = this.state$.value.id
+      if (!contactId)
+        return
 
-        this.contacts$ = this._contactService.getContacts() // TODO: Manually re-trigger the subscription for now.
-        this.resetState()
+      this._contactService.updateContact(contactId, contactForm).subscribe(updatedContact => {
+        this.contacts$.next(this.contacts$.value.map(contact => {
+          return (contact._id === updatedContact._id) ? updatedContact : contact
+        }))
       })
+
+      this.resetState()
 
       return
     }
 
     // Add a new contact.
-    this._contactService.setContact(contactForm).subscribe(v => {
-      console.log(v)
+    this._contactService.setContact(contactForm).subscribe(newContact => {
+      this.contacts$.next([...this.contacts$.value, newContact])
 
-      this.contacts$ = this._contactService.getContacts() // TODO: Manually re-trigger the subscription for now.
       this.resetState()
     })
   }
 
   resetState() {
-    this.selectedContact = null
-    this.show = "contact-list"
+    this.state$.next({type: "list"})
   }
 
 }
