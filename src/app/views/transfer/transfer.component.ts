@@ -62,27 +62,34 @@ import {TransferValidator} from "../../shared/validators/transfer.validator";
             >
           </mat-form-field>
 
-          <mat-form-field class="full-width" appearance="fill">
-            <mat-label>Importo</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="100"
-              formControlName="amount"
-            >
-          </mat-form-field>
+          <div formGroupName="transferGroup" class="transfer-group"
+               [ngClass]="{error: transferGroup?.errors?.['transfer'] && transferGroup?.touched}">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Importo</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="100"
+                formControlName="amount"
+              >
+            </mat-form-field>
 
-          <mat-form-field class="full-width" appearance="fill">
-            <mat-label>Seleziona una carta</mat-label>
-            <mat-select formControlName="cardId" required>
-              <mat-option *ngFor="let card of (cards$ | async)" [value]="card._id">
-                {{card.number}}
-              </mat-option>
-              <mat-option [value]="'zaq1xsw2cde3vfr4'">
-                0123456789012345 (FAKE)
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Seleziona una carta</mat-label>
+              <mat-select formControlName="cardId" required>
+                <mat-option *ngFor="let card of (cards$ | async)" [value]="card._id">
+                  {{card.number}}
+                </mat-option>
+                <mat-option [value]="'zaq1xsw2cde3vfr4'">
+                  0123456789012345 (FAKE)
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-error *ngIf="transferGroup?.errors?.['transfer'] && transferGroup?.touched">
+              L'importo da trasferire e' <strong>superiore</strong> ai fondi disponibili sulla carta.
+            </mat-error>
+          </div>
         </mat-card-content>
 
         <mat-card-actions>
@@ -97,10 +104,6 @@ import {TransferValidator} from "../../shared/validators/transfer.validator";
             Trasferisci denaro
           </button>
         </mat-card-actions>
-
-        <pre>
-          {{transferForm.errors | json}}
-        </pre>
 
       </mat-card>
     </form>
@@ -123,6 +126,10 @@ import {TransferValidator} from "../../shared/validators/transfer.validator";
       font-weight: 400;
     }
 
+    .transfer-group.error {
+      //  TODO: How can I get the colors variable from Angular Material??
+    }
+
     .mat-card-actions .mat-button,
     .mat-card-actions .mat-raised-button,
     .mat-card-actions .mat-stroked-button {
@@ -143,9 +150,38 @@ export class TransferComponent implements OnInit {
     name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(24)]],
     surname: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(24)]],
     iban: ['', [Validators.required, ibanValidator]],
-    amount: ['', [Validators.required, amountValidator]],
-    cardId: ['', [Validators.required], [this._cardIdValidator.validate()]],
-  }, {asyncValidators: [this._transferValidator.validate({fieldCard: 'cardId', fieldAmount: 'amount'})]});
+    transferGroup: this._fb.group({
+      amount: ['', [Validators.required, amountValidator]],
+      cardId: ['', [Validators.required], [this._cardIdValidator.validate()]]
+    }, {
+      asyncValidators: [this._transferValidator.validate({fieldCard: 'cardId', fieldAmount: 'amount'})],
+      updateOn: 'blur'
+    })
+  });
+
+  get name() {
+    return this.transferForm.get('name')
+  }
+
+  get surname() {
+    return this.transferForm.get('surname')
+  }
+
+  get iban() {
+    return this.transferForm.get('iban')
+  }
+
+  get transferGroup() {
+    return this.transferForm.get('transferGroup')
+  }
+
+  get amount() {
+    return this.transferForm.get('transferGroup.amount')
+  }
+
+  get cardId() {
+    return this.transferForm.get('transferGroup.cardId')
+  }
 
   cards$: Observable<Card[]> = this._cardService.getCards()
 
@@ -189,7 +225,10 @@ export class TransferComponent implements OnInit {
       if (!result)
         return
 
-      const transferForm = this.transferForm.value as TransferForm
+      // Since we have an inner form group, we need to rearrange the data structure before its submission.
+      const {name, surname, iban, transferGroup} = this.transferForm.value;
+      const {amount, cardId} = transferGroup;
+      const transferForm = {name, surname, iban, amount, cardId} as TransferForm
 
       this._transferService.setTransfer(transferForm).subscribe(v => {
         console.log(v)

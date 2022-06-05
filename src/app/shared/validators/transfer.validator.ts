@@ -23,9 +23,7 @@ export class TransferValidator {
       const fieldCard = control.get(fields.fieldCard);
       const fieldAmount = control.get(fields.fieldAmount);
 
-      console.log(fieldCard, fieldAmount)
-
-      if (!fieldCard || !fieldAmount)
+      if (!fieldCard || !fieldAmount || !fieldCard.value || !fieldAmount.value)
         return of(null)
 
       const cardId = fieldCard.value as string
