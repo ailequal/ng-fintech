@@ -4,7 +4,7 @@ import {MatSelectChange} from "@angular/material/select";
 import {BehaviorSubject, combineLatest, map, Observable} from "rxjs";
 import {CardService} from "../../api/card.service";
 import {MovementsApi} from "../../models/movement";
-import {ActivatedRoute, Router, RouterLinkActive} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'ae-movements',
@@ -64,7 +64,16 @@ export class MovementsComponent implements OnInit {
 
   cards$: BehaviorSubject<Card[]> = new BehaviorSubject<Card[]>([])
 
-  selectedCardId$: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  // TODO: It would be cool to use merge() and combine _activatedRoute.params with matSelect.optionSelectionChanges.
+  //  The problem though, is that the matSelect will only be available from the ngOnInt at best...
+  selectedCardId$: Observable<string | null> = this._activatedRoute.params.pipe(
+    map(params => {
+      if (!params || Object.keys(params).length === 0 || !params['cardId'])
+        return null
+
+      return params['cardId']
+    })
+  );
 
   selectedCard$: Observable<Card | null> = combineLatest([this.cards$, this.selectedCardId$]).pipe(
     map(combinedValues => {
@@ -105,6 +114,7 @@ export class MovementsComponent implements OnInit {
   shouldLoadMore$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true)
 
   constructor(
+    private _router: Router,
     private _activatedRoute: ActivatedRoute,
     private _cardService: CardService
   ) {
@@ -114,15 +124,13 @@ export class MovementsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const cardId = this._activatedRoute.snapshot.params['cardId']
-    if (!cardId)
-      return
+    this.selectedCardId$.subscribe(selectedCardId => {
+      if (!selectedCardId)
+        return
 
-    // Set the active card from the url.
-    this.selectedCardId$.next(cardId)
-
-    // Load the first movements.
-    this.loadMovements(cardId, this.singleChunk)
+      // Load the first movements from url.
+      this.loadMovements(selectedCardId, this.singleChunk)
+    })
   }
 
   onSelectionChange(event: MatSelectChange) {
@@ -131,12 +139,8 @@ export class MovementsComponent implements OnInit {
       return;
     }
 
-    // Set the active card.
-    const selectedCardId = event.value as string
-    this.selectedCardId$.next(selectedCardId)
-
-    // Load the first movements.
-    this.loadMovements(selectedCardId, this.singleChunk)
+    const cardId = event.value
+    this._router.navigateByUrl('/dashboard/movements/' + cardId).then(console.log)
   }
 
   onLoadMore(card: Card) {
@@ -153,6 +157,7 @@ export class MovementsComponent implements OnInit {
         return
       }
 
+      // Inject the new movements.
       this.movements$.next(movements)
 
       // Determine if we could load more movements.
@@ -164,7 +169,6 @@ export class MovementsComponent implements OnInit {
   }
 
   dispose() {
-    this.selectedCardId$.next('')
     this.movements$.next(null)
     this.shouldLoadMore$.next(true)
   }
