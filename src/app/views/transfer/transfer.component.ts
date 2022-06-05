@@ -6,7 +6,7 @@ import {DialogConfirmComponent} from "../../shared/components/dialog-confirm.com
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ContactsComponent} from "./components/contacts.component";
 import {Contact} from "../../models/contact";
-import {Observable} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {CardService} from "../../api/card.service";
 import {TransferService} from "../../api/transfer.service";
 import {TransferForm} from "../../models/transfer";
@@ -183,7 +183,7 @@ export class TransferComponent implements OnInit {
     return this.transferForm.get('transferGroup.cardId')
   }
 
-  cards$: Observable<Card[]> = this._cardService.getCards()
+  cards$: BehaviorSubject<Card[]> = new BehaviorSubject<Card[]>([])
 
   constructor(
     private _fb: FormBuilder,
@@ -194,6 +194,9 @@ export class TransferComponent implements OnInit {
     private _cardIdValidator: CardIdValidator,
     private _transferValidator: TransferValidator
   ) {
+    this._cardService.getCards().subscribe(cards => {
+      this.cards$.next(cards)
+    })
   }
 
   ngOnInit(): void {

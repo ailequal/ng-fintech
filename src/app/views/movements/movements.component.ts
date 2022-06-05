@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {Card} from "../../models/card";
 import {MatSelectChange} from "@angular/material/select";
-import {BehaviorSubject, combineLatest, map, Observable, of, switchMap} from "rxjs";
+import {BehaviorSubject, combineLatest, map, Observable} from "rxjs";
 import {CardService} from "../../api/card.service";
 import {MovementsApi} from "../../models/movement";
 
@@ -61,7 +61,7 @@ import {MovementsApi} from "../../models/movement";
 })
 export class MovementsComponent implements OnInit {
 
-  cards$: Observable<Card[]> = this._cardService.getCards()
+  cards$: BehaviorSubject<Card[]> = new BehaviorSubject<Card[]>([])
 
   selectedCardId$: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
@@ -104,6 +104,9 @@ export class MovementsComponent implements OnInit {
   shouldLoadMore$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true)
 
   constructor(private _cardService: CardService) {
+    this._cardService.getCards().subscribe(cards => {
+      this.cards$.next(cards)
+    })
   }
 
   ngOnInit(): void {
