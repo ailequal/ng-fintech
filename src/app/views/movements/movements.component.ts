@@ -1,9 +1,9 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {Card} from "../../models/card";
-import {Movement} from "../../models/movement";
 import {MatSelectChange} from "@angular/material/select";
-import {Observable} from "rxjs";
+import {BehaviorSubject, combineLatest, map, Observable, of, switchMap} from "rxjs";
 import {CardService} from "../../api/card.service";
+import {MovementsApi} from "../../models/movement";
 
 @Component({
   selector: 'ae-movements',
@@ -11,8 +11,8 @@ import {CardService} from "../../api/card.service";
     <div>
       <mat-form-field appearance="fill">
         <mat-label>Seleziona una carta</mat-label>
-        <mat-select (selectionChange)="onSelectionChange($event)">
-          <mat-option *ngFor="let card of (cards$ | async)" [value]="card">
+        <mat-select (selectionChange)="onSelectionChange($event)" [value]="selectedCardId$ | async">
+          <mat-option *ngFor="let card of (cards$ | async)" [value]="card._id">
             {{card.number}}
           </mat-option>
           <mat-option [value]="'zaq1xsw2cde3vfr4'">
@@ -21,22 +21,34 @@ import {CardService} from "../../api/card.service";
         </mat-select>
       </mat-form-field>
 
-      <h2>Saldo: {{selectedCard ? (selectedCard.amount | currency: 'EUR') : '---'}}</h2>
+      <ng-container *ngIf="(selectedCard$ | async) as selectedCard; else noCardRef">
+        <h2>Saldo: {{selectedCard.amount | currency: 'EUR'}}</h2>
+        <h3>Totale spese: {{total$ | async | currency: 'EUR'}}</h3>
 
-      <div *ngIf="selectedCard" class="movements">
-        <!--TODO: The movement component should be refactored. We might want to also transfer the value "total" from movements$.-->
-        <ae-movement
-          *ngFor="let movement of ((movements$ | async)?.data)"
-          [title]="movement.title"
-          [description]="movement.description"
-          [amount]=movement.amount
-          [type]="movement.type"
-          [date]="movement.timestamp | date: 'dd/MM/yyyy'"
-        >
-        </ae-movement>
-      </div>
+        <div class="movements">
+          <!--TODO: The movement component should be refactored. We might want to also transfer the value "total" from movements$.-->
+          <ng-container *ngIf="(movements$ | async)?.data as movements">
+            <ae-movement
+              *ngFor="let movement of movements"
+              [title]="movement.title"
+              [description]="movement.description"
+              [amount]=movement.amount
+              [type]="movement.type"
+              [date]="movement.timestamp | date: 'dd/MM/yyyy'"
+            >
+            </ae-movement>
+          </ng-container>
+        </div>
 
-      <button (click)="onLoadMore($event)" class="load-more" mat-stroked-button>Carica altro</button>
+        <button *ngIf="shouldLoadMore$ | async" (click)="onLoadMore(selectedCard)" class="load-more" mat-stroked-button>
+          Carica altro
+        </button>
+      </ng-container>
+
+      <ng-template #noCardRef>
+        <h2>Saldo: ---</h2>
+        <h3>Totale spese: ---</h3>
+      </ng-template>
     </div>
   `,
   styles: [`
@@ -51,9 +63,45 @@ export class MovementsComponent implements OnInit {
 
   cards$: Observable<Card[]> = this._cardService.getCards()
 
-  selectedCard: Card | null = null
+  selectedCardId$: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
-  movements$: Observable<{ data: Movement[], total: number }> | null = null
+  selectedCard$: Observable<Card | null> = combineLatest([this.cards$, this.selectedCardId$]).pipe(
+    map(combinedValues => {
+      const [cards, selectedCardId] = combinedValues
+
+      const card = cards.find(element => {
+        return element._id === selectedCardId
+      })
+
+      return card ? card : null
+    })
+  );
+
+  total$: Observable<number | null> = this.selectedCard$.pipe(
+    map(card => {
+      if (!card || !card.movements)
+        return null
+
+      return card.movements.reduce((total, element) => {
+        // We need the plus, since the backend has a bug where sometimes returns the amount as string.
+        const amount = +element.amount as number
+
+        return total + amount
+      }, 0)
+    })
+  )
+
+  movements$: BehaviorSubject<MovementsApi | null> = new BehaviorSubject<MovementsApi | null>(null)
+
+  singleChunk: number = 5
+
+  loadedChunk: number = 0
+
+  // TODO: We do not handle the offset for now.
+  //  This means that each call will retrieve all the movements and override the ones already stored.
+  // offset: BehaviorSubject<number> = new BehaviorSubject<number>(0)
+
+  shouldLoadMore$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true)
 
   constructor(private _cardService: CardService) {
   }
@@ -63,22 +111,46 @@ export class MovementsComponent implements OnInit {
 
   onSelectionChange(event: MatSelectChange) {
     if (!event.value) {
-      this.selectedCard = null;
-      this.movements$ = null;
+      this.dispose()
       return;
     }
 
     // Set the active card.
-    this.selectedCard = event.value as Card
+    const selectedCardId = event.value as string
+    this.selectedCardId$.next(selectedCardId)
 
-    // Set the active movements.
-    this.movements$ = this._cardService.getCardMovements(this.selectedCard._id)
-
-    // TODO: Only add 5 more movements each time, until it's full.
+    // Load the first movements.
+    this.loadMovements(selectedCardId, this.singleChunk)
   }
 
-  onLoadMore(event: MouseEvent) {
-    console.log(event)
+  onLoadMore(card: Card) {
+    this.loadMovements(card._id, this.loadedChunk + this.singleChunk)
+  }
+
+  loadMovements(cardId: string, chunk: number) {
+    this._cardService.getCardMovements(cardId, chunk).subscribe(movements => {
+      // Double check if the server responded with an empty object.
+      if (!movements || Object.keys(movements).length === 0) {
+        this.movements$.next(null)
+        this.shouldLoadMore$.next(true)
+        // this.dispose() // This method might be more appropriate.
+        return
+      }
+
+      this.movements$.next(movements)
+
+      // Determine if we could load more movements.
+      this.shouldLoadMore$.next(movements.data.length < movements.total)
+
+      // Update chunk status.
+      this.loadedChunk += this.singleChunk
+    })
+  }
+
+  dispose() {
+    this.selectedCardId$.next('')
+    this.movements$.next(null)
+    this.shouldLoadMore$.next(true)
   }
 
 }

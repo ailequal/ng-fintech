@@ -9,3 +9,8 @@ export interface Movement {
   type: MovementType;
   timestamp: number;
 }
+
+export interface MovementsApi {
+  data: Movement[],
+  total: number
+}

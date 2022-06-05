@@ -1,3 +1,5 @@
+import {Movement} from "./movement";
+
 export type CardType = 'mastercard' | 'visa';
 
 export interface Card {
@@ -7,6 +9,7 @@ export interface Card {
   owner: string;
   type: CardType;
   amount: number;
+  movements?: Movement[]
 }
 
 export interface CardForm {

@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {Observable} from "rxjs";
 import {Card, CardForm} from "../models/card";
-import {Movement} from "../models/movement";
+import {Movement, MovementsApi} from "../models/movement";
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +25,8 @@ export class CardService {
     return this._http.delete<boolean>(environment.apiUrl + '/cards/' + cardId)
   }
 
-  getCardMovements(cardId: string, limit: number = 5, offset: number = 0): Observable<{ data: Movement[], total: number }> {
-    return this._http.get<{ data: Movement[], total: number }>(environment.apiUrl + '/cards/' + cardId + '/movements', {
+  getCardMovements(cardId: string, limit: number = 5, offset: number = 0): Observable<MovementsApi> {
+    return this._http.get<MovementsApi>(environment.apiUrl + '/cards/' + cardId + '/movements', {
       params: {
         limit: limit,
         offset: offset
