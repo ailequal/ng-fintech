@@ -25,6 +25,11 @@ const routes: Routes = [
         pathMatch: 'full'
       },
       {
+        path: 'movements/:cardId',
+        loadChildren: () => import('../movements/movements.module').then(m => m.MovementsModule),
+        pathMatch: 'full'
+      },
+      {
         path: 'transfer',
         loadChildren: () => import('../transfer/transfer.module').then(m => m.TransferModule),
         pathMatch: 'full'

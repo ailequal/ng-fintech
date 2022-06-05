@@ -6,6 +6,7 @@ import {CardFormComponent} from "./components/card-form.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Observable} from "rxjs";
 import {CardService} from "../../api/card.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'ae-cards',
@@ -55,26 +56,22 @@ export class CardsComponent implements OnInit {
 
   cards$: Observable<Card[]> = this._cardService.getCards()
 
-  movements$: Observable<any> | null = null
-
   @ViewChild('drawerRef', {read: MatDrawer, static: true}) drawer!: MatDrawer;
 
   @ViewChild('cardFormRef', {read: CardFormComponent, static: true}) cardForm!: CardFormComponent;
 
   constructor(
+    private _router: Router,
     private _snackBar: MatSnackBar,
-    private _cardService: CardService) {
+    private _cardService: CardService
+  ) {
   }
 
   ngOnInit(): void {
   }
 
   receiptHandler(card: Card): void {
-    this.movements$ = this._cardService.getCardMovements(card._id)
-    this.movements$.subscribe(console.log)
-
-    // TODO: We will print these information.
-    //  Or even better: route the user to "transfer" with the selected card already visible.
+    this._router.navigateByUrl('/dashboard/movements/' + card._id).then(console.log)
   }
 
   deleteHandler(card: Card): void {

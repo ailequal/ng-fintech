@@ -98,6 +98,8 @@ import {dateToString} from "../../../shared/utilities/date-to-string";
 })
 export class AppointmentFormComponent implements OnInit {
 
+  // TODO: Convert the component logic to RxJS.
+
   @ViewChild('picker', {read: MatDatepicker, static: true}) picker!: MatDatepicker<any>;
 
   @Input() location: Location | null = null

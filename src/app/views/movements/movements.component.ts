@@ -4,6 +4,7 @@ import {MatSelectChange} from "@angular/material/select";
 import {BehaviorSubject, combineLatest, map, Observable} from "rxjs";
 import {CardService} from "../../api/card.service";
 import {MovementsApi} from "../../models/movement";
+import {ActivatedRoute, Router, RouterLinkActive} from "@angular/router";
 
 @Component({
   selector: 'ae-movements',
@@ -103,13 +104,25 @@ export class MovementsComponent implements OnInit {
 
   shouldLoadMore$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true)
 
-  constructor(private _cardService: CardService) {
+  constructor(
+    private _activatedRoute: ActivatedRoute,
+    private _cardService: CardService
+  ) {
     this._cardService.getCards().subscribe(cards => {
       this.cards$.next(cards)
     })
   }
 
   ngOnInit(): void {
+    const cardId = this._activatedRoute.snapshot.params['cardId']
+    if (!cardId)
+      return
+
+    // Set the active card from the url.
+    this.selectedCardId$.next(cardId)
+
+    // Load the first movements.
+    this.loadMovements(cardId, this.singleChunk)
   }
 
   onSelectionChange(event: MatSelectChange) {
