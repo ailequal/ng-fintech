@@ -4,7 +4,7 @@ import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/co
 import {DayWithSlot, DayWithSlots, Location} from "../../models/location";
 import {MatDrawer} from "@angular/material/sidenav";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {Observable} from "rxjs";
+import {BehaviorSubject, combineLatest, map, Observable, of, switchMap} from "rxjs";
 
 @Component({
   selector: 'ae-appointments',
@@ -20,7 +20,7 @@ import {Observable} from "rxjs";
       <mat-drawer (closed)="closedHandler($event)" #drawerRef class="sidenav" mode="side" position="end">
         <ae-appointment-form
           #appointmentFormRef
-          [location]="selectedLocation"
+          [location]="selectedLocation$ | async"
           [allSlots]="slots$ | async"
           (onBook)="bookHandler($event)"
           (onClose)="closedHandler($event)"
@@ -52,11 +52,32 @@ import {Observable} from "rxjs";
 })
 export class AppointmentsComponent implements OnInit {
 
-  locations$: Observable<Location[]> = this._appointmentService.getLocations()
+  locations$: BehaviorSubject<Location[]> = new BehaviorSubject<Location[]>([])
 
-  selectedLocation: Location | null = null
+  selectedLocationId$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null)
 
-  slots$: Observable<DayWithSlots[]> | null = null
+  selectedLocation$: Observable<Location | null> = combineLatest([this.locations$, this.selectedLocationId$]).pipe(
+    map(combinedValues => {
+      const [locations, selectedLocationId] = combinedValues
+      if (!locations.length || !selectedLocationId)
+        return null
+
+      const location = locations.find(element => {
+        return element._id === selectedLocationId
+      })
+
+      return location ? location : null
+    })
+  )
+
+  slots$: Observable<DayWithSlots[] | null> = this.selectedLocationId$.pipe(
+    switchMap(locationId => {
+      if (!locationId)
+        return of(null)
+
+      return this._appointmentService.getSlots(locationId)
+    })
+  )
 
   @ViewChild('drawerRef', {read: MatDrawer, static: true}) drawer!: MatDrawer;
 
@@ -69,6 +90,9 @@ export class AppointmentsComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private _appointmentService: AppointmentService
   ) {
+    this._appointmentService.getLocations().subscribe(locations => {
+      this.locations$.next(locations)
+    })
   }
 
   ngOnInit(): void {
@@ -77,15 +101,12 @@ export class AppointmentsComponent implements OnInit {
   clickHandler(location: Location) {
     // Set the active location.
     if (!location) {
-      this.selectedLocation = null
-      this.slots$ = null
+      this.selectedLocationId$.next(null)
       this.drawer.close().then(console.log)
       return
     }
-    this.selectedLocation = location;
 
-    // Set the relative slots.
-    this.slots$ = this._appointmentService.getSlots(this.selectedLocation._id)
+    this.selectedLocationId$.next(location._id)
 
     this.drawer.toggle().then(console.log)
   }
