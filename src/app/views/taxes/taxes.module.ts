@@ -4,6 +4,7 @@ import {TaxesRoutingModule} from './taxes-routing.module';
 import {SharedModule} from "../../shared/shared.module";
 
 import {TaxesComponent} from './taxes.component';
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -12,6 +13,7 @@ import {TaxesComponent} from './taxes.component';
   imports: [
     CommonModule,
     TaxesRoutingModule,
+    ReactiveFormsModule,
     SharedModule
   ]
 })
