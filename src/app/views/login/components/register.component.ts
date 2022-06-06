@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {equalFieldsValidatorReactive} from "../../../shared/validators/equal-fields.validator";
+import {RegisterErrorStateMatcher} from "../utilities/register-error-state-matcher";
 
 @Component({
   selector: 'ae-register',
@@ -58,6 +59,7 @@ import {equalFieldsValidatorReactive} from "../../../shared/validators/equal-fie
                 formControlName="passwordAlpha"
                 matInput
                 [type]="hidePasswordAlpha ? 'password': 'text'"
+                [errorStateMatcher]="registerMatcher"
               >
               <mat-icon matSuffix
                         (click)="hidePasswordAlpha = !hidePasswordAlpha">{{hidePasswordAlpha ? 'visibility_off' : 'visibility'}}</mat-icon>
@@ -69,23 +71,15 @@ import {equalFieldsValidatorReactive} from "../../../shared/validators/equal-fie
                 formControlName="passwordBeta"
                 matInput
                 [type]="hidePasswordBeta ? 'password': 'text'"
+                [errorStateMatcher]="registerMatcher"
               >
               <mat-icon matSuffix
                         (click)="hidePasswordBeta = !hidePasswordBeta">{{hidePasswordBeta ? 'visibility_off' : 'visibility'}}</mat-icon>
+              <mat-error *ngIf="passwords?.errors?.['equalFields'] && passwordBeta?.touched">
+                Le password inserite <strong>non</strong> coincidono.
+              </mat-error>
             </mat-form-field>
-
-            <mat-error *ngIf="passwords?.errors?.['equalFields'] && passwordBeta?.touched">
-              Le password inserite <strong>non</strong> coincidono.
-            </mat-error>
           </div>
-
-          <!--          <div style="border:3px solid red; padding: 20px;">-->
-          <!--            <pre><strong>form</strong> {{registerForm.errors|json}}</pre>-->
-          <!--            <pre><strong>email</strong> {{email?.errors|json}}</pre>-->
-          <!--            <pre><strong>passwords</strong> {{passwords?.errors | json}}</pre>-->
-          <!--            <pre>{{passwordAlpha?.errors | json}}</pre>-->
-          <!--            <pre>{{passwordBeta?.errors | json}}</pre>-->
-          <!--          </div>-->
         </mat-card-content>
 
         <mat-card-actions>
@@ -151,12 +145,6 @@ export class RegisterComponent implements OnInit {
 
   hidePasswordBeta: boolean = true;
 
-  constructor(
-    private _fb: FormBuilder,
-    private _router: Router
-  ) {
-  }
-
   registerForm = this._fb.group({
     email: ['', [Validators.required, Validators.email]],
     name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(24)]],
@@ -167,6 +155,8 @@ export class RegisterComponent implements OnInit {
       ]],
     }, {validators: [equalFieldsValidatorReactive(['passwordAlpha', 'passwordBeta'])]})
   })
+
+  registerMatcher = new RegisterErrorStateMatcher();
 
   get email() {
     return this.registerForm.get('email')
@@ -190,6 +180,12 @@ export class RegisterComponent implements OnInit {
 
   get passwordBeta() {
     return this.registerForm.get('passwords.passwordBeta')
+  }
+
+  constructor(
+    private _fb: FormBuilder,
+    private _router: Router
+  ) {
   }
 
   ngOnInit(): void {
