@@ -4,7 +4,7 @@ import {MatDrawer} from "@angular/material/sidenav";
 import {Card} from "../../models/card";
 import {CardFormComponent} from "./components/card-form.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {Observable} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {CardService} from "../../api/card.service";
 import {Router} from "@angular/router";
 
@@ -54,7 +54,7 @@ import {Router} from "@angular/router";
 })
 export class CardsComponent implements OnInit {
 
-  cards$: Observable<Card[]> = this._cardService.getCards()
+  cards$: BehaviorSubject<Card[]> = new BehaviorSubject<Card[]>([])
 
   @ViewChild('drawerRef', {read: MatDrawer, static: true}) drawer!: MatDrawer;
 
@@ -68,17 +68,26 @@ export class CardsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this._cardService.getCards().subscribe(cards => {
+      this.cards$.next(cards)
+    })
   }
 
   receiptHandler(card: Card): void {
+    // TODO: When navigating with this method, the active menu icon on the left part of the dashboard
+    //  is displaying as active both /cards and /movements... It might help the option "skipLocationChange".
     this._router.navigateByUrl('/dashboard/movements/' + card._id).then(console.log)
   }
 
   deleteHandler(card: Card): void {
     this._cardService.deleteCard(card._id).subscribe(v => {
-      console.log(v)
+      if (!v) return
 
-      this.cards$ = this._cardService.getCards() // TODO: Manually re-trigger the subscription for now.
+      this.cards$.next(
+        this.cards$.value.filter(c => {
+          return c._id !== card._id
+        })
+      )
 
       this._snackBar.open('Carta rimossa', '❌', {
         horizontalPosition: 'end',
@@ -93,10 +102,9 @@ export class CardsComponent implements OnInit {
   }
 
   submitHandler(cardForm: CardForm): void {
-    this._cardService.setCard(cardForm).subscribe(v => {
-      console.log(v)
+    this._cardService.setCard(cardForm).subscribe(c => {
 
-      this.cards$ = this._cardService.getCards() // TODO: Manually re-trigger the subscription for now.
+      this.cards$.next([...this.cards$.value, c])
 
       this._snackBar.open('Carta aggiunta', '❌', {
         horizontalPosition: 'end',
