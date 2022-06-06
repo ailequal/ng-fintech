@@ -11,6 +11,7 @@ export class TaxService {
   constructor(private _http: HttpClient) {
   }
 
+  // TODO: The tax parameter is set to any...
   setTax(tax: any): Observable<boolean> {
     return this._http.post<boolean>(environment.apiUrl + '/taxes', tax);
   }

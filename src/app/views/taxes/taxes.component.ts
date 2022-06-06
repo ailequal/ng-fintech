@@ -4,11 +4,13 @@ import {MatDatepicker, MatDatepickerInputEvent} from "@angular/material/datepick
 import {MatSelectChange} from "@angular/material/select";
 import {codiceFiscaleValidator} from "../../shared/validators/codice-fiscale.validator";
 import {dateFromToValidatorReactive} from "../../shared/validators/date-from-to";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {TaxService} from "../../api/tax.service";
 
 @Component({
   selector: 'ae-taxes',
   template: `
-    <form class="taxes-form" [formGroup]="taxesForm" (ngSubmit)="submitHandler()">
+    <form class="taxes-form" [formGroup]="taxesForm">
       <mat-card class="taxes-form">
 
         <mat-card-header>
@@ -73,7 +75,6 @@ import {dateFromToValidatorReactive} from "../../shared/validators/date-from-to"
               <input
                 matInput
                 type="text"
-                placeholder="Tip"
                 formControlName="birthProvince"
               >
             </mat-form-field>
@@ -83,7 +84,6 @@ import {dateFromToValidatorReactive} from "../../shared/validators/date-from-to"
               <input
                 matInput
                 type="text"
-                placeholder="Tip"
                 formControlName="birthCity"
               >
             </mat-form-field>
@@ -139,13 +139,14 @@ import {dateFromToValidatorReactive} from "../../shared/validators/date-from-to"
                 </div>
 
                 <button (click)="treasuryDeleteHandler(treasury, i, $event)" mat-mini-fab color="warn"
-                        aria-label="Delete icon">
+                        aria-label="Delete icon" type="button">
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>
             </div>
 
-            <button (click)="treasuryAddHandler($event)" mat-mini-fab color="primary" aria-label="Add icon">
+            <button (click)="treasuryAddHandler($event)" mat-mini-fab color="primary" aria-label="Add icon"
+                    type="button">
               <mat-icon>add</mat-icon>
             </button>
           </div>
@@ -232,13 +233,14 @@ import {dateFromToValidatorReactive} from "../../shared/validators/date-from-to"
                   <h3>Totale a credito: {{500 | currency: 'EUR'}}</h3>
                 </div>
 
-                <button (click)="inpsDeleteHandler(inps, i, $event)" mat-mini-fab color="warn" aria-label="Delete icon">
+                <button (click)="inpsDeleteHandler(inps, i, $event)" mat-mini-fab color="warn" aria-label="Delete icon"
+                        type="button">
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>
             </div>
 
-            <button (click)="inpsAddHandler($event)" mat-mini-fab color="primary" aria-label="Add icon">
+            <button (click)="inpsAddHandler($event)" mat-mini-fab color="primary" aria-label="Add icon" type="button">
               <mat-icon>add</mat-icon>
             </button>
           </div>
@@ -246,7 +248,8 @@ import {dateFromToValidatorReactive} from "../../shared/validators/date-from-to"
         </mat-card-content>
 
         <mat-card-actions align="end">
-          <button class="mb" mat-raised-button [disabled]="!taxesForm.valid" color="primary">
+          <button (click)="submitHandler()" class="mb" mat-raised-button [disabled]="!taxesForm.valid" color="primary"
+                  type="button">
             Invia
           </button>
         </mat-card-actions>
@@ -428,7 +431,11 @@ export class TaxesComponent implements OnInit {
   //   return this.taxesForm.get('credit')
   // }
 
-  constructor(private _fb: FormBuilder) {
+  constructor(
+    private _fb: FormBuilder,
+    private _snackBar: MatSnackBar,
+    private _taxService: TaxService
+  ) {
   }
 
   ngOnInit(): void {
@@ -496,7 +503,37 @@ export class TaxesComponent implements OnInit {
   }
 
   submitHandler() {
-    console.log(this.taxesForm)
+    this._taxService.setTax(this.taxesForm.value).subscribe({
+      next: v => {
+        console.log(v)
+
+        this._snackBar.open('Modulo FXX inviato', '✅', {
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          duration: 3000
+        });
+
+        this.dispose();
+      },
+      error: v => {
+        console.log(v)
+
+        this._snackBar.open('Impossibile inviare il modulo FXX', '❌', {
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          duration: 3000
+        });
+      },
+      complete: () => {
+        console.log('Completed "_taxService.setTax()".')
+      }
+    })
+  }
+
+  dispose() {
+    this.taxesForm.reset()
+    this.treasuries.clear()
+    this.inpses.clear()
   }
 
 }
