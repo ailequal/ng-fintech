@@ -8,6 +8,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {TaxService} from "../../api/tax.service";
 import {combineLatest, map, Observable, startWith} from "rxjs";
 import {isObject} from "../../shared/utilities/is-object";
+import {InpsErrorStateMatcher} from './utilities/inps-error-state-matcher';
 
 @Component({
   selector: 'ae-taxes',
@@ -189,6 +190,7 @@ import {isObject} from "../../shared/utilities/is-object";
                     [matDatepicker]="dateFromRef"
                     formControlName="dateFrom"
                     (dateChange)="dateFromChangeHandler(inps, i, $event)"
+                    [errorStateMatcher]="inpsMatcher"
                   >
                   <mat-datepicker-toggle matSuffix [for]="dateFromRef"></mat-datepicker-toggle>
                   <mat-datepicker #dateFromRef></mat-datepicker>
@@ -201,9 +203,14 @@ import {isObject} from "../../shared/utilities/is-object";
                     [matDatepicker]="dateToRef"
                     formControlName="dateTo"
                     (dateChange)="dateToChangeHandler(inps, i, $event)"
+                    [errorStateMatcher]="inpsMatcher"
                   >
                   <mat-datepicker-toggle matSuffix [for]="dateToRef"></mat-datepicker-toggle>
                   <mat-datepicker #dateToRef></mat-datepicker>
+
+                  <mat-error *ngIf="inps.hasError('dateFromTo')">
+                    Intervallo date incorretto.
+                  </mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="fill">
@@ -340,40 +347,58 @@ import {isObject} from "../../shared/utilities/is-object";
 })
 export class TaxesComponent implements OnInit {
 
+  // TODO: Add custom ErrorStateMatcher for the password creation.
+  // TODO: Add modal window before submitting the form value where the user can choose which card for the payment.
+  // TODO: Refactor with ControlValueAccessor this form for the treasuries and inpses.
+  // TODO: The input birthProvince will be based on "https://github.com/matteocontrini/comuni-json" with an autocomplete
+  //  input from Angular Material. Also add a custom validator for any user typo.
+  // TODO: Add even more inputs based on the F24 document.
+  // TODO: Prettify the form interface.
+
   @ViewChild('birthDateRef', {read: MatDatepicker, static: true}) birthDateMat!: MatDatepicker<any>;
 
   @ViewChild('dateFromRef', {read: MatDatepicker, static: true}) dateFromMat!: MatDatepicker<any>;
 
   @ViewChild('dateToRef', {read: MatDatepicker, static: true}) dateToMat!: MatDatepicker<any>;
 
+  taxpayerControlsModel: { [key: string]: Object[] } = {
+    codiceFiscale: ['', [Validators.required, codiceFiscaleValidator]],
+    surname: ['', [Validators.required]],
+    name: ['', [Validators.required]],
+    birthDate: ['', [Validators.required]],
+    gender: ['', [Validators.required]],
+    birthProvince: ['', [Validators.required]],
+    birthCity: ['', [Validators.required]]
+  }
+
+  treasuriesControlsModel: { [key: string]: Object[] } = {
+    taxCode: ['', [Validators.required]],
+    referenceYear: ['', [Validators.required]],
+    dueAmount: ['', [Validators.required]],
+    creditAmount: ['', [Validators.required]]
+  }
+
+  inpsesControlsModel: { [key: string]: Object[] } = {
+    headquartersCode: ['', [Validators.required]],
+    causal: ['', [Validators.required]],
+    inpsCode: ['', [Validators.required]],
+    dateFrom: ['', [Validators.required]],
+    dateTo: ['', [Validators.required]],
+    debt: ['', [Validators.required]],
+    credit: ['', [Validators.required]]
+  }
+
+  inpsesOptionsModel: { [key: string]: Object[] } = {
+    validators: [dateFromToValidatorReactive({fieldFrom: 'dateFrom', fieldTo: 'dateTo'})]
+  }
+
   taxesForm = this._fb.group({
-    taxpayer: this._fb.group({
-      codiceFiscale: ['', [Validators.required, codiceFiscaleValidator]],
-      surname: ['', [Validators.required]],
-      name: ['', [Validators.required]],
-      birthDate: ['', [Validators.required]],
-      gender: ['', [Validators.required]],
-      birthProvince: ['', [Validators.required]],
-      birthCity: ['', [Validators.required]],
-    }),
+    taxpayer: this._fb.group(this.taxpayerControlsModel),
     treasuries: this._fb.array([
-      this._fb.group({
-        taxCode: ['', [Validators.required]],
-        referenceYear: ['', [Validators.required]],
-        dueAmount: ['', [Validators.required]],
-        creditAmount: ['', [Validators.required]]
-      })
+      this._fb.group(this.treasuriesControlsModel)
     ]),
     inpses: this._fb.array([
-      this._fb.group({
-        headquartersCode: ['', [Validators.required]],
-        causal: ['', [Validators.required]],
-        inpsCode: ['', [Validators.required]],
-        dateFrom: ['', [Validators.required]],
-        dateTo: ['', [Validators.required]],
-        debt: ['', [Validators.required]],
-        credit: ['', [Validators.required]]
-      }, {validators: [dateFromToValidatorReactive({fieldFrom: 'dateFrom', fieldTo: 'dateTo'})]})
+      this._fb.group(this.inpsesControlsModel, this.inpsesOptionsModel)
     ])
   });
 
@@ -447,6 +472,8 @@ export class TaxesComponent implements OnInit {
       return creditTotals - debitTotals
     })
   )
+
+  inpsMatcher = new InpsErrorStateMatcher();
 
   get taxpayer() {
     return this.taxesForm.get('taxpayer') as FormGroup
@@ -540,6 +567,10 @@ export class TaxesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // TODO: In this way I set the two form arrays while also clearing them.
+    //  Isn't there a better way to do this??
+    this.treasuries.clear()
+    this.inpses.clear()
   }
 
   birthDateChangeHandler(event: MatDatepickerInputEvent<unknown, unknown | null>) {
@@ -551,12 +582,7 @@ export class TaxesComponent implements OnInit {
   }
 
   newTreasury(): FormGroup {
-    return this._fb.group({
-      taxCode: ['', [Validators.required]],
-      referenceYear: ['', [Validators.required]],
-      dueAmount: ['', [Validators.required]],
-      creditAmount: ['', [Validators.required]]
-    })
+    return this._fb.group(this.treasuriesControlsModel)
   }
 
   treasuryAddHandler(event: MouseEvent) {
@@ -580,15 +606,7 @@ export class TaxesComponent implements OnInit {
   }
 
   newInps(): FormGroup {
-    return this._fb.group({
-      headquartersCode: ['', [Validators.required]],
-      causal: ['', [Validators.required]],
-      inpsCode: ['', [Validators.required]],
-      dateFrom: ['', [Validators.required]],
-      dateTo: ['', [Validators.required]],
-      debt: ['', [Validators.required]],
-      credit: ['', [Validators.required]]
-    })
+    return this._fb.group(this.inpsesControlsModel, this.inpsesOptionsModel)
   }
 
   inpsAddHandler(event: MouseEvent) {
