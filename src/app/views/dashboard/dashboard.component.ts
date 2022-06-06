@@ -34,7 +34,7 @@ import {NavigationLink} from "../../models/link";
     }
 
     .inner-content {
-      margin: 50px 100px 0 100px;
+      margin: 50px 50px 0 50px;
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
