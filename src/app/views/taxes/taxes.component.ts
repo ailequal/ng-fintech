@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MatDatepicker, MatDatepickerInputEvent} from "@angular/material/datepicker";
 import {MatSelectChange} from "@angular/material/select";
 
@@ -136,15 +136,16 @@ import {MatSelectChange} from "@angular/material/select";
                   <h3>Importo a credito: {{500 | currency: 'EUR'}}</h3>
                 </div>
 
-                <button (click)="treasuryDeleteHandler($event)" mat-mini-fab color="warn" aria-label="Delete icon">
+                <button (click)="treasuryDeleteHandler(treasury, i, $event)" mat-mini-fab color="warn"
+                        aria-label="Delete icon">
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>
-
-              <button (click)="treasuryAddHandler($event)" mat-mini-fab color="primary" aria-label="Add icon">
-                <mat-icon>add</mat-icon>
-              </button>
             </div>
+
+            <button (click)="treasuryAddHandler($event)" mat-mini-fab color="primary" aria-label="Add icon">
+              <mat-icon>add</mat-icon>
+            </button>
           </div>
 
           <div class="inpses container" formArrayName="inpses">
@@ -185,7 +186,7 @@ import {MatSelectChange} from "@angular/material/select";
                     matInput
                     [matDatepicker]="dateFromRef"
                     formControlName="dateFrom"
-                    (dateChange)="dateFromChangeHandler($event)"
+                    (dateChange)="dateFromChangeHandler(inps, i, $event)"
                   >
                   <mat-datepicker-toggle matSuffix [for]="dateFromRef"></mat-datepicker-toggle>
                   <mat-datepicker #dateFromRef></mat-datepicker>
@@ -197,7 +198,7 @@ import {MatSelectChange} from "@angular/material/select";
                     matInput
                     [matDatepicker]="dateToRef"
                     formControlName="dateTo"
-                    (dateChange)="dateToChangeHandler($event)"
+                    (dateChange)="dateToChangeHandler(inps, i, $event)"
                   >
                   <mat-datepicker-toggle matSuffix [for]="dateToRef"></mat-datepicker-toggle>
                   <mat-datepicker #dateToRef></mat-datepicker>
@@ -229,15 +230,15 @@ import {MatSelectChange} from "@angular/material/select";
                   <h3>Totale a credito: {{500 | currency: 'EUR'}}</h3>
                 </div>
 
-                <button (click)="inpsDeleteHandler($event)" mat-mini-fab color="warn" aria-label="Delete icon">
+                <button (click)="inpsDeleteHandler(inps, i, $event)" mat-mini-fab color="warn" aria-label="Delete icon">
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>
-
-              <button (click)="inpsAddHandler($event)" mat-mini-fab color="primary" aria-label="Add icon">
-                <mat-icon>add</mat-icon>
-              </button>
             </div>
+
+            <button (click)="inpsAddHandler($event)" mat-mini-fab color="primary" aria-label="Add icon">
+              <mat-icon>add</mat-icon>
+            </button>
           </div>
 
         </mat-card-content>
@@ -431,10 +432,6 @@ export class TaxesComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  submitHandler() {
-    console.log(this.taxesForm)
-  }
-
   birthDateChangeHandler(event: MatDatepickerInputEvent<unknown, unknown | null>) {
     console.log(event)
   }
@@ -443,28 +440,61 @@ export class TaxesComponent implements OnInit {
     console.log(event)
   }
 
+  newTreasury(): FormGroup {
+    return this._fb.group({
+      taxCode: ['', [Validators.required]],
+      referenceYear: ['', [Validators.required]],
+      dueAmount: ['', [Validators.required]],
+      creditAmount: ['', [Validators.required]]
+    })
+  }
+
   treasuryAddHandler(event: MouseEvent) {
     console.log(event)
+
+    this.treasuries.push(this.newTreasury())
   }
 
-  treasuryDeleteHandler(event: MouseEvent) {
-    console.log(event)
+  treasuryDeleteHandler(treasury: AbstractControl, i: number, event: MouseEvent) {
+    console.log(treasury, i, event)
+
+    this.treasuries.removeAt(i)
   }
 
-  dateFromChangeHandler(event: MatDatepickerInputEvent<unknown, unknown | null>) {
-    console.log(event)
+  dateFromChangeHandler(inps: AbstractControl, i: number, event: MatDatepickerInputEvent<unknown, unknown | null>) {
+    console.log(inps, i, event)
   }
 
-  dateToChangeHandler(event: MatDatepickerInputEvent<unknown, unknown | null>) {
-    console.log(event)
+  dateToChangeHandler(inps: AbstractControl, i: number, event: MatDatepickerInputEvent<unknown, unknown | null>) {
+    console.log(inps, i, event)
+  }
+
+  newInps(): FormGroup {
+    return this._fb.group({
+      headquartersCode: ['', [Validators.required]],
+      causal: ['', [Validators.required]],
+      inpsCode: ['', [Validators.required]],
+      dateFrom: ['', [Validators.required]],
+      dateTo: ['', [Validators.required]],
+      debt: ['', [Validators.required]],
+      credit: ['', [Validators.required]]
+    })
   }
 
   inpsAddHandler(event: MouseEvent) {
     console.log(event)
+
+    this.inpses.push(this.newInps())
   }
 
-  inpsDeleteHandler($event: MouseEvent) {
-    console.log(event)
+  inpsDeleteHandler(inps: AbstractControl, i: number, event: MouseEvent) {
+    console.log(inps, i, event)
+
+    this.inpses.removeAt(i)
+  }
+
+  submitHandler() {
+    console.log(this.taxesForm)
   }
 
 }
