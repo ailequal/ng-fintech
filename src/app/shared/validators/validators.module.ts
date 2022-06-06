@@ -6,6 +6,7 @@ import {IbanValidatorDirective} from "./iban.validator";
 import {CodiceFiscaleValidatorDirective} from "./codice-fiscale.validator";
 import {CardIdValidatorDirective} from "./card-id.validator";
 import {TransferValidatorDirective} from "./transfer.validator";
+import {DateFromToValidatorDirective} from "./date-from-to";
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import {TransferValidatorDirective} from "./transfer.validator";
     IbanValidatorDirective,
     CodiceFiscaleValidatorDirective,
     CardIdValidatorDirective,
-    TransferValidatorDirective
+    TransferValidatorDirective,
+    DateFromToValidatorDirective
   ],
   imports: [
     CommonModule
@@ -25,7 +27,8 @@ import {TransferValidatorDirective} from "./transfer.validator";
     IbanValidatorDirective,
     CodiceFiscaleValidatorDirective,
     CardIdValidatorDirective,
-    TransferValidatorDirective
+    TransferValidatorDirective,
+    DateFromToValidatorDirective
   ]
 })
 export class ValidatorsModule {

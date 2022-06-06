@@ -2,6 +2,8 @@ import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/co
 import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MatDatepicker, MatDatepickerInputEvent} from "@angular/material/datepicker";
 import {MatSelectChange} from "@angular/material/select";
+import {codiceFiscaleValidator} from "../../shared/validators/codice-fiscale.validator";
+import {dateFromToValidatorReactive} from "../../shared/validators/date-from-to";
 
 @Component({
   selector: 'ae-taxes',
@@ -313,7 +315,7 @@ export class TaxesComponent implements OnInit {
 
   taxesForm = this._fb.group({
     taxpayer: this._fb.group({
-      codiceFiscale: ['', [Validators.required]],
+      codiceFiscale: ['', [Validators.required, codiceFiscaleValidator]],
       surname: ['', [Validators.required]],
       name: ['', [Validators.required]],
       birthDate: ['', [Validators.required]],
@@ -338,7 +340,7 @@ export class TaxesComponent implements OnInit {
         dateTo: ['', [Validators.required]],
         debt: ['', [Validators.required]],
         credit: ['', [Validators.required]]
-      })
+      }, {validators: [dateFromToValidatorReactive({fieldFrom: 'dateFrom', fieldTo: 'dateTo'})]})
     ])
   });
 
