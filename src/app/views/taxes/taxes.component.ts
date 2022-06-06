@@ -6,6 +6,8 @@ import {codiceFiscaleValidator} from "../../shared/validators/codice-fiscale.val
 import {dateFromToValidatorReactive} from "../../shared/validators/date-from-to";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {TaxService} from "../../api/tax.service";
+import {map, Observable, startWith, tap} from "rxjs";
+import {isObject} from "../../shared/utilities/is-object";
 
 @Component({
   selector: 'ae-taxes',
@@ -122,7 +124,7 @@ import {TaxService} from "../../api/tax.service";
                     >
                   </mat-form-field>
 
-                  <h3>Importo a debito: {{500 | currency: 'EUR'}}</h3>
+                  <h3>Totale a debito: {{500 | currency: 'EUR'}}</h3>
                 </div>
 
                 <div>
@@ -135,7 +137,7 @@ import {TaxService} from "../../api/tax.service";
                     >
                   </mat-form-field>
 
-                  <h3>Importo a credito: {{500 | currency: 'EUR'}}</h3>
+                  <h3>Totale a credito: {{500 | currency: 'EUR'}}</h3>
                 </div>
 
                 <button (click)="treasuryDeleteHandler(treasury, i, $event)" mat-mini-fab color="warn"
@@ -248,10 +250,14 @@ import {TaxService} from "../../api/tax.service";
         </mat-card-content>
 
         <mat-card-actions align="end">
-          <button (click)="submitHandler()" class="mb" mat-raised-button [disabled]="!taxesForm.valid" color="primary"
-                  type="button">
-            Invia
-          </button>
+          <div class="submit container">
+            <h3>Saldo totale: {{15000 | currency: 'EUR'}}</h3>
+
+            <button (click)="submitHandler()" class="mb" mat-raised-button [disabled]="!taxesForm.valid" color="primary"
+                    type="button">
+              Invia
+            </button>
+          </div>
         </mat-card-actions>
 
       </mat-card>
@@ -273,6 +279,10 @@ import {TaxService} from "../../api/tax.service";
       border-radius: 5px;
       padding: 20px;
       background-color: #f8f9fa;
+    }
+
+    .submit.container h3 {
+      font-weight: 700;
     }
 
     .container > .title {
@@ -346,6 +356,68 @@ export class TaxesComponent implements OnInit {
       }, {validators: [dateFromToValidatorReactive({fieldFrom: 'dateFrom', fieldTo: 'dateTo'})]})
     ])
   });
+
+  treasuriesTotal$: Observable<{ dueAmount: number, creditAmount: number }> = this.treasuries.valueChanges.pipe(
+    startWith([]),
+    map(treasuries => {
+      if (!Array.isArray(treasuries) || !treasuries.length)
+        return {dueAmount: 0, creditAmount: 0}
+
+      const dueAmountTotal = treasuries.reduce((total, treasuryFormGroup) => {
+        if (!isObject(treasuryFormGroup))
+          return total
+
+        if (!('dueAmount' in treasuryFormGroup) || null == treasuryFormGroup.dueAmount || '' == treasuryFormGroup.dueAmount)
+          return total
+
+        return total + parseFloat(treasuryFormGroup.dueAmount)
+      }, 0)
+
+      const creditAmountTotal = treasuries.reduce((total, treasuryFormGroup) => {
+        if (!isObject(treasuryFormGroup))
+          return total
+
+        if (!('creditAmount' in treasuryFormGroup) || null == treasuryFormGroup.creditAmount || '' == treasuryFormGroup.creditAmount)
+          return total
+
+        return total + parseFloat(treasuryFormGroup.creditAmount)
+      }, 0)
+
+      return {dueAmount: dueAmountTotal, creditAmount: creditAmountTotal}
+    })
+  )
+
+  inpsesTotal$: Observable<{ debt: number, credit: number }> = this.inpses.valueChanges.pipe(
+    startWith([]),
+    map(inpses => {
+      if (!Array.isArray(inpses) || !inpses.length)
+        return {debt: 0, credit: 0}
+
+      const debtTotal = inpses.reduce((total, inpsFormGroup) => {
+        if (!isObject(inpsFormGroup))
+          return total
+
+        if (!('debt' in inpsFormGroup) || null == inpsFormGroup.debt || '' == inpsFormGroup.debt)
+          return total
+
+        return total + parseFloat(inpsFormGroup.debt)
+      }, 0)
+
+      const creditTotal = inpses.reduce((total, inpsFormGroup) => {
+        if (!isObject(inpsFormGroup))
+          return total
+
+        if (!('credit' in inpsFormGroup) || null == inpsFormGroup.credit || '' == inpsFormGroup.credit)
+          return total
+
+        return total + parseFloat(inpsFormGroup.credit)
+      }, 0)
+
+      return {debt: debtTotal, credit: creditTotal}
+    })
+  )
+
+  totals$: any = '' // combine the emissions from the two observable above
 
   get taxpayer() {
     return this.taxesForm.get('taxpayer') as FormGroup
