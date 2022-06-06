@@ -114,37 +114,34 @@ import {isObject} from "../../shared/utilities/is-object";
                   >
                 </mat-form-field>
 
-                <div>
-                  <mat-form-field appearance="fill">
-                    <mat-label>Importo a debito</mat-label>
-                    <input
-                      matInput
-                      type="number"
-                      formControlName="dueAmount"
-                    >
-                  </mat-form-field>
+                <mat-form-field appearance="fill">
+                  <mat-label>Importo a debito</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="dueAmount"
+                  >
+                </mat-form-field>
 
-                  <h3>Totale a debito: {{500 | currency: 'EUR'}}</h3>
-                </div>
-
-                <div>
-                  <mat-form-field appearance="fill">
-                    <mat-label>Importo a credito</mat-label>
-                    <input
-                      matInput
-                      type="number"
-                      formControlName="creditAmount"
-                    >
-                  </mat-form-field>
-
-                  <h3>Totale a credito: {{500 | currency: 'EUR'}}</h3>
-                </div>
+                <mat-form-field appearance="fill">
+                  <mat-label>Importo a credito</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="creditAmount"
+                  >
+                </mat-form-field>
 
                 <button (click)="treasuryDeleteHandler(treasury, i, $event)" mat-mini-fab color="warn"
                         aria-label="Delete icon" type="button">
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>
+            </div>
+
+            <div class="status flex">
+              <h3>Totale a debito: {{500 | currency: 'EUR'}}</h3>
+              <h3>Totale a credito: {{500 | currency: 'EUR'}}</h3>
             </div>
 
             <button (click)="treasuryAddHandler($event)" mat-mini-fab color="primary" aria-label="Add icon"
@@ -209,37 +206,34 @@ import {isObject} from "../../shared/utilities/is-object";
                   <mat-datepicker #dateToRef></mat-datepicker>
                 </mat-form-field>
 
-                <div>
-                  <mat-form-field appearance="fill">
-                    <mat-label>Debito</mat-label>
-                    <input
-                      matInput
-                      type="number"
-                      formControlName="debt"
-                    >
-                  </mat-form-field>
+                <mat-form-field appearance="fill">
+                  <mat-label>Debito</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="debt"
+                  >
+                </mat-form-field>
 
-                  <h3>Totale a debito: {{500 | currency: 'EUR'}}</h3>
-                </div>
-
-                <div>
-                  <mat-form-field appearance="fill">
-                    <mat-label>Credito</mat-label>
-                    <input
-                      matInput
-                      type="number"
-                      formControlName="credit"
-                    >
-                  </mat-form-field>
-
-                  <h3>Totale a credito: {{500 | currency: 'EUR'}}</h3>
-                </div>
+                <mat-form-field appearance="fill">
+                  <mat-label>Credito</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="credit"
+                  >
+                </mat-form-field>
 
                 <button (click)="inpsDeleteHandler(inps, i, $event)" mat-mini-fab color="warn" aria-label="Delete icon"
                         type="button">
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>
+            </div>
+
+            <div class="status flex">
+              <h3>Totale a debito: {{500 | currency: 'EUR'}}</h3>
+              <h3>Totale a credito: {{500 | currency: 'EUR'}}</h3>
             </div>
 
             <button (click)="inpsAddHandler($event)" mat-mini-fab color="primary" aria-label="Add icon" type="button">
@@ -302,6 +296,19 @@ import {isObject} from "../../shared/utilities/is-object";
       display: flex;
       justify-content: center;
       align-items: center;
+    }
+
+    .treasuries .status,
+    .inpses .status {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .treasuries .status h3,
+    .inpses .status h3 {
+      display: inline-block;
     }
 
     .mat-card-actions .mat-raised-button {
