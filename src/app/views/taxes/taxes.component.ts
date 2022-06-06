@@ -85,6 +85,22 @@ import {MatSelectChange} from "@angular/material/select";
             >
           </mat-form-field>
 
+          <div class="container">
+            <h2 class="title">Erario</h2>
+
+            <button (click)="treasuryHandler($event)" mat-mini-fab color="primary" aria-label="Add icon">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+
+          <div class="container">
+            <h2 class="title">INPS</h2>
+
+            <button (click)="inpsHandler($event)" mat-mini-fab color="primary" aria-label="Add icon">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+
         </mat-card-content>
 
         <mat-card-actions align="end">
@@ -97,17 +113,25 @@ import {MatSelectChange} from "@angular/material/select";
     </form>
   `,
   styles: [`
-    .title {
-      font-size: 18px;
-      color: rgba(0, 0, 0, 0.54);
-    }
-
     .taxes-form {
       min-width: 120px;
     }
 
-    .mat-card-title {
+    .mat-card-title.title {
+      font-size: 18px;
       font-weight: 400;
+      color: rgba(0, 0, 0, 0.54);
+    }
+
+    .container {
+      margin: 25px 0;
+      border-radius: 5px;
+      padding: 20px;
+      background-color: #f8f9fa;
+    }
+
+    .container > .title {
+      margin-bottom: 25px;
     }
 
     .mat-card-actions .mat-raised-button {
@@ -181,6 +205,14 @@ export class TaxesComponent implements OnInit {
   }
 
   genderHandler(event: MatSelectChange) {
+    console.log(event)
+  }
+
+  treasuryHandler(event: MouseEvent) {
+    console.log(event)
+  }
+
+  inpsHandler(event: MouseEvent) {
     console.log(event)
   }
 
