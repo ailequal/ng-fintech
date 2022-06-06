@@ -152,6 +152,8 @@ import {CardForm} from "../../../models/card";
 })
 export class CardFormComponent implements OnInit {
 
+  // TODO: Convert into a reactive form.
+
   cardTypes: string[] = ['mastercard', 'visa']
 
   @ViewChild('f', {read: NgForm, static: true}) f!: NgForm;

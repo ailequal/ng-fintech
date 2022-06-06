@@ -347,7 +347,6 @@ import {InpsErrorStateMatcher} from './utilities/inps-error-state-matcher';
 })
 export class TaxesComponent implements OnInit {
 
-  // TODO: Add custom ErrorStateMatcher for the password creation.
   // TODO: Add modal window before submitting the form value where the user can choose which card for the payment.
   // TODO: Refactor with ControlValueAccessor this form for the treasuries and inpses.
   // TODO: The input birthProvince will be based on "https://github.com/matteocontrini/comuni-json" with an autocomplete
@@ -610,14 +609,10 @@ export class TaxesComponent implements OnInit {
   }
 
   inpsAddHandler(event: MouseEvent) {
-    console.log(event)
-
     this.inpses.push(this.newInps())
   }
 
   inpsDeleteHandler(inps: AbstractControl, i: number, event: MouseEvent) {
-    console.log(inps, i, event)
-
     this.inpses.removeAt(i)
   }
 

@@ -97,6 +97,8 @@ import {Router} from "@angular/router";
 })
 export class SignInComponent implements OnInit {
 
+  // TODO: Convert into a reactive form.
+
   hidePassword: boolean = true;
 
   constructor(private _router: Router) {
