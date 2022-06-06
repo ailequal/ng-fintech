@@ -6,7 +6,7 @@ import {codiceFiscaleValidator} from "../../shared/validators/codice-fiscale.val
 import {dateFromToValidatorReactive} from "../../shared/validators/date-from-to";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {TaxService} from "../../api/tax.service";
-import {map, Observable, startWith, tap} from "rxjs";
+import {combineLatest, map, Observable, startWith} from "rxjs";
 import {isObject} from "../../shared/utilities/is-object";
 
 @Component({
@@ -140,8 +140,8 @@ import {isObject} from "../../shared/utilities/is-object";
             </div>
 
             <div class="status flex">
-              <h3>Totale a debito: {{500 | currency: 'EUR'}}</h3>
-              <h3>Totale a credito: {{500 | currency: 'EUR'}}</h3>
+              <h3>Totale a debito: {{(treasuriesTotal$ | async)?.dueAmount | currency: 'EUR'}}</h3>
+              <h3>Totale a credito: {{(treasuriesTotal$ | async)?.creditAmount | currency: 'EUR'}}</h3>
             </div>
 
             <button (click)="treasuryAddHandler($event)" mat-mini-fab color="primary" aria-label="Add icon"
@@ -232,8 +232,8 @@ import {isObject} from "../../shared/utilities/is-object";
             </div>
 
             <div class="status flex">
-              <h3>Totale a debito: {{500 | currency: 'EUR'}}</h3>
-              <h3>Totale a credito: {{500 | currency: 'EUR'}}</h3>
+              <h3>Totale a debito: {{(inpsesTotal$ | async)?.debt | currency: 'EUR'}}</h3>
+              <h3>Totale a credito: {{(inpsesTotal$ | async)?.credit | currency: 'EUR'}}</h3>
             </div>
 
             <button (click)="inpsAddHandler($event)" mat-mini-fab color="primary" aria-label="Add icon" type="button">
@@ -245,7 +245,12 @@ import {isObject} from "../../shared/utilities/is-object";
 
         <mat-card-actions align="end">
           <div class="submit container">
-            <h3>Saldo totale: {{15000 | currency: 'EUR'}}</h3>
+            <h3 *ngIf="(totals$ | async) || true as totals">
+              Saldo totale:
+              <span [ngClass]="{credit: totals && totals >=0, debt: totals && totals < 0}">
+                {{totals$ | async | currency: 'EUR'}}
+              </span>
+            </h3>
 
             <button (click)="submitHandler()" class="mb" mat-raised-button [disabled]="!taxesForm.valid" color="primary"
                     type="button">
@@ -277,6 +282,14 @@ import {isObject} from "../../shared/utilities/is-object";
 
     .submit.container h3 {
       font-weight: 700;
+    }
+
+    .submit.container h3 span.credit {
+      color: green;
+    }
+
+    .submit.container h3 span.debt {
+      color: red;
     }
 
     .container > .title {
@@ -424,7 +437,16 @@ export class TaxesComponent implements OnInit {
     })
   )
 
-  totals$: any = '' // combine the emissions from the two observable above
+  totals$: Observable<number> = combineLatest([this.treasuriesTotal$, this.inpsesTotal$]).pipe(
+    map(combinedValues => {
+      const [treasuriesTotal, inpsesTotal] = combinedValues
+
+      const creditTotals = treasuriesTotal.creditAmount + inpsesTotal.credit
+      const debitTotals = treasuriesTotal.dueAmount + inpsesTotal.debt
+
+      return creditTotals - debitTotals
+    })
+  )
 
   get taxpayer() {
     return this.taxesForm.get('taxpayer') as FormGroup
