@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MatDatepicker, MatDatepickerInputEvent} from "@angular/material/datepicker";
 import {MatSelectChange} from "@angular/material/select";
 
@@ -15,223 +15,229 @@ import {MatSelectChange} from "@angular/material/select";
 
         <mat-card-content>
 
-          <mat-form-field class="full-width" appearance="fill">
-            <mat-label>Codice fiscale</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="RSSMRA80A01F205X"
-              formControlName="codiceFiscale"
-            >
-          </mat-form-field>
+          <div class="taxpayer" formGroupName="taxpayer">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Codice fiscale</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="RSSMRA80A01F205X"
+                formControlName="codiceFiscale"
+              >
+            </mat-form-field>
 
-          <mat-form-field class="full-width" appearance="fill">
-            <mat-label>Cognome</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="Tip"
-              formControlName="surname"
-            >
-          </mat-form-field>
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Cognome</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Tip"
+                formControlName="surname"
+              >
+            </mat-form-field>
 
-          <mat-form-field class="full-width" appearance="fill">
-            <mat-label>Nome</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="Lucas"
-              formControlName="name"
-            >
-          </mat-form-field>
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Nome</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Lucas"
+                formControlName="name"
+              >
+            </mat-form-field>
 
-          <mat-form-field class="full-width" appearance="fill">
-            <mat-label>Data di nascita</mat-label>
-            <input
-              matInput
-              [matDatepicker]="birthDateRef"
-              formControlName="birthDate"
-              (dateChange)="birthDateChangeHandler($event)"
-            >
-            <mat-datepicker-toggle matSuffix [for]="birthDateRef"></mat-datepicker-toggle>
-            <mat-datepicker #birthDateRef></mat-datepicker>
-          </mat-form-field>
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Data di nascita</mat-label>
+              <input
+                matInput
+                [matDatepicker]="birthDateRef"
+                formControlName="birthDate"
+                (dateChange)="birthDateChangeHandler($event)"
+              >
+              <mat-datepicker-toggle matSuffix [for]="birthDateRef"></mat-datepicker-toggle>
+              <mat-datepicker #birthDateRef></mat-datepicker>
+            </mat-form-field>
 
-          <mat-form-field class="full-width" appearance="fill">
-            <mat-label>Sesso</mat-label>
-            <mat-select (selectionChange)="genderHandler($event)" formControlName="gender">
-              <mat-option [value]="'male'">Maschio</mat-option>
-              <mat-option [value]="'female'">Femmina</mat-option>
-            </mat-select>
-          </mat-form-field>
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Sesso</mat-label>
+              <mat-select (selectionChange)="genderHandler($event)" formControlName="gender">
+                <mat-option [value]="'male'">Maschio</mat-option>
+                <mat-option [value]="'female'">Femmina</mat-option>
+              </mat-select>
+            </mat-form-field>
 
-          <mat-form-field class="full-width" appearance="fill">
-            <mat-label>Provincia di nascita</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="Tip"
-              formControlName="birthProvince"
-            >
-          </mat-form-field>
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Provincia di nascita</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Tip"
+                formControlName="birthProvince"
+              >
+            </mat-form-field>
 
-          <mat-form-field class="full-width" appearance="fill">
-            <mat-label>Comune di nascita</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="Tip"
-              formControlName="birthCity"
-            >
-          </mat-form-field>
-
-          <div class="treasury container">
-            <h2 class="title">Erario</h2>
-
-            <div class="flex">
-              <mat-form-field appearance="fill">
-                <mat-label>Codice tributo</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  formControlName="taxCode"
-                >
-              </mat-form-field>
-
-              <mat-form-field appearance="fill">
-                <mat-label>Anno di riferimento</mat-label>
-                <input
-                  matInput
-                  type="number"
-                  formControlName="referenceYear"
-                >
-              </mat-form-field>
-
-              <div>
-                <mat-form-field appearance="fill">
-                  <mat-label>Importo a debito</mat-label>
-                  <input
-                    matInput
-                    type="number"
-                    formControlName="dueAmount"
-                  >
-                </mat-form-field>
-
-                <h3>Importo a debito: {{500 | currency: 'EUR'}}</h3>
-              </div>
-
-              <div>
-                <mat-form-field appearance="fill">
-                  <mat-label>Importo a credito</mat-label>
-                  <input
-                    matInput
-                    type="number"
-                    formControlName="creditAmount"
-                  >
-                </mat-form-field>
-
-                <h3>Importo a credito: {{500 | currency: 'EUR'}}</h3>
-              </div>
-
-              <button (click)="treasuryDeleteHandler($event)" mat-mini-fab color="warn" aria-label="Delete icon">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
-
-            <button (click)="treasuryAddHandler($event)" mat-mini-fab color="primary" aria-label="Add icon">
-              <mat-icon>add</mat-icon>
-            </button>
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Comune di nascita</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Tip"
+                formControlName="birthCity"
+              >
+            </mat-form-field>
           </div>
 
-          <div class="inps container">
-            <h2 class="title">INPS</h2>
+          <div class="treasuries container" formArrayName="treasuries">
+            <h2 class="title">Erario</h2>
 
-            <div class="flex">
-              <mat-form-field appearance="fill">
-                <mat-label>Codice sede</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  formControlName="headquartersCode"
-                >
-              </mat-form-field>
-
-              <mat-form-field appearance="fill">
-                <mat-label>Causale contributo</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  formControlName="causal"
-                >
-              </mat-form-field>
-
-              <mat-form-field appearance="fill">
-                <mat-label>Codice INPS</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  formControlName="inpsCode"
-                >
-              </mat-form-field>
-
-              <mat-form-field appearance="fill">
-                <mat-label>Da</mat-label>
-                <input
-                  matInput
-                  [matDatepicker]="dateFromRef"
-                  formControlName="dateFrom"
-                  (dateChange)="dateFromChangeHandler($event)"
-                >
-                <mat-datepicker-toggle matSuffix [for]="dateFromRef"></mat-datepicker-toggle>
-                <mat-datepicker #dateFromRef></mat-datepicker>
-              </mat-form-field>
-
-              <mat-form-field appearance="fill">
-                <mat-label>A</mat-label>
-                <input
-                  matInput
-                  [matDatepicker]="dateToRef"
-                  formControlName="dateTo"
-                  (dateChange)="dateToChangeHandler($event)"
-                >
-                <mat-datepicker-toggle matSuffix [for]="dateToRef"></mat-datepicker-toggle>
-                <mat-datepicker #dateToRef></mat-datepicker>
-              </mat-form-field>
-
-              <div>
+            <div *ngFor="let treasury of treasuries.controls; index as i" [formGroupName]="i" class="row">
+              <div class="flex">
                 <mat-form-field appearance="fill">
-                  <mat-label>Debito</mat-label>
+                  <mat-label>Codice tributo</mat-label>
                   <input
                     matInput
-                    type="number"
-                    formControlName="debt"
+                    type="text"
+                    formControlName="taxCode"
                   >
                 </mat-form-field>
 
-                <h3>Totale a debito: {{500 | currency: 'EUR'}}</h3>
-              </div>
-
-              <div>
                 <mat-form-field appearance="fill">
-                  <mat-label>Credito</mat-label>
+                  <mat-label>Anno di riferimento</mat-label>
                   <input
                     matInput
                     type="number"
-                    formControlName="credit"
+                    formControlName="referenceYear"
                   >
                 </mat-form-field>
 
-                <h3>Totale a credito: {{500 | currency: 'EUR'}}</h3>
+                <div>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Importo a debito</mat-label>
+                    <input
+                      matInput
+                      type="number"
+                      formControlName="dueAmount"
+                    >
+                  </mat-form-field>
+
+                  <h3>Importo a debito: {{500 | currency: 'EUR'}}</h3>
+                </div>
+
+                <div>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Importo a credito</mat-label>
+                    <input
+                      matInput
+                      type="number"
+                      formControlName="creditAmount"
+                    >
+                  </mat-form-field>
+
+                  <h3>Importo a credito: {{500 | currency: 'EUR'}}</h3>
+                </div>
+
+                <button (click)="treasuryDeleteHandler($event)" mat-mini-fab color="warn" aria-label="Delete icon">
+                  <mat-icon>delete</mat-icon>
+                </button>
               </div>
 
-              <button (click)="inpsDeleteHandler($event)" mat-mini-fab color="warn" aria-label="Delete icon">
-                <mat-icon>delete</mat-icon>
+              <button (click)="treasuryAddHandler($event)" mat-mini-fab color="primary" aria-label="Add icon">
+                <mat-icon>add</mat-icon>
               </button>
             </div>
+          </div>
 
-            <button (click)="inpsAddHandler($event)" mat-mini-fab color="primary" aria-label="Add icon">
-              <mat-icon>add</mat-icon>
-            </button>
+          <div class="inpses container" formArrayName="inpses">
+            <h2 class="title">INPS</h2>
+
+            <div *ngFor="let inps of inpses.controls; index as i" [formGroupName]="i" class="row">
+              <div class="flex">
+                <mat-form-field appearance="fill">
+                  <mat-label>Codice sede</mat-label>
+                  <input
+                    matInput
+                    type="text"
+                    formControlName="headquartersCode"
+                  >
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                  <mat-label>Causale contributo</mat-label>
+                  <input
+                    matInput
+                    type="text"
+                    formControlName="causal"
+                  >
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                  <mat-label>Codice INPS</mat-label>
+                  <input
+                    matInput
+                    type="text"
+                    formControlName="inpsCode"
+                  >
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                  <mat-label>Da</mat-label>
+                  <input
+                    matInput
+                    [matDatepicker]="dateFromRef"
+                    formControlName="dateFrom"
+                    (dateChange)="dateFromChangeHandler($event)"
+                  >
+                  <mat-datepicker-toggle matSuffix [for]="dateFromRef"></mat-datepicker-toggle>
+                  <mat-datepicker #dateFromRef></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                  <mat-label>A</mat-label>
+                  <input
+                    matInput
+                    [matDatepicker]="dateToRef"
+                    formControlName="dateTo"
+                    (dateChange)="dateToChangeHandler($event)"
+                  >
+                  <mat-datepicker-toggle matSuffix [for]="dateToRef"></mat-datepicker-toggle>
+                  <mat-datepicker #dateToRef></mat-datepicker>
+                </mat-form-field>
+
+                <div>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Debito</mat-label>
+                    <input
+                      matInput
+                      type="number"
+                      formControlName="debt"
+                    >
+                  </mat-form-field>
+
+                  <h3>Totale a debito: {{500 | currency: 'EUR'}}</h3>
+                </div>
+
+                <div>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Credito</mat-label>
+                    <input
+                      matInput
+                      type="number"
+                      formControlName="credit"
+                    >
+                  </mat-form-field>
+
+                  <h3>Totale a credito: {{500 | currency: 'EUR'}}</h3>
+                </div>
+
+                <button (click)="inpsDeleteHandler($event)" mat-mini-fab color="warn" aria-label="Delete icon">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+
+              <button (click)="inpsAddHandler($event)" mat-mini-fab color="primary" aria-label="Add icon">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
           </div>
 
         </mat-card-content>
@@ -267,7 +273,7 @@ import {MatSelectChange} from "@angular/material/select";
       margin-bottom: 25px;
     }
 
-    .container > .flex {
+    .container .row > .flex {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
@@ -305,97 +311,119 @@ export class TaxesComponent implements OnInit {
   @ViewChild('dateToRef', {read: MatDatepicker, static: true}) dateToMat!: MatDatepicker<any>;
 
   taxesForm = this._fb.group({
-    codiceFiscale: ['', [Validators.required]], // start main
-    surname: ['', [Validators.required]],
-    name: ['', [Validators.required]],
-    birthDate: ['', [Validators.required]],
-    gender: ['', [Validators.required]],
-    birthProvince: ['', [Validators.required]],
-    birthCity: ['', [Validators.required]],
-    taxCode: ['', [Validators.required]], // start treasury
-    referenceYear: ['', [Validators.required]],
-    dueAmount: ['', [Validators.required]],
-    creditAmount: ['', [Validators.required]],
-    headquartersCode: ['', [Validators.required]], // start inps
-    causal: ['', [Validators.required]],
-    inpsCode: ['', [Validators.required]],
-    dateFrom: ['', [Validators.required]],
-    dateTo: ['', [Validators.required]],
-    debt: ['', [Validators.required]],
-    credit: ['', [Validators.required]]
+    taxpayer: this._fb.group({
+      codiceFiscale: ['', [Validators.required]],
+      surname: ['', [Validators.required]],
+      name: ['', [Validators.required]],
+      birthDate: ['', [Validators.required]],
+      gender: ['', [Validators.required]],
+      birthProvince: ['', [Validators.required]],
+      birthCity: ['', [Validators.required]],
+    }),
+    treasuries: this._fb.array([
+      this._fb.group({
+        taxCode: ['', [Validators.required]],
+        referenceYear: ['', [Validators.required]],
+        dueAmount: ['', [Validators.required]],
+        creditAmount: ['', [Validators.required]]
+      })
+    ]),
+    inpses: this._fb.array([
+      this._fb.group({
+        headquartersCode: ['', [Validators.required]],
+        causal: ['', [Validators.required]],
+        inpsCode: ['', [Validators.required]],
+        dateFrom: ['', [Validators.required]],
+        dateTo: ['', [Validators.required]],
+        debt: ['', [Validators.required]],
+        credit: ['', [Validators.required]]
+      })
+    ])
   });
 
+  get taxpayer() {
+    return this.taxesForm.get('taxpayer') as FormGroup
+  }
+
   get codiceFiscale() {
-    return this.taxesForm.get('codiceFiscale')
+    return this.taxesForm.get('taxpayer.codiceFiscale')
   }
 
   get surname() {
-    return this.taxesForm.get('surname')
+    return this.taxesForm.get('taxpayer.surname')
   }
 
   get name() {
-    return this.taxesForm.get('name')
+    return this.taxesForm.get('taxpayer.name')
   }
 
   get birthDate() {
-    return this.taxesForm.get('birthDate')
+    return this.taxesForm.get('taxpayer.birthDate')
   }
 
   get gender() {
-    return this.taxesForm.get('gender')
+    return this.taxesForm.get('taxpayer.gender')
   }
 
   get birthProvince() {
-    return this.taxesForm.get('birthProvince')
+    return this.taxesForm.get('taxpayer.birthProvince')
   }
 
   get birthCity() {
-    return this.taxesForm.get('birthCity')
+    return this.taxesForm.get('taxpayer.birthCity')
   }
 
-  get taxCode() {
-    return this.taxesForm.get('taxCode')
+  get treasuries() {
+    return this.taxesForm.get('treasuries') as FormArray
   }
 
-  get referenceYear() {
-    return this.taxesForm.get('referenceYear')
+  // get taxCode() {
+  //   return this.taxesForm.get('taxCode')
+  // }
+  //
+  // get referenceYear() {
+  //   return this.taxesForm.get('referenceYear')
+  // }
+  //
+  // get dueAmount() {
+  //   return this.taxesForm.get('dueAmount')
+  // }
+  //
+  // get creditAmount() {
+  //   return this.taxesForm.get('creditAmount')
+  // }
+
+  get inpses() {
+    return this.taxesForm.get('inpses') as FormArray
   }
 
-  get dueAmount() {
-    return this.taxesForm.get('dueAmount')
-  }
-
-  get creditAmount() {
-    return this.taxesForm.get('creditAmount')
-  }
-
-  get headquartersCode() {
-    return this.taxesForm.get('headquartersCode')
-  }
-
-  get causal() {
-    return this.taxesForm.get('causal')
-  }
-
-  get inpsCode() {
-    return this.taxesForm.get('inpsCode')
-  }
-
-  get dateFrom() {
-    return this.taxesForm.get('dateFrom')
-  }
-
-  get dateTo() {
-    return this.taxesForm.get('dateTo')
-  }
-
-  get debt() {
-    return this.taxesForm.get('debt')
-  }
-
-  get credit() {
-    return this.taxesForm.get('credit')
-  }
+  // get headquartersCode() {
+  //   return this.taxesForm.get('headquartersCode')
+  // }
+  //
+  // get causal() {
+  //   return this.taxesForm.get('causal')
+  // }
+  //
+  // get inpsCode() {
+  //   return this.taxesForm.get('inpsCode')
+  // }
+  //
+  // get dateFrom() {
+  //   return this.taxesForm.get('dateFrom')
+  // }
+  //
+  // get dateTo() {
+  //   return this.taxesForm.get('dateTo')
+  // }
+  //
+  // get debt() {
+  //   return this.taxesForm.get('debt')
+  // }
+  //
+  // get credit() {
+  //   return this.taxesForm.get('credit')
+  // }
 
   constructor(private _fb: FormBuilder) {
   }
