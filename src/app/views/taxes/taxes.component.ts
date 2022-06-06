@@ -347,8 +347,8 @@ import {InpsErrorStateMatcher} from './utilities/inps-error-state-matcher';
 })
 export class TaxesComponent implements OnInit {
 
+  // TODO: Refactor with ControlValueAccessor this form for taxpayer, treasuries and inpses (the component is too long)!!
   // TODO: Add modal window before submitting the form value where the user can choose which card for the payment.
-  // TODO: Refactor with ControlValueAccessor this form for the treasuries and inpses.
   // TODO: The input birthProvince will be based on "https://github.com/matteocontrini/comuni-json" with an autocomplete
   //  input from Angular Material. Also add a custom validator for any user typo.
   // TODO: Add even more inputs based on the F24 document.
@@ -478,85 +478,13 @@ export class TaxesComponent implements OnInit {
     return this.taxesForm.get('taxpayer') as FormGroup
   }
 
-  get codiceFiscale() {
-    return this.taxesForm.get('taxpayer.codiceFiscale')
-  }
-
-  get surname() {
-    return this.taxesForm.get('taxpayer.surname')
-  }
-
-  get name() {
-    return this.taxesForm.get('taxpayer.name')
-  }
-
-  get birthDate() {
-    return this.taxesForm.get('taxpayer.birthDate')
-  }
-
-  get gender() {
-    return this.taxesForm.get('taxpayer.gender')
-  }
-
-  get birthProvince() {
-    return this.taxesForm.get('taxpayer.birthProvince')
-  }
-
-  get birthCity() {
-    return this.taxesForm.get('taxpayer.birthCity')
-  }
-
   get treasuries() {
     return this.taxesForm.get('treasuries') as FormArray
   }
 
-  // get taxCode() {
-  //   return this.taxesForm.get('taxCode')
-  // }
-  //
-  // get referenceYear() {
-  //   return this.taxesForm.get('referenceYear')
-  // }
-  //
-  // get dueAmount() {
-  //   return this.taxesForm.get('dueAmount')
-  // }
-  //
-  // get creditAmount() {
-  //   return this.taxesForm.get('creditAmount')
-  // }
-
   get inpses() {
     return this.taxesForm.get('inpses') as FormArray
   }
-
-  // get headquartersCode() {
-  //   return this.taxesForm.get('headquartersCode')
-  // }
-  //
-  // get causal() {
-  //   return this.taxesForm.get('causal')
-  // }
-  //
-  // get inpsCode() {
-  //   return this.taxesForm.get('inpsCode')
-  // }
-  //
-  // get dateFrom() {
-  //   return this.taxesForm.get('dateFrom')
-  // }
-  //
-  // get dateTo() {
-  //   return this.taxesForm.get('dateTo')
-  // }
-  //
-  // get debt() {
-  //   return this.taxesForm.get('debt')
-  // }
-  //
-  // get credit() {
-  //   return this.taxesForm.get('credit')
-  // }
 
   constructor(
     private _fb: FormBuilder,
