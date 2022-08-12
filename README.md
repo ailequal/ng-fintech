@@ -1,8 +1,18 @@
 # NgFintech
 
-[//]: # (TODO: Add some informations inside the README and the source related to the mock backend.)
-
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.4.
+
+## Preliminary setup
+
+Before running this project, its mock backend must be already running.
+
+```shell
+git clone https://github.com/talent-factory-academy/fintech-backend.git
+cd fintech-backend
+npm install
+npm run dev
+# check that the server is running on localhost:3000
+```
 
 ## Development server
 
