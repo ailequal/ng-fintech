@@ -1,6 +1,6 @@
 {
   "name": "ng-fintech",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -21,6 +21,10 @@
     "@angular/platform-browser": "~13.3.0",
     "@angular/platform-browser-dynamic": "~13.3.0",
     "@angular/router": "~13.3.0",
+    "@ngrx/effects": "^13.2.0",
+    "@ngrx/entity": "^13.2.0",
+    "@ngrx/store": "^13.2.0",
+    "@ngrx/store-devtools": "^13.2.0",
     "leaflet": "^1.8.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
@@ -30,6 +34,7 @@
     "@angular-devkit/build-angular": "~13.3.4",
     "@angular/cli": "~13.3.4",
     "@angular/compiler-cli": "~13.3.0",
+    "@ngrx/schematics": "^13.2.0",
     "@types/jasmine": "~3.10.0",
     "@types/leaflet": "^1.7.10",
     "@types/node": "^12.11.1",

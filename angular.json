@@ -133,5 +133,8 @@
       }
     }
   },
-  "defaultProject": "ng-fintech"
+  "defaultProject": "ng-fintech",
+  "cli": {
+    "defaultCollection": "@ngrx/schematics"
+  }
 }
