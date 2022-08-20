@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {Contact, ContactForm, ContactsComponentState} from "../../../models/contact";
 import {MatDialogRef} from "@angular/material/dialog";
 import {BehaviorSubject, combineLatest, map, Observable} from "rxjs";
 import {ContactService} from "../../../api/contact.service";
 import {Store} from "@ngrx/store";
-import {loadContacts} from "../../../store/actions/contacts.actions";
+import {deleteContact, loadContacts, setContact, updateContact} from "../../../store/actions/contacts.actions";
+import {selectContactsAll} from "../../../store/selectors/contacts.selectors";
 
 @Component({
   selector: 'ae-contacts',
@@ -61,11 +62,11 @@ import {loadContacts} from "../../../store/actions/contacts.actions";
       width: 100%;
     }
   `],
-  // changeDetection: ChangeDetectionStrategy.OnPush // TODO: We might not be able to use it in this component, at least for now.
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContactsComponent implements OnInit {
 
-  contacts$: BehaviorSubject<Contact[]> = new BehaviorSubject<Contact[]>([])
+  contacts$: Observable<Contact[]> = this._store.select(selectContactsAll);
 
   state$: BehaviorSubject<ContactsComponentState> = new BehaviorSubject<ContactsComponentState>({type: 'list'})
 
@@ -89,9 +90,6 @@ export class ContactsComponent implements OnInit {
     public dialogRef: MatDialogRef<ContactsComponent>,
     private _contactService: ContactService
   ) {
-    this._contactService.getContacts().subscribe(contacts => {
-      this.contacts$.next(contacts)
-    });
   }
 
   ngOnInit(): void {
@@ -109,13 +107,7 @@ export class ContactsComponent implements OnInit {
   }
 
   deleteHandler(contactId: string) {
-    this._contactService.deleteContact(contactId).subscribe(v => {
-      this.contacts$.next(
-        this.contacts$.value.filter(contact => {
-          return contact._id !== contactId
-        })
-      )
-    })
+    this._store.dispatch(deleteContact({contactId: contactId}));
   }
 
   submitHandler(contactForm: ContactForm) {
@@ -125,27 +117,25 @@ export class ContactsComponent implements OnInit {
       if (!contactId)
         return
 
-      this._contactService.updateContact(contactId, contactForm).subscribe(updatedContact => {
-        this.contacts$.next(this.contacts$.value.map(contact => {
-          return (contact._id === updatedContact._id) ? updatedContact : contact
-        }))
-      })
-
-      this.resetState()
+      this._store.dispatch(updateContact({contactId: contactId, contact: contactForm}));
+      this.resetState();
 
       return
     }
 
     // Add a new contact.
-    this._contactService.setContact(contactForm).subscribe(newContact => {
-      this.contacts$.next([...this.contacts$.value, newContact])
-
-      this.resetState()
-    })
+    this._store.dispatch(setContact({contact: contactForm}));
+    this.resetState();
   }
 
   resetState() {
-    this.state$.next({type: "list"})
+    // TODO: This method is always called right after a store dispatch, which is asynchronous (calls external API).
+    //  To correctly executed this method right after the first dispatch, we should rely on NgRx
+    //  by storing inside the state this property. If all the UI state is saved, everything can be easily
+    //  replicated and debugged! For now it's gonna be fine in this easier way: no matter the outcome of the action
+    //  from the API (success or failure), we will always go back to the previous component view state.
+    //  P.S. What about triggering a notification depending on the action result??
+    this.state$.next({type: "list"});
   }
 
 }

@@ -7,7 +7,11 @@ export function debugContacts(reducer: ActionReducer<any>): ActionReducer<any> {
     '[Contacts] Load contacts success',
     '[Contacts] Load contacts failure',
     '[Contacts] Set contact',
+    '[Contacts] Set contact success',
+    '[Contacts] Set contact failure',
     '[Contacts] Update contact',
+    '[Contacts] Update contact success',
+    '[Contacts] Update contact failure',
     '[Contacts] Delete contact'
   ];
 
