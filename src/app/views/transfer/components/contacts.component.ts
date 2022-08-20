@@ -3,6 +3,8 @@ import {Contact, ContactForm, ContactsComponentState} from "../../../models/cont
 import {MatDialogRef} from "@angular/material/dialog";
 import {BehaviorSubject, combineLatest, map, Observable} from "rxjs";
 import {ContactService} from "../../../api/contact.service";
+import {Store} from "@ngrx/store";
+import {loadContacts} from "../../../store/actions/contacts.actions";
 
 @Component({
   selector: 'ae-contacts',
@@ -83,15 +85,17 @@ export class ContactsComponent implements OnInit {
   )
 
   constructor(
+    private _store: Store,
     public dialogRef: MatDialogRef<ContactsComponent>,
     private _contactService: ContactService
   ) {
     this._contactService.getContacts().subscribe(contacts => {
       this.contacts$.next(contacts)
-    })
+    });
   }
 
   ngOnInit(): void {
+    this._store.dispatch(loadContacts());
   }
 
   checkHandler(selectedContact: Contact) {
